@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 dotenv.config();
 const JWT_SECRETS = process.env.JWT_SECRET;
 
-const signup = async (req, res) => {
+const signin = async (req, res) => {
     try {
         const {name, email, password, username} = req.body;
 
@@ -81,4 +81,4 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { signup, login };
+module.exports = { signin, login };
