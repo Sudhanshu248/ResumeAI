@@ -1,0 +1,66 @@
+.signin-col-2 {
+
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-form {
+    width: 65%;
+    border: none;
+    
+   
+    border-radius: 10px;
+    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+
+.login-form {
+
+    padding: 10px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: start;
+}
+
+.input-box {
+    padding: 10px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: start;
+    width: 100%;
+  
+}
+
+.input-box label {
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+#email,
+#password ,#username {
+    outline: none;
+    border: none;
+    margin-bottom: 25px !important;
+    border-bottom: 1px solid #000;
+    width: 100%;
+    padding: 10px;
+}
+.login-btn{
+text-align: center;
+}
+
+.login-btn button{
+    width: 45%;
+   font-size: 15px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+   
+}
+
