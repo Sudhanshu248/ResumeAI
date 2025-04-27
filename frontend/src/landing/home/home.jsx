@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     return (
@@ -9,8 +10,12 @@ export default function Home() {
                     <div style={{ fontSize: "21px" }} className='home-text'>Create. Perfect. Stand Out. With Smart Resume Tools</div>
                     <div className="home-btn">
 
-                        <Button variant="contained">Get Started</Button>
-                        <Button variant="outlined">More</Button>
+                        <Button variant="contained"> 
+                        <Link class="nav-link" to="/dashboard" >Get Started</Link>
+                        </Button>
+                        <Button variant="outlined">
+                        <Link class="nav-link" to="#" >More</Link>
+                        </Button>
 
                     </div>
                 </div>

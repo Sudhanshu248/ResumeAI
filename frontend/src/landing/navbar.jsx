@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-
+import { Link } from 'react-router-dom';
 export default function Navbar() {
   return (
     <div className="navbar-container p-2 " style={{height:"15vh" , width:"100%" }}>
@@ -14,9 +14,15 @@ export default function Navbar() {
         </div>
 
         <div className="nav-col-2 me-3">
-          <Button variant="outlined">Login</Button>
-          <Button variant="contained">Get Started</Button>
-          <Button variant="contained">Analysis</Button>
+          <Button variant="outlined" >
+          <Link  class="nav-link" to="/signin" >Login</Link>
+          </Button>
+          <Button variant="contained">
+            <Link class="nav-link" to="/dashboard" >Get Started</Link>
+          </Button>
+          <Button variant="contained"> 
+            <Link class="nav-link" to="/dashboard"> Analysor</Link>
+            </Button>
         </div>
       </div>
     </div>

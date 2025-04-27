@@ -8,29 +8,51 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Input from '@mui/material/Input';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 import CircularProgress from '@mui/material/CircularProgress';
+import ResumeCard from "./component/resumeCard";
 
 export default function Dashboard() {
- 
+
   const [open, setOpen] = React.useState(false);
-  const [resumeTitle, setResumeTitle] = React.useState('');
-  const [resumeId, setResumeId] = React.useState('');
+  const [resumeTitle, setResumeTitle] = React.useState(() => {
+    const savedTitles = localStorage.getItem('resumeTitles');
+    return savedTitles ? JSON.parse(savedTitles) : [];
+  });
+  const [newResumeTitle, setNewResumeTitle] = React.useState('');
+  const [resumeId, setResumeId] = React.useState([]);
   const [loader, setLoader] = React.useState(false);
+  const navigate = useNavigate();
+
+  // Save to localStorage whenever resumeTitle changes
+  React.useEffect(() => {
+    localStorage.setItem('resumeTitles', JSON.stringify(resumeTitle));
+  }, [resumeTitle]);
 
   const onCreateResume = async () => {
     try {
       setLoader(true);
       const uuid = uuidv4();
       setResumeId(uuid);
-      console.log('Creating resume:', { title: resumeTitle, id: uuid });
-      
+      const newResume = {
+        id: uuid,
+        title: newResumeTitle,
+        createdAt: new Date().toISOString()
+      };
+      setResumeTitle([...resumeTitle, newResume]);
+      console.log('Creating resume:', newResume);
+
       setOpen(false);
-      
+      if (uuid) {
+        navigate(`/resume/${uuid}/edit`);
+      }
+
     } catch (error) {
       console.error('Error creating resume:', error);
     } finally {
       setLoader(false);
+      setNewResumeTitle('');
     }
   };
 
@@ -48,11 +70,19 @@ export default function Dashboard() {
         <h1 className="fs-3 fw-bold">My Resume </h1>
         <p className="fs-5 opacity-75">Start creating your resume for your next job</p>
 
-        <div className="row">
-          <div className="col" onClick={() => { handleClickOpen() }}>
+       <div className="container">
+       <div className="row d-flex flex-wrap">
+          <div className="col " onClick={() => { handleClickOpen() }}>
             <AddResume />
           </div>
+          {resumeTitle.length > 0 && resumeTitle.map((resume, index) => (
+            <div className="col" key={index}>
+              <ResumeCard resume={resume} />
+            </div>
+          ))}
+
         </div>
+       </div>
 
         <React.Fragment>
           <Dialog
@@ -67,12 +97,18 @@ export default function Dashboard() {
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 <p>  Add new title for your resume</p>
-                <Input type="text" placeholder="Enter title"  style={{ height: '3rem', width: '23rem' }} onChange={(e) => { setResumeTitle(e.target.value) }} />
+                <Input
+                  type="text"
+                  placeholder="Enter title"
+                  style={{ height: '3rem', width: '23rem' }}
+                  value={newResumeTitle}
+                  onChange={(e) => { setNewResumeTitle(e.target.value) }}
+                />
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button variant="outlined" onClick={handleClose}>Cancle</Button>
-              <Button  variant="contained" disabled={!resumeTitle} onClick={onCreateResume} autoFocus>
+              <Button variant="contained" disabled={!newResumeTitle} onClick={onCreateResume} autoFocus>
                 {loader ? <CircularProgress /> : "Create"}
               </Button>
             </DialogActions>

@@ -6,7 +6,7 @@ import SignInPage from './landing/login/SignIn'
 import Navbar from './landing/navbar'
 import Dashboard from './landing/dashboard/dashboard'
 import {BrowserRouter , Routes , Route} from "react-router-dom"
-import EditResume from './landing/Resume/edit'
+import EditResume from './landing/dashboard/Resume/Edit'
 function App() {
 
  
@@ -20,7 +20,7 @@ function App() {
           <Route path='/' element={<HomePage />}></Route>
           <Route path='/signin' element={<SignInPage />}></Route>
           <Route path='/dashboard' element={<Dashboard />}></Route>
-          <Route path='/dashboard/resume/:id' element={<EditResume/>}></Route>
+          <Route path='/resume/:id/edit' element={<EditResume/>}></Route>
          </Routes>
         <Footer />
       </BrowserRouter>
