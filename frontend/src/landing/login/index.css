@@ -42,10 +42,10 @@
 }
 
 #email,
-#password ,#username {
+#password ,#username ,#name {
     outline: none;
     border: none;
-    margin-bottom: 25px !important;
+    margin-bottom: 20px !important;
     border-bottom: 1px solid #000;
     width: 100%;
     padding: 10px;

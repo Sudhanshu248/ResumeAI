@@ -15,13 +15,13 @@ export default function Navbar() {
 
         <div className="nav-col-2 me-3">
           <Button variant="outlined" >
-          <Link  class="nav-link" to="/signin" >Login</Link>
+          <Link  className="nav-link" to="/signin" >Login</Link>
           </Button>
           <Button variant="contained">
-            <Link class="nav-link" to="/dashboard" >Get Started</Link>
+            <Link className="nav-link" to="/dashboard" >Get Started</Link>
           </Button>
           <Button variant="contained"> 
-            <Link class="nav-link" to="/dashboard"> Analysor</Link>
+            <Link className="nav-link" to="/dashboard"> Analysor</Link>
             </Button>
         </div>
       </div>

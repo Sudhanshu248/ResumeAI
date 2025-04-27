@@ -13,7 +13,7 @@ export default function SignInPage(){
         </div>
         <div className="col signin-col-2">
             <Form/>
-            <Login/>
+           
         </div>
     </div>
 </div>
