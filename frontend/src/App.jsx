@@ -21,7 +21,8 @@ function App() {
           <Route path='/signin' element={<SignInPage />}></Route>
           <Route path='/dashboard' element={<Dashboard />}></Route>
           <Route path='/dashboard/resume/:id' element={<EditResume/>}></Route>
-         </Routes>
+          {/* <Route path='*' element={<Notfound/>}></Route> */}
+        </Routes>
         <Footer />
       </BrowserRouter>
 

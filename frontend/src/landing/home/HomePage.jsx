@@ -5,9 +5,9 @@ import Work from "./works"
 export default function HomePage(){
     return(
         <>
-        <Home/>
-        <Work/>
-        <Card/>
+            <Home/>
+            <Work/>
+            <Card/>
         </>
     )
 }
