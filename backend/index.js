@@ -6,6 +6,7 @@ const userRoutes = require("./routes/user.routes.js");
 const dotenv = require("dotenv");
 
 dotenv.config();
+const dblink = process.env.DB_CONNECT;
 
 const app = express();
 
@@ -22,17 +23,12 @@ app.use(express.json());
 app.use('/', userRoutes);  // This will handle /signup and /login directly
 
 const start = async () => {
-    try {
-    const connectDB =    await mongoose.connect("mongodb+srv://sainisudhanshu389:pae3A04OxUkxC19s@resumeaicluster.vebonud.mongodb.net/resumeai?retryWrites=true&w=majority&appName=ResumeAICluster", {
+    const connectDB = await mongoose.connect(dblink, {
             ssl: true,
             tls: true,
             tlsAllowInvalidCertificates: true
-        });
-        console.log("Connected to MongoDB successfully");
-    } catch (error) {
-        console.error("MongoDB connection error:", error);
-        process.exit(1);
-    }
+    });
+    console.log("Connected to MongoDB successfully");
 }
 
 app.get("/home", (req, res) => {
