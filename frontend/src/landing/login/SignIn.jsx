@@ -1,6 +1,7 @@
 
 import './index.css';
 import Form from './form';
+import Login from './page';
 
 export default function SignInPage(){
     return(
@@ -12,7 +13,7 @@ export default function SignInPage(){
         </div>
         <div className="col signin-col-2">
             <Form/>
-        
+            <Login/>
         </div>
     </div>
 </div>
