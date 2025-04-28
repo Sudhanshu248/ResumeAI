@@ -6,6 +6,7 @@ const userRoutes = require("./routes/user.routes.js");
 const dotenv = require("dotenv");
 
 dotenv.config();
+const dblink = process.env.DB_CONNECT;
 
 const app = express();
 

@@ -7,6 +7,7 @@ import Navbar from './landing/navbar'
 import Dashboard from './landing/dashboard/dashboard'
 import {BrowserRouter , Routes , Route} from "react-router-dom"
 import EditResume from './landing/dashboard/Resume/Edit'
+import NotFound from './landing/Notfound'
 function App() {
 
  
@@ -22,6 +23,7 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />}></Route>
 
           <Route path='/resume/:id/edit' element={<EditResume/>}></Route>
+          <Route path='*' element={<NotFound/>}></Route>
          </Routes>
 
 

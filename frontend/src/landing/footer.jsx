@@ -3,45 +3,42 @@ export default function Footer() {
         <>
             <div className="container border-top">
                 <div className="row">
-                    <div className="col">
-                        <h1 className="p-3 footer-text">AI Powered Resume <br /> Generator</h1>
-                        <p className="ps-3 pe-3">Let’s create your AI-powered resume for that next big job</p>
+                    <div className="col-4 p-4">
+                        <h3 className="p-3 footer-text">AI Powered Resume <br /> Builder</h3>
+                        <p className="ps-3 pe-3">Let’s create your AI-powered resume for your next big job.</p>
                     </div>
-                    <div className="col">
 
+                    <div className="col-2"></div>
 
-                        <div className="row">
-                            <h4 className="p-4">Contact Us</h4>
-                            <div className="col fs-4 ">
-                                <ul>
-                                    <li>
-                                        <i className="fa-brands fa-linkedin footer-logo-1" ></i>
-                                        <p className="fs-6 fw-bold form-check-inline ">Linkedin</p>
+                    <div className="col-2 p-5 text-center">
+                        <h5 className="" style={{color: "Black", paddingBottom: "0.8rem"}}>Quick Links</h5>
+                        <a href="" className="text-decoration-none">Home</a> <br />
+                        <a href="" className="text-decoration-none">Templates</a><br />
+                        <a href="" className="text-decoration-none">Pricing</a><br />
+                        <a href="" className="text-decoration-none">Contact</a><br />
+                    </div>
 
-                                    </li>
-                                    <li>
-                                        <i className="fa-brands fa-github footer-logo-2"></i>
+                    <div className="col-2 p-5 text-center">
+                        <h5 className="" style={{color: "Black", paddingBottom: "0.8rem"}}>Resources</h5>
+                        <a href="" className="text-decoration-none">Blog</a> <br />
+                        <a href="" className="text-decoration-none">FAQs</a><br />
+                        <a href="" className="text-decoration-none">Privacy Policy</a><br />
+                        <a href="" className="text-decoration-none">Terms of Service</a><br />
+                    </div>
 
-                                        <p className="fs-6  form-check-inline">Github</p>
-                                    </li>
+                    <div className="col-2 p-5 text-center">
+                        <h5 className="" style={{color: "Black", paddingBottom: "0.8rem"}}>Follow us</h5>
+                        <div className="d-flex flex-direction-column m-3">
+                        <a href="" className=" m-2" ><i class="fa-brands fa-instagram"></i></a> <br />
+                        <a href="" className="m-2"><i class="fa-brands fa-linkedin-in"></i></a><br />
+                        <a href="" className="m-2"><i class="fa-regular fa-envelope"></i></a><br />
 
-                                </ul>
-                            </div>
+                        </div>
+                    </div>
 
-                            <div className="col fs-4 footer-contact">
-
-                                <ul>
-                                    <li>
-                                        <i className="fa-solid fa-envelope footer-logo-3"></i>
-                                        <p className="fs-6  form-check-inline">Email</p>
-                                    </li>
-                                    <li>
-                                        <i className="fa-brands fa-instagram footer-logo-4"></i>
-                                        <p className="fs-6  form-check-inline">Instagram</p>
-                                    </li>
-                                </ul>
-                            </div>
-
+                    <div className="row">
+                        <div className="text-center pb-3">
+                            <p>@2025, ResumeAI Builder. All rights reserved.</p>
                         </div>
 
 
