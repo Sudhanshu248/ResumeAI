@@ -1,0 +1,21 @@
+.light-theme{
+    background-color: white;
+    color: black;
+    --clr: black;
+    --text-clr: black;
+}
+
+.dark-theme{
+    background-color: rgb(2, 2, 48);
+    color: white;
+    --clr: white;
+    --text-clr: black;
+}
+
+.footer{
+    color: --clr;
+}
+
+.material-symbols-outlined{
+    color: --text-clr;
+}
