@@ -4,9 +4,9 @@ import Footer from './landing/footer'
 import HomePage from './landing/home/HomePage'
 import SignInPage from './landing/login/SignIn'
 import Navbar from './landing/navbar'
-import Dashboard from './landing/dashboard/dashboard'
+import Dashboard from './landing/dashboard/component/dashboard'
 import {BrowserRouter , Routes , Route} from "react-router-dom"
-import EditResume from './landing/dashboard/Resume/Edit'
+import EditResume from './landing/dashboard/Resume/Edit.jsx'
 function App() {
 
  

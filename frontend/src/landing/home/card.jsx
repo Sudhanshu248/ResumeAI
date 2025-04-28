@@ -12,7 +12,7 @@ export default function Card() {
                             style={{ boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}
                         >
                             <div className="card-logo fs-3 ">
-                                <i class="fa-brands fa-react card-logo-1"></i>
+                                <i className="fa-brands fa-react card-logo-1"></i>
                             </div>
                             <h1 className="fs-4 ">Create Your Template</h1>
                             <p>Starting  by the  SignIn. Our single, professionally designed template ensures a clean and consistent look for all users.</p>
@@ -26,7 +26,7 @@ export default function Card() {
                         >
 
                             <div className="card-logo fs-3 ">
-                                <i class="fa-solid fa-pen-to-square card-logo-2"></i>
+                                <i className="fa-solid fa-pen-to-square card-logo-2"></i>
                             </div>
                             <h1 className="fs-4 ">Update Your Information</h1>
                             <p>
@@ -41,7 +41,7 @@ export default function Card() {
                         >
 
                             <div className="card-logo fs-3 ">
-                                <i class="fa-solid fa-share-nodes card-logo-1"></i>
+                                <i className="fa-solid fa-share-nodes card-logo-1"></i>
                             </div>
                             <h1 className="fs-4">Share Your Resume
                             </h1>

@@ -1,4 +1,4 @@
-import AddResume from "./component/addResume"
+import AddResume from "./addResume"
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -11,24 +11,26 @@ import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import ResumeCard from "./component/resumeCard";
+import ResumeCard from "./resumeCard";
 
 export default function Dashboard() {
 
   const [open, setOpen] = React.useState(false);
-  const [resumeTitle, setResumeTitle] = React.useState(() => {
-    const savedTitles = localStorage.getItem('resumeTitles');
+  const [newResumeTitle, setNewResumeTitle] = React.useState('');
+  const [loader, setLoader] = React.useState(false);
+  const [resumeId, setResumeId] = React.useState([]);
+  const [Resume, setResume] = React.useState(() => {
+    const savedTitles = localStorage.getItem('Resume');
     return savedTitles ? JSON.parse(savedTitles) : [];
   });
-  const [newResumeTitle, setNewResumeTitle] = React.useState('');
-  const [resumeId, setResumeId] = React.useState([]);
-  const [loader, setLoader] = React.useState(false);
+
+
   const navigate = useNavigate();
 
-  // Save to localStorage whenever resumeTitle changes
+
   React.useEffect(() => {
-    localStorage.setItem('resumeTitles', JSON.stringify(resumeTitle));
-  }, [resumeTitle]);
+    localStorage.setItem('Resume', JSON.stringify(Resume));
+  }, [Resume]);
 
   const onCreateResume = async () => {
     try {
@@ -40,7 +42,7 @@ export default function Dashboard() {
         title: newResumeTitle,
         createdAt: new Date().toISOString()
       };
-      setResumeTitle([...resumeTitle, newResume]);
+      setResume([...Resume, newResume]);
       console.log('Creating resume:', newResume);
 
       setOpen(false);
@@ -75,8 +77,8 @@ export default function Dashboard() {
           <div className="col " onClick={() => { handleClickOpen() }}>
             <AddResume />
           </div>
-          {resumeTitle.length > 0 && resumeTitle.map((resume, index) => (
-            <div className="col" key={index}>
+            {Resume.length > 0 && Resume.map((resume) => (
+            <div className="col" key={resume.id}>
               <ResumeCard resume={resume} />
             </div>
           ))}
