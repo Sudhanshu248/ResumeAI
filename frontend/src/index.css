@@ -6,6 +6,25 @@ logoipsum
 */
 
 /* HOme */
+::-webkit-scrollbar{
+  width: 0.75rem; /* smaller width */
+  height: 0.1rem;
+
+}
+
+::-webkit-scrollbar-track{
+  background-color: rgb(24, 24, 29);
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #fff;
+  border: 5px solid transparent;
+  border-radius: 9px;
+  background-clip: content-box;
+
+}
+
+
 
 .home-container{
     text-align: center;
