@@ -9,9 +9,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Input from '@mui/material/Input';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
-
 import CircularProgress from '@mui/material/CircularProgress';
 import ResumeCard from "./resumeCard";
+
+import { toast } from 'react-toastify';
+
 
 export default function Dashboard() {
 
@@ -27,16 +29,90 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
 
-
   React.useEffect(() => {
     localStorage.setItem('Resume', JSON.stringify(Resume));
   }, [Resume]);
 
+  // Test authentication
+  const handleTestAuth = async () => {
+    try {
+      const result = await testAuth();
+      if (result.success) {
+        toast.success('Authentication successful!');
+      } else {
+        toast.error(`Authentication failed: ${result.message}`);
+        if (result.status === 401) {
+          toast.info('Redirecting to login page...');
+          setTimeout(() => navigate('/signin'), 2000);
+        }
+      }
+    } catch (error) {
+      console.error('Error testing auth:', error);
+      toast.error('Error testing authentication');
+    }
+  };
+
   const onCreateResume = async () => {
     try {
+      if (!isAuthenticated()) {
+        toast.error('You need to login to create a resume');
+        navigate('/signin');
+        return;
+      }
+
       setLoader(true);
       const uuid = uuidv4();
       setResumeId(uuid);
+      
+      // Test authentication before making the request
+      const authTest = await testAuth();
+      if (!authTest.success) {
+        toast.error(`Authentication failed: ${authTest.message}`);
+        if (authTest.status === 401) {
+          toast.info('Redirecting to login page...');
+          setTimeout(() => navigate('/signin'), 2000);
+        }
+        return;
+      }
+
+      // Get the token directly to ensure it's available
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Authentication token is missing');
+        navigate('/signin');
+        return;
+      }
+      
+      // Make API call to create resume using auth headers
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+      
+      console.log('Making request with headers:', headers);
+      
+      const response = await fetch('http://localhost:3002/api/create-resume', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+          title: newResumeTitle,
+          id: uuid
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          toast.error('Session expired. Please login again.');
+          navigate('/signin');
+          return;
+        }
+        throw new Error(errorData.message || 'Failed to create resume');
+      }
+      
+      const data = await response.json();
+      console.log('Resume created:', data);
+      
       const newResume = {
         id: uuid,
         title: newResumeTitle,
@@ -52,6 +128,7 @@ export default function Dashboard() {
 
     } catch (error) {
       console.error('Error creating resume:', error);
+      toast.error(error.message || 'Failed to create resume. Please try again.');
     } finally {
       setLoader(false);
       setNewResumeTitle('');
@@ -72,13 +149,25 @@ export default function Dashboard() {
         <h1 className="fs-3 fw-bold">My Resume </h1>
         <p className="fs-5 opacity-75">Start creating your resume for your next job</p>
 
+        {/* Test Auth Button */}
+        <Button 
+          variant="outlined" 
+          color="secondary" 
+          onClick={handleTestAuth}
+          className="mb-3"
+        >
+          Test Authentication
+        </Button>
+
        <div className="container">
        <div className="row d-flex flex-wrap">
           <div className="col " onClick={() => { handleClickOpen() }}>
             <AddResume />
           </div>
+          
             {Resume.length > 0 && Resume.map((resume) => (
-            <div className="col" key={resume.id}>
+
+            <div className="col card-logo-1" key={resume.id} onClick={() => { navigate(`/resume/${resume.id}/view`) }}>
               <ResumeCard resume={resume} />
             </div>
           ))}

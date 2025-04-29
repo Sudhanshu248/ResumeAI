@@ -1,4 +1,3 @@
-
 import './App.css'
 import Footer from './landing/footer'
 import HomePage from './landing/home/HomePage'
@@ -8,29 +7,28 @@ import Dashboard from './landing/dashboard/component/dashboard'
 import {BrowserRouter , Routes , Route} from "react-router-dom"
 import EditResume from './landing/dashboard/Resume/Edit'
 import NotFound from './landing/Notfound'
+import GoToTop from './landing/GoToTop'
 import ViewResume from './landing/viewResume/view/viewResume'
+import { ResumeProvider } from './context/ResumeContext'
+
 function App() {
-
- 
-
   return (
     <>
-
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path='/' element={<HomePage />}></Route>
-          <Route path='/signin' element={<SignInPage />}></Route>
-          <Route path='/dashboard' element={<Dashboard />}></Route>
-          <Route path='/resume/:id/edit' element={<EditResume/>}></Route>
-          <Route path='/resume/:id/view' element={<ViewResume/>}></Route>
-          <Route path='*' element={<NotFound/>}></Route>
-         </Routes>
-
-
-        <Footer />
-      </BrowserRouter>
-
+      <ResumeProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<HomePage />}></Route>
+            <Route path='/signin' element={<SignInPage />}></Route>
+            <Route path='/dashboard' element={<Dashboard />}></Route>
+            <Route path='/resume/:id/edit' element={<EditResume/>}></Route>
+            <Route path='/resume/:id/view' element={<ViewResume/>}></Route>
+            <Route path='*' element={<NotFound/>}></Route>
+          </Routes>
+          <GoToTop/>
+          <Footer />
+        </BrowserRouter>
+      </ResumeProvider>
     </>
   )
 }

@@ -1,24 +1,29 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ResumeInfoContext } from "../../../context/ResumeInfo";
+import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
-import { Navigate } from "react-router-dom";
+
 export default function SkillForm({enableNext}) {
     const [loading, setLoading] = useState(false);
-    const {resumeInfo, setResumeInfo} = useContext(ResumeInfoContext);
+    const {resumeData, updateSkills} = useResume();
     const [skillList, setSkillList] = useState(
-        [{
-                id: uuidv4(),
-                name: "",
-                rating: 0
-            }]
+        resumeData?.skills || [{
+            id: uuidv4(),
+            name: "",
+            rating: 0
+        }]
     );
+
+    // Reset enableNext when form changes
+    useEffect(() => {
+        enableNext(false);
+    }, [skillList]);
 
     const CaseUpper = (str) => {
         return str.toUpperCase();
@@ -36,15 +41,7 @@ export default function SkillForm({enableNext}) {
             return skill;
         });
         setSkillList(updatedSkills);
-        
-        // Update ResumeInfoContext
-        setResumeInfo(prevState => {
-            if (!prevState) return { skills: updatedSkills };
-            return {
-                ...prevState,
-                skills: updatedSkills
-            };
-        });
+        updateSkills(updatedSkills);
     };
 
     const handleRatingChange = (value, skillId) => {
@@ -58,15 +55,7 @@ export default function SkillForm({enableNext}) {
             return skill;
         });
         setSkillList(updatedSkills);
-        
-        // Update ResumeInfoContext
-        setResumeInfo(prevState => {
-            if (!prevState) return { skills: updatedSkills };
-            return {
-                ...prevState,
-                skills: updatedSkills
-            };
-        });
+        updateSkills(updatedSkills);
     };
 
     const renderStars = (rating, skillId) => {
@@ -121,49 +110,39 @@ export default function SkillForm({enableNext}) {
             name: "",
             rating: 0
         };
-        setSkillList([...skillList, newSkill]);
+        const updatedSkills = [...skillList, newSkill];
+        setSkillList(updatedSkills);
+        updateSkills(updatedSkills);
     };
 
     const handleRemoveSkill = (skillId) => {
         if (skillList.length > 1) {
             const updatedSkills = skillList.filter(skill => skill.id !== skillId);
             setSkillList(updatedSkills);
-            
-            // Update ResumeInfoContext
-            setResumeInfo(prevState => {
-                if (!prevState) return { skills: updatedSkills };
-                return {
-                    ...prevState,
-                    skills: updatedSkills
-                };
-            });
+            updateSkills(updatedSkills);
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         setLoading(true);
         try {
             // Validate that all skills have names and ratings
             const isValid = skillList.every(skill => skill.name.trim() !== "" && skill.rating >= 0);
             if (!isValid) {
                 toast.error("Please fill in all skill fields");
+                enableNext(false);
                 return;
             }
 
-            // Update ResumeInfoContext
-            setResumeInfo(prevState => {
-                if (!prevState) return { skills: skillList };
-                return {
-                    ...prevState,
-                    skills: skillList
-                };
-            });
-
+            // Update context with validated data
+            updateSkills(skillList);
             toast.success("Skills saved successfully!");
-            if (enableNext) enableNext();
+            enableNext(true);
         } catch (error) {
-            toast.error("Error saving skills");
             console.error("Error saving skills:", error);
+            toast.error("Error saving skills");
+            enableNext(false);
         } finally {
             setLoading(false);
         }
@@ -174,10 +153,7 @@ export default function SkillForm({enableNext}) {
             <h4 className="fw-bold pb-1 m-0 mt-2">Skills</h4>
             <p className="pb-4">Add your skills</p>
 
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit();
-            }}>
+            <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     {skillList.map((skill) => (
                         <div key={skill.id} className="mb-3 p-3 border rounded">

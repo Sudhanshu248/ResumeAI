@@ -6,9 +6,54 @@ logoipsum
 usecontext
 toaster 
 text editor
+ctrl p
+toPDF method 
+window.print() method
 */
 
+/* DownloadPrint */
+@media print {
+  #no-print {
+    display: none;
+  }
+  #resume-print {
+    display: block;
+  }
+  body{
+    
+    margin: 0;
+    padding: 0; 
+    box-shadow: none;
+  }
+}
+
+@page {
+  size: auto;
+  margin: 0mm;
+}
+
+
+
 /* HOme */
+::-webkit-scrollbar{
+  width: 0.75rem; /* smaller width */
+  height: 0.1rem;
+
+}
+
+::-webkit-scrollbar-track{
+  background-color: rgb(24, 24, 29);
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #fff;
+  border: 5px solid transparent;
+  border-radius: 9px;
+  background-clip: content-box;
+
+}
+
+
 
 .home-container{
     text-align: center;

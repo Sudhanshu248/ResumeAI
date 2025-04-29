@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ResumeInfoContext } from "../../../context/ResumeInfo";
+import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import Checkbox from '@mui/material/Checkbox';
@@ -15,14 +15,13 @@ const formFields = {
     degree: '',
     fieldofstudy: '',
     startDate: '',
-    endDate: '',
-
+    endDate: '',  
     description: '',
 }
 
 export default function EducationForm({enableNext}) {
-    const {resumeInfo, setResumeInfo} = useContext(ResumeInfoContext);
-    const [education, setEducation] = useState(resumeInfo?.education || [{ ...formFields }]);
+    const {resumeData, updateEducation} = useResume();
+    const [education, setEducation] = useState(resumeData?.education || [{ ...formFields }]);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e, index) => {
@@ -31,47 +30,25 @@ export default function EducationForm({enableNext}) {
             i === index ? { 
                 ...item, 
                 [name]: type === 'checkbox' ? checked : value,
-                // If currently is checked, set endDate to empty
-                ...(name === 'isCurrently' && checked ? { endDate: '' } : {})
+                // If currently studying is checked, set endDate to empty
+                ...(name === 'currentlyStudying' && checked ? { endDate: '' } : {})
             } : item
         );
         
-        // Update local state
         setEducation(updatedEducation);
-        
-        // Update context with the entire resumeInfo object
-        setResumeInfo(prevState => {
-            if (!prevState) return { education: updatedEducation };
-            return {
-                ...prevState,
-                education: updatedEducation
-            };
-        });
+        updateEducation(updatedEducation);
     };
 
     const handleAddEducation = () => {
         const newEducation = [...education, { ...formFields, id: uuidv4() }];
         setEducation(newEducation);
-        setResumeInfo(prevState => {
-            if (!prevState) return { education: newEducation };
-            return {
-                ...prevState,
-                education: newEducation
-            };
-        });
-        // enableNext(true);
+        updateEducation(newEducation);
     };
 
     const handleRemoveEducation = (index) => {
         const updatedEducation = education.filter((_, i) => i !== index);
         setEducation(updatedEducation);
-        setResumeInfo(prevState => {
-            if (!prevState) return { education: updatedEducation };
-            return {
-                ...prevState,
-                education: updatedEducation
-            };
-        });
+        updateEducation(updatedEducation);
     };
 
     const handleSubmit = (e) => {
@@ -85,29 +62,23 @@ export default function EducationForm({enableNext}) {
                 item.degree.trim() !== "" && 
                 item.fieldofstudy.trim() !== "" && 
                 item.startDate !== "" && 
-                (item.isCurrently || item.endDate !== "")
+                (item.currentlyStudying || item.endDate !== "")
             );
 
             if (!isValid) {
                 toast.error("Please fill in all required fields");
+                enableNext(false);
                 return;
             }
 
-            // Update ResumeInfoContext
-            setResumeInfo(prevState => {
-                if (!prevState) return { education: education };
-                return {
-                    ...prevState,
-                    education: education
-                };
-            });
-
-            // Enable next button after successful save
-            enableNext(true);
+            // Update context with validated data
+            updateEducation(education);
             toast.success("Education information saved successfully");
+            enableNext(true);
         } catch (error) {
             console.error("Error saving education:", error);
             toast.error("Error saving education information");
+            enableNext(false);
         } finally {
             setLoading(false);
         }
@@ -156,15 +127,15 @@ export default function EducationForm({enableNext}) {
                                         value={items.endDate} 
                                         onChange={(e) => handleChange(e, index)} 
                                         className="p-1" 
-                                    
-                                        disabled={items.isCurrently}
+                                        required={!items.currentlyStudying}
+                                        disabled={items.currentlyStudying}
                                     />
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={items.isCurrently}
+                                                checked={items.currentlyStudying}
                                                 onChange={(e) => handleChange(e, index)}
-                                                name="isCurrently"
+                                                name="currentlyStudying"
                                             />
                                         }
                                         label="Currently studying here"
@@ -215,7 +186,6 @@ export default function EducationForm({enableNext}) {
                         style={{width:"7rem"}} 
                         disabled={loading} 
                         type="submit"
-                        onClick={handleSubmit}
                     >
                         {loading ? <CircularProgress size={20} /> : "Save"}
                     </button>

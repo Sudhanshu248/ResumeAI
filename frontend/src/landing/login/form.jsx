@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function Form() {
 
@@ -49,13 +50,23 @@ const handleSignUp = async () => {
         console.log("Signup response:", response.data);
 
         if (response.data && response.data.token) {
-            localStorage.setItem('token', response.data.token);
+            // Validate token format before storing
+            const token = response.data.token;
+            if (!token || typeof token !== 'string' || token.split('.').length !== 3) {
+                throw new Error('Invalid token received from server');
+            }
+            
+            // Store token with proper formatting
+            localStorage.setItem('token', token.trim());
+            toast.success("Account created successfully!");
             navigate('/dashboard');
         }
     } catch (error) {
         console.error("Signup error:", error);
         if (error.response && error.response.data && error.response.data.message) {
             setError(error.response.data.message);
+        } else if (error.message === 'Invalid token received from server') {
+            setError("Authentication error. Please try again.");
         } else if (error.code === 'ERR_NETWORK') {
             setError("Network error. Please check if the server is running.");
         } else {
@@ -68,8 +79,8 @@ const handleSignUp = async () => {
 
 
 const handleLogin = async () => {
-  if (!username || !password) {
-      setError("Username and password are required.");
+  if (!email || !password) {
+      setError("Email and password are required.");
       return;
   }
 
@@ -77,35 +88,55 @@ const handleLogin = async () => {
       setLoading(true);
       setError("");
 
-      const response = await axios.post("http://localhost:3002/login", { // Ensure this is the correct login endpoint
-          username: username.trim(),
+      const response = await axios.post("http://localhost:3002/login", {
+          email: email.trim(),
           password: password.trim(),
-      }, {
+      }, 
+      {
           headers: {
               'Content-Type': 'application/json',
           },
           timeout: 10000, // 10-second timeout
       });
 
-      console.log("Login response:", response.data);
-
       if (response.data && response.data.token) {
-          localStorage.setItem('token', response.data.token);
+          // Validate token format before storing
+          const token = response.data.token;
+          if (!token || typeof token !== 'string' || token.split('.').length !== 3) {
+              throw new Error('Invalid token received from server');
+          }
+          
+          // Store token with proper formatting
+          const formattedToken = token.trim();
+          console.log('Storing token:', formattedToken.substring(0, 20) + '...');
+          localStorage.setItem('token', formattedToken);
+          
+          // Verify token was stored correctly
+          const storedToken = localStorage.getItem('token');
+          console.log('Stored token verification:', storedToken ? 'Token exists' : 'No token');
+          
+          toast.success("Login successful!");
           navigate('/dashboard');
       } else {
           setError("Invalid credentials. Please try again.");
       }
+
   } catch (error) {
       console.error("Login error:", error);
+
       if (error.response && error.response.data && error.response.data.message) {
           setError(error.response.data.message);
+      } else if (error.message === 'Invalid token received from server') {
+          setError("Authentication error. Please try again.");
       } else {
           setError("An error occurred while trying to log in. Please try again later.");
       }
+      
   } finally {
       setLoading(false);
   }
 };
+
 
 
   
@@ -124,8 +155,8 @@ const handleLogin = async () => {
         <p>{error && <div className="alert alert-danger">{error}</div>}</p>
 
         <div className="input-box h-100 ">
-            <input type="name" id="username" placeholder="Enter your username" className='mb-5 mt-3'
-              onChange={(e) => setUsername(e.target.value)}
+            <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
+              onChange={(e) => setEmail(e.target.value)}
             />
             {/* <label htmlFor="password"></label> */}
             <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'

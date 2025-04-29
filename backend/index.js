@@ -2,8 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const userRoutes = require("./routes/user.routes.js");
+const userRoutes = require("./routes/userRoute.js");
+const resumeRoutes = require("./routes/resumeRoute.js");
 const dotenv = require("dotenv");
+
 
 dotenv.config();
 const dblink = process.env.DB_CONNECT;
@@ -23,6 +25,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/', userRoutes);  // This will handle /signup and /login directly
+app.use('/api', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
 
 const start = async () => {
     try {

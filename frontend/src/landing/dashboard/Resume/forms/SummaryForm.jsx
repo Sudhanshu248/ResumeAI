@@ -1,16 +1,21 @@
 import Button from "@mui/material/Button";
 import { CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
-import { useContext, useState } from "react";
-import { ResumeInfoContext } from "../../../context/ResumeInfo.jsx";
+import { useState, useEffect } from "react";
+import { useResume } from "../../../../context/ResumeContext.jsx";
 import { AIChatSession } from "../../../../server/AIModel.js";
-import { useEffect } from "react";
 import TextEditor from "react-simple-wysiwyg";
+
 export default function SummaryForm({enableNext}) {
-    const {resumeInfo, setResumeInfo} = useContext(ResumeInfoContext);
-    const [summary, setSummary] = useState(resumeInfo?.summary || "");
+    const {resumeData, updatePersonalInfo} = useResume();
+    const [summary, setSummary] = useState(resumeData?.personalInfo?.summary || "");
     const [loading, setLoading] = useState(false);
-    const prompt = `Job Title: ${resumeInfo?.jobTitle} , Depend on my job title give me summary for my resume within 4-5 lines`;
+    const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle} , Depend on my job title give me summary for my resume within 4-5 lines`;
+
+  
+    useEffect(() => {
+        enableNext(false);
+    }, [summary]);
 
     const generateSummaryAI = async () => {
         try {
@@ -19,11 +24,11 @@ export default function SummaryForm({enableNext}) {
             const responseText = await response.response.text();
             const parsedResponse = JSON.parse(responseText);
             console.log(parsedResponse);
-            // Format the summary points into a single string
+          
             const formattedSummary = parsedResponse.summary.join('\n\n');
             
             setSummary(formattedSummary);
-            setResumeInfo({ ...resumeInfo, summary: formattedSummary });
+            updatePersonalInfo({ summary: formattedSummary });
             toast.success("AI Summary generated successfully");
         } catch (error) {
             console.error("Error generating summary:", error);
@@ -36,19 +41,32 @@ export default function SummaryForm({enableNext}) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        setResumeInfo({ ...resumeInfo, summary: summary });
-        toast.success("Summary saved successfully");
-        enableNext(true);
-        setLoading(false);
+        
+        try {
+            if (!summary.trim()) {
+                toast.error("Please add a summary");
+                enableNext(false);
+                return;
+            }
+            
+            updatePersonalInfo({ summary: summary });
+            toast.success("Summary saved successfully");
+            enableNext(true);
+        } catch (error) {
+            console.error("Error saving summary:", error);
+            toast.error("Failed to save summary");
+            enableNext(false);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
-        <div>
-            <div className="pt-3 pb-5 ps-3 pe-3 rounded-3 mt-4 ms-3" style={{ height: "fit-content", borderTop: "8px solid #0d6ff2f2", boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}>
-                <h4 className="fw-bold pb-1 m-0 mt-2">Summary</h4>
-                <p className="pb-4">Add a summary of your career and skills</p>
+        <div className="pt-3 pb-5 ps-3 pe-3 rounded-3 mt-4 ms-3" style={{ height: "fit-content", borderTop: "8px solid #0d6ff2f2", boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}>
+            <h4 className="fw-bold pb-1 m-0 mt-2">Summary</h4>
+            <p className="pb-4">Add a summary of your career and skills</p>
 
-                <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-between p-2">
                     <label htmlFor="summary" className="mb-1 fw-medium">Summary</label>
                     <Button 
@@ -58,6 +76,7 @@ export default function SummaryForm({enableNext}) {
                         style={{ border: "1px solid rgba(193, 87, 246, 0.95)", backgroundColor: "rgba(255, 255, 255, 0.95)", color: "rgba(168, 36, 220, 0.95)" }} 
                         onClick={generateSummaryAI}
                         disabled={loading}
+                        type="button"
                     >
                         {loading ? <CircularProgress size={20} /> : "Generate From AI"}
                     </Button>
@@ -72,11 +91,17 @@ export default function SummaryForm({enableNext}) {
                     onChange={(e)=>setSummary(e.target.value)}
                 />
 
-                <div className=" d-flex justify-content-center align-items-center text-end mt-3">
-                   <button className="btn btn-primary text-white fw-semibold fs-5  mx-auto pe-1 ps-1 py-1  " style={{width:"7rem"}} disabled={loading} >{loading ? <CircularProgress size={20} /> : "Save"}</button>
-                   </div>
-                </form>
-            </div>
+                <div className="d-flex justify-content-center align-items-center text-end mt-4">
+                    <button 
+                        className="btn btn-primary text-white fw-semibold fs-5 mx-auto pe-1 ps-1 py-1" 
+                        style={{width:"7rem"}} 
+                        disabled={loading} 
+                        type="submit"
+                    >
+                        {loading ? <CircularProgress size={20} /> : "Save"}
+                    </button>
+                </div>
+            </form>
         </div>
     )
 }

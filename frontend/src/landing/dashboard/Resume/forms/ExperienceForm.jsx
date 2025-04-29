@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ResumeInfoContext } from "../../../context/ResumeInfo";
+import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import Checkbox from '@mui/material/Checkbox';
@@ -17,13 +17,13 @@ const formFields = {
     state: '',
     startDate: '',
     endDate: '',
-    isCurrently: false,
+    currentlyWorking: false,
     workSummery: '',
 }
 
 export default function ExperienceForm({enableNext}) {
-    const {resumeInfo, setResumeInfo} = useContext(ResumeInfoContext);
-    const [experience, setExperience] = useState(resumeInfo?.experience || [{ ...formFields }]);
+    const {resumeData, updateExperience} = useResume();
+    const [experience, setExperience] = useState(resumeData?.experience || [{ ...formFields }]);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e, index) => {
@@ -32,54 +32,58 @@ export default function ExperienceForm({enableNext}) {
             i === index ? { 
                 ...item, 
                 [name]: type === 'checkbox' ? checked : value,
-                // If currently is checked, set endDate to empty
-                ...(name === 'isCurrently' && checked ? { endDate: '' } : {})
+                // If currently working is checked, set endDate to empty
+                ...(name === 'currentlyWorking' && checked ? { endDate: '' } : {})
             } : item
         );
         
-        
         setExperience(updatedExperience);
-        
-        setResumeInfo(prevState => {
-            if (!prevState) return { experience: updatedExperience };
-            return {
-                ...prevState,
-                experience: updatedExperience
-            };
-        });
+        updateExperience(updatedExperience);
     };
 
     const handleAddExperience = () => {
         const newExperience = [...experience, { ...formFields, id: uuidv4() }];
         setExperience(newExperience);
-        setResumeInfo(prevState => {
-            if (!prevState) return { experience: newExperience };
-            return {
-                ...prevState,
-                experience: newExperience
-            };
-        });
+        updateExperience(newExperience);
     };
 
     const handleRemoveExperience = (index) => {
         const updatedExperience = experience.filter((_, i) => i !== index);
         setExperience(updatedExperience);
-        setResumeInfo(prevState => {
-            if (!prevState) return { experience: updatedExperience };
-            return {
-                ...prevState,
-                experience: updatedExperience
-            };
-        });
+        updateExperience(updatedExperience);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
         
-        toast.success("Experience information saved successfully");
-        enableNext(true);
-        setLoading(false);
+        try {
+            // Validate that all required fields are filled
+            const isValid = experience.every(item => 
+                item.title.trim() !== "" && 
+                item.companyName.trim() !== "" && 
+                item.city.trim() !== "" && 
+                item.state.trim() !== "" && 
+                item.startDate !== "" && 
+                (item.currentlyWorking || item.endDate !== "")
+            );
+
+            if (!isValid) {
+                toast.error("Please fill in all required fields");
+                enableNext(false);
+                return;
+            }
+
+            // Update context with validated data
+            updateExperience(experience);
+            toast.success("Experience information saved successfully");
+            enableNext(true);
+        } catch (error) {
+            console.error('Error saving experience:', error);
+            toast.error("Failed to save experience information");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -122,15 +126,15 @@ export default function ExperienceForm({enableNext}) {
                                         value={items.endDate} 
                                         onChange={(e) => handleChange(e, index)} 
                                         className="p-1" 
-                                        required={!items.isCurrently}
-                                        disabled={items.isCurrently}
+                                        required={!items.currentlyWorking}
+                                        disabled={items.currentlyWorking}
                                     />
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={items.isCurrently}
+                                                checked={items.currentlyWorking}
                                                 onChange={(e) => handleChange(e, index)}
-                                                name="isCurrently"
+                                                name="currentlyWorking"
                                             />
                                         }
                                         label="Currently working here"
