@@ -55,8 +55,8 @@ const handleSignUp = async () => {
 
 
 const handleLogin = async () => {
-  if (!username || !password) {
-      setError("Username and password are required.");
+  if (!email || !password) {
+      setError("Email and password are required.");
       return;
   }
 
@@ -64,17 +64,16 @@ const handleLogin = async () => {
       setLoading(true);
       setError("");
 
-      const response = await axios.post("http://localhost:3002/login", { // Ensure this is the correct login endpoint
-          username: username.trim(),
+      const response = await axios.post("http://localhost:3002/login", {
+          email: email.trim(),
           password: password.trim(),
-      }, {
+      }, 
+      {
           headers: {
               'Content-Type': 'application/json',
           },
           timeout: 10000, // 10-second timeout
       });
-
-      console.log("Login response:", response.data);
 
       if (response.data && response.data.token) {
           localStorage.setItem('token', response.data.token);
@@ -82,17 +81,22 @@ const handleLogin = async () => {
       } else {
           setError("Invalid credentials. Please try again.");
       }
+
   } catch (error) {
+
       console.error("Login error:", error);
+
       if (error.response && error.response.data && error.response.data.message) {
           setError(error.response.data.message);
       } else {
           setError("An error occurred while trying to log in. Please try again later.");
       }
+      
   } finally {
       setLoading(false);
   }
 };
+
 
 
   
@@ -111,8 +115,8 @@ const handleLogin = async () => {
         <p>{error && <div className="alert alert-danger">{error}</div>}</p>
 
         <div className="input-box h-100 ">
-            <input type="name" id="username" placeholder="Enter your username" className='mb-5 mt-3'
-              onChange={(e) => setUsername(e.target.value)}
+            <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
+              onChange={(e) => setEmail(e.target.value)}
             />
             {/* <label htmlFor="password"></label> */}
             <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'
