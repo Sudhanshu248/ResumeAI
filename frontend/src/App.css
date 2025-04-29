@@ -3,6 +3,8 @@
     color: black;
     --clr: black;
     --text-clr: black;
+    --arr-bg-clr: rgb(2, 2, 45);
+    --arr-clr: white;
 }
 
 .dark-theme{
@@ -10,12 +12,22 @@
     color: white;
     --clr: white;
     --text-clr: black;
+    --arr-bg-clr: white;
+    --arr-clr: rgb(2, 2, 45);
 }
 
 .footer{
-    color: --clr;
+    color: var(--clr);
 }
 
 .material-symbols-outlined{
-    color: --text-clr;
+    color: var(--text-clr);
+}
+
+.top-btn{
+    background-color: var(--arr-bg-clr) ;
+}
+
+.fa-solid{
+    color: var(--arr-clr);
 }

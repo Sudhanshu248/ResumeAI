@@ -1,0 +1,23 @@
+.scroll{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.top-btn{
+    font-size: 2.4rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    bottom: 2rem;
+    right: 3rem;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
