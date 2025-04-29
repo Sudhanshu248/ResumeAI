@@ -1,4 +1,4 @@
-
+import "./home.css";
 
 export default function Card() {
     return (
@@ -7,10 +7,7 @@ export default function Card() {
                 <div className="row">
 
                     <div className="col">
-                        <div
-                            className="card p-3 border border-0 h-100 rounded-4"
-                            style={{ boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}
-                        >
+                        <div className="card p-3 border border-0 h-100 rounded-4" >
                             <div className="card-logo fs-3 ">
                                 <i className="fa-brands fa-react card-logo-1"></i>
                             </div>
@@ -20,11 +17,7 @@ export default function Card() {
                     </div>
 
                     <div className="col">
-                        <div
-                            className="card p-3 border border-0 h-100 rounded-4"
-                            style={{ boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}
-                        >
-
+                        <div className="card p-3 border border-0 h-100 rounded-4" >
                             <div className="card-logo fs-3 ">
                                 <i className="fa-solid fa-pen-to-square card-logo-2"></i>
                             </div>
@@ -35,11 +28,7 @@ export default function Card() {
                     </div>
 
                     <div className="col">
-                        <div
-                            className="card p-3 border border-0 h-100 rounded-4"
-                            style={{ boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}
-                        >
-
+                        <div className="card p-3 border border-0 h-100 rounded-4" >
                             <div className="card-logo fs-3 ">
                                 <i className="fa-solid fa-share-nodes card-logo-1"></i>
                             </div>
@@ -51,7 +40,6 @@ export default function Card() {
 
                 </div>
             </div>
-
         </>
     )
 }

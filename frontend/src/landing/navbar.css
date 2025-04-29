@@ -1,0 +1,20 @@
+.navbar-container{
+    height: 10vh;
+    width: 100%;
+    background-color: rgb(245, 245, 245);
+    padding: 0.5rem;
+}
+
+.logo-image{
+    height: 3rem;
+    width: 12rem;
+
+}
+
+.nav-col-1>img{
+    height: 3rem;
+    width: 9rem;
+    /* padding: 1rem; */
+    /* background: transparent; */
+    cursor: pointer;
+}

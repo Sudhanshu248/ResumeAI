@@ -11,7 +11,9 @@ export default function Education({ resumeInfo }) {
                             <p className="text-start " >{education.major} in {education.degree}</p>
                             <p className="text-start ">{education.startDate} - {education.endDate}</p>
                         </div>
-                        <p className="text-start m-0">{education.description}</p>
+                      <div className="text-start">
+                       <div dangerouslySetInnerHTML={{ __html: education.description }} />
+                      </div>
                     </div>
                 ))
             }

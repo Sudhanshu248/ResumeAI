@@ -11,9 +11,9 @@ export default function Skills({ resumeInfo }) {
                 {
                     resumeInfo.skills.map((skill , index) => (
                         <div key={index} className="me-2 mb-2 pe-2 ps-2">
-                            <p className="text-start m-0">{skill.name}</p>
+                                    <p className="text-start m-0" style={{ fontSize: "1.2rem" }}>{skill.name}</p>
                             <div className="progress" style={{ backgroundColor: "#d5d1d1" , width:"14vw"}}>
-                                <div className="progress-bar progress-bar-striped progress-bar-animated" style={{ width: `${skill.rating}%`, backgroundColor: resumeInfo.themeColor }}>
+                                <div className="progress-bar progress-bar-striped progress-bar-animated" style={{ width: `${skill.rating*20}%`, backgroundColor: resumeInfo.themeColor }}>
                                 </div>
                             </div>
                         </div>

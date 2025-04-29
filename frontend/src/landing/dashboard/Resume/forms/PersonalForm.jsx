@@ -64,7 +64,7 @@ export default function PersonalForm({enableNext}) {
                    <div className=" d-flex justify-content-center align-items-center text-end">
                    <button className="btn btn-primary text-white fw-semibold fs-5  mx-auto pe-1 ps-1 py-1  " style={{width:"7rem"}} disabled={loading} onClick={handleSubmit}>{loading ? <CircularProgress size={20} /> : "Save"}</button>
                    </div>
-                </div>``
+                </div>
 
             </form>
         </div>
