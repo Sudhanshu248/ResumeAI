@@ -48,6 +48,6 @@
 <li>npm install</li>
 <li>npm run dev</li>
 <h1>🌍 Live Demo</h1>
-<h1>🔗 Try the Live App</h1>
+
 
 <h1>📸 Screenshots</h1>
