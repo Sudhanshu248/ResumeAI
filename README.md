@@ -26,8 +26,6 @@
 
 <li>Paste a Job Description (Optional): Improve results by letting the AI tailor content to a specific job.</li>
 
-<li>Choose a Template: Pick a professional design that matches your industry.</li>
-
 <li>Generate & Edit: Let the AI generate a resume, and make manual tweaks if needed.</li>
 
 <li>Download & Apply: Export and use your resume immediately.</li>
