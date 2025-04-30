@@ -54,7 +54,7 @@ export default function ResumeForm() {
             {activeForm === 3 ? <ExperienceForm enableNext={(v) => setEnableNext(v)} /> : null}
             {activeForm === 4 ? <EducationForm enableNext={(v) => setEnableNext(v)} /> : null}
             {activeForm === 5 ? <SkillForm enableNext={(v) => setEnableNext(v)} /> : null}
-            {activeForm === 6 ? <Navigate to={`/resume/${id}/view`} /> : null}
+            {activeForm === 6 ? <Navigate to={`/resume/${id}/view`}  resumeData={resumeData} /> : null}
         </div>
     )
 }

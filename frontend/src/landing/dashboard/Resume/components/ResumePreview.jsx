@@ -6,14 +6,13 @@ import Summary from "../preview/Summary.jsx";
 import Education from "../preview/Education.jsx";
 import Experience from "../preview/Experience.jsx";
 import Skills from "../preview/Skills.jsx";
-import { ResumeProvider } from "../../../../context/ResumeContext.jsx";
 
 export default function ResumePreview() {
-    const { resumeData, updateResumeData } = useResume();       
+    const { resumeData, setResumeData } = useResume();       
 
     useEffect(() => {
-        updateResumeData(dummy);
-    }, [updateResumeData]);
+        setResumeData(dummy);
+    }, [setResumeData]);
 
     if (!resumeData) {
         return <div>Loading...</div>;

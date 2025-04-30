@@ -13,55 +13,19 @@ export default function EditResume() {
     const [loading, setLoading] = useState(false);
     const [isNewResume, setIsNewResume] = useState(!id);
 
-    // Load resume data when component mounts
-    useEffect(() => {
-        if (!isNewResume) {
-            const fetchResume = async () => {
-                try {
-                    const token = localStorage.getItem('token');
-                    if (!token) {
-                        toast.error("Please login to view your resume");
-                        return;
-                    }
 
-                    const response = await fetch(`http://localhost:3002/api/resume-by-id/${id}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch resume');
-                    }
-
-                    const data = await response.json();
-                    console.log('Resume data loaded:', data);
-                    
-                    // Update the context with the fetched data
-                    // This would need to be implemented in your context
-                    
-                } catch (error) {
-                    console.error('Error fetching resume:', error);
-                    toast.error("Failed to load resume data");
-                }
-            };
-
-            fetchResume();
-        }
-    }, [id, isNewResume]);
-
+       
     const handleSaveResume = async () => {
         try {
             setLoading(true);
             
             if (isNewResume) {
-                // Create a new resume
+               
                 const result = await createResume();
-                toast.success("Resume created successfully!");
-                // Navigate to the edit page for the new resume
+            
                 navigate(`/resume/${result.resume._id}/edit`);
             } else {
-                // Save an existing resume
+              
                 await saveResume(id);
                 toast.success("Resume saved successfully!");
             }

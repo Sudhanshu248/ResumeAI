@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "react-toastify";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextEditor from "react-simple-wysiwyg";
@@ -69,18 +68,17 @@ export default function ExperienceForm({enableNext}) {
             );
 
             if (!isValid) {
-                toast.error("Please fill in all required fields");
                 enableNext(false);
                 return;
             }
 
             // Update context with validated data
             updateExperience(experience);
-            toast.success("Experience information saved successfully");
+            
             enableNext(true);
         } catch (error) {
             console.error('Error saving experience:', error);
-            toast.error("Failed to save experience information");
+           
         } finally {
             setLoading(false);
         }

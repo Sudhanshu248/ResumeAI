@@ -1,10 +1,10 @@
 import Button from "@mui/material/Button";
 import { CircularProgress } from "@mui/material";
-import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import { AIChatSession } from "../../../../server/AIModel.js";
 import TextEditor from "react-simple-wysiwyg";
+import { toast } from "react-toastify";
 
 export default function SummaryForm({enableNext}) {
     const {resumeData, updatePersonalInfo} = useResume();
@@ -29,10 +29,10 @@ export default function SummaryForm({enableNext}) {
             
             setSummary(formattedSummary);
             updatePersonalInfo({ summary: formattedSummary });
-            toast.success("AI Summary generated successfully");
+            
         } catch (error) {
             console.error("Error generating summary:", error);
-            toast.error("Failed to generate summary");
+           
         } finally {
             setLoading(false);
         }
@@ -50,11 +50,11 @@ export default function SummaryForm({enableNext}) {
             }
             
             updatePersonalInfo({ summary: summary });
-            toast.success("Summary saved successfully");
+          
             enableNext(true);
         } catch (error) {
             console.error("Error saving summary:", error);
-            toast.error("Failed to save summary");
+          
             enableNext(false);
         } finally {
             setLoading(false);

@@ -1,17 +1,17 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "react-toastify";
 
 
-export default function PersonalForm({enableNext}) {
+
+export default function PersonalForm({ enableNext }) {
     const { resumeData, updatePersonalInfo } = useResume();
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        
+
         // Update the resume data in the context
         updatePersonalInfo({
             firstName: resumeData.personalInfo.firstName,
@@ -21,8 +21,8 @@ export default function PersonalForm({enableNext}) {
             phone: resumeData.personalInfo.phone,
             email: resumeData.personalInfo.email
         });
-        
-        toast.success("Personal information saved successfully");
+
+      
         enableNext(true);
         setLoading(false);
     }
@@ -41,80 +41,80 @@ export default function PersonalForm({enableNext}) {
                 <div className="row g-3 justify-content-between">
                     <div className="col d-flex flex-column">
                         <label htmlFor="firstName" className="mb-1 fw-medium">First Name</label>
-                        <input 
-                            type="text" 
-                            name="firstName" 
-                            required 
-                            className="p-1" 
-                            id="firstName" 
-                            value={resumeData.personalInfo.firstName}
-                            onChange={handleChange} 
+                        <input
+                            type="text"
+                            name="firstName"
+                            required
+                            className="p-1"
+                            id="firstName"
+                            onChange={handleChange}
+                            value={resumeData.personalInfo?.firstName || "" }         
                         />
                     </div>
                     <div className="col d-flex flex-column">
                         <label htmlFor="lastName" className="mb-1 fw-medium">Last Name</label>
-                        <input 
-                            type="text" 
-                            name="lastName" 
-                            required 
-                            className="p-1" 
-                            id="lastName" 
-                            value={resumeData.personalInfo.lastName}
-                            onChange={handleChange} 
+                        <input
+                            type="text"
+                            name="lastName"
+                            required
+                            className="p-1"
+                            id="lastName"
+                            onChange={handleChange}
+                            value={resumeData.personalInfo?.lastName || ""}
                         />
                     </div>
                     <div className=" d-flex flex-column">
                         <label htmlFor="jobTitle" className="mb-1 fw-medium">Job Title</label>
-                        <input 
-                            type="text" 
-                            name="jobTitle" 
-                            required 
-                            className="p-1" 
-                            id="jobTitle" 
-                            value={resumeData.personalInfo.jobTitle}
-                            onChange={handleChange} 
+                        <input
+                            type="text"
+                            name="jobTitle"
+                            required
+                            className="p-1"
+                            id="jobTitle"
+                            value={resumeData.personalInfo?.jobTitle || ""}
+                            onChange={handleChange}
                         />
                     </div>
                     <div className=" d-flex flex-column">
                         <label htmlFor="address" className="mb-1 fw-medium">Address</label>
-                        <input 
-                            type="text" 
-                            name="address" 
-                            required 
-                            className="p-1" 
-                            id="address" 
-                            value={resumeData.personalInfo.address}
-                            onChange={handleChange} 
+                        <input
+                            type="text"
+                            name="address"
+                            required
+                            className="p-1"
+                            id="address"
+                            value={resumeData.personalInfo?.address || ""}
+                            onChange={handleChange}
                         />
                     </div>
                     <div className="col d-flex flex-column">
                         <label htmlFor="phone" className="mb-1 fw-medium">Phone</label>
-                        <input 
-                            type="text" 
-                            name="phone" 
-                            required 
-                            className="p-1" 
-                            id="phone" 
-                            value={resumeData.personalInfo.phone}
-                            onChange={handleChange} 
+                        <input
+                            type="text"
+                            name="phone"
+                            required
+                            className="p-1"
+                            id="phone"
+                            value={resumeData.personalInfo?.phone || ""}
+                            onChange={handleChange}
                         />
                     </div>
                     <div className="col d-flex flex-column">
                         <label htmlFor="email" className="mb-1 fw-medium">Email</label>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            required 
-                            className="p-1 border border-1 border-dark" 
-                            id="email" 
-                            value={resumeData.personalInfo.email}
-                            onChange={handleChange} 
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            className="p-1 border border-1 border-dark"
+                            id="email"
+                            value={resumeData.personalInfo?.email || ""}
+                            onChange={handleChange}
                         />
                     </div>
 
-                   <div className=" d-flex justify-content-center align-items-center text-end">
-                   <button className="btn btn-primary text-white fw-semibold fs-5  mx-auto pe-1 ps-1 py-1  " style={{width:"7rem"}} disabled={loading} type="submit">{loading ? <CircularProgress size={20} /> : "Save"}</button>
-                   </div>
+                    <div className=" d-flex justify-content-center align-items-center text-end">
+                        <button className="btn btn-primary text-white fw-semibold fs-5  mx-auto pe-1 ps-1 py-1  " style={{ width: "7rem" }} disabled={loading} type="submit">{loading ? <CircularProgress size={20} /> : "Save"}</button>
+                    </div>
                 </div>
             </form>
         </div>

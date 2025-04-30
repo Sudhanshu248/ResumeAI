@@ -13,7 +13,7 @@ export default function Skills({ resumeData }) {
                           <li className="text-start m-0" style={{ fontSize: "1.2rem" }}>{skill.name}</li>
                           </ul>
                             <div className="progress" style={{ backgroundColor: "", width: "14vw" }}>
-                                    <div className="progress-bar progress-bar-striped progress-bar-animated" style={{ width: `${skill.rating * 20}%`, backgroundColor: resumeData.themeColor }}>
+                                        <div className="progress-bar progress-bar-striped progress-bar-animated" style={{ width: `${skill.rating * 20}%`, backgroundColor: resumeData.themeColor }}>
                                 </div>
                             </div>
                         </div>
