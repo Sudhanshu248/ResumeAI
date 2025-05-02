@@ -4,7 +4,7 @@ export default function Education({ resumeData }) {
             <h5 className="text-start" style={{ color: resumeData.themeColor }}>Education</h5>
             <div style={{ border: `0.5px solid ${resumeData.themeColor}` }}></div>
             {
-                resumeData.education.map((education) => (
+                resumeData.education?.map((education) => (
                     <div key={education.id} className="m-0">
                         <h6 className="text-start fw-bold mt-2">{education.universityName}</h6>
                         <div className="d-flex justify-content-between m-0" >

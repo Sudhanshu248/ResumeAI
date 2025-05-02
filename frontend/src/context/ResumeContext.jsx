@@ -15,9 +15,30 @@ export const ResumeProvider = ({ children }) => {
       email: '',
       summary: ''
     },
-    experience: [],
-    education:[],
-    skills: [],
+    experience: [{
+      id:1,
+      companyName:'',
+      startDate:'',
+      endDate:'',
+      jobTitle:'',
+      workSummary:''
+    }],
+    education:[{
+      id:1,
+      universityName:'',
+      startDate:'',
+      endDate:'',
+      degree:'',
+      major:'',
+      description:''
+    }],
+    skills: [
+      {
+        id:1,
+        name:'',
+        rating:''
+      }
+    ],
     themeColor: "#0d6efd"
   });
 

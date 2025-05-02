@@ -20,6 +20,7 @@ export default function Dashboard() {
   const [newResumeTitle, setNewResumeTitle] = React.useState('');
   const [loader, setLoader] = React.useState(false);
   const [resumeId, setResumeId] = React.useState([]);
+  
   const [Resume, setResume] = React.useState(() => {
     const savedTitles = localStorage.getItem('Resume');
     return savedTitles ? JSON.parse(savedTitles) : [];
@@ -32,7 +33,7 @@ export default function Dashboard() {
     localStorage.setItem('Resume', JSON.stringify(Resume));
   }, [Resume]);
 
-
+ 
 
   const onCreateResume = async () => {
     try {
