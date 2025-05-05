@@ -20,11 +20,11 @@ export default function PersonalForm({ enableNext }) {
             address: resumeData.personalInfo.address,
             phone: resumeData.personalInfo.phone,
             email: resumeData.personalInfo.email
-        });
+        });       
 
-      
         enableNext(true);
         setLoading(false);
+       
     }
 
     const handleChange = (e) => {

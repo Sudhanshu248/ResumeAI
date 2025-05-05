@@ -8,6 +8,8 @@ export default function ViewResume() {
      
         window.print();
 
+        localStorage.removeItem('ResumeData');
+
        
     }
 
@@ -21,6 +23,8 @@ export default function ViewResume() {
                     <div className="d-flex justify-content-evenly align-items-center gap-3 p-2">
                         <Button variant="contained" color="primary" onClick={handleDownloadPDF}>Download PDF</Button>
                         <Button variant="outlined" color="primary">Share</Button>
+                    
+
                     </div>
 
                     
