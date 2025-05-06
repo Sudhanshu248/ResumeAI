@@ -32,7 +32,7 @@ const GoToTop = () => {
         {isVisible && 
           <div className="top-btn" onClick={goToBtn}>
             
-            <i class="fa-solid fa-arrow-up fa-2xs"></i>
+            <i className="fa-solid fa-arrow-up fa-2xs"></i>
 
           </div>
         }
