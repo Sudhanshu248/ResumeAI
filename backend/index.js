@@ -19,7 +19,7 @@ app.use(cors({ origin: 'https://resume-ai-wheat.vercel.app' }));
 
 
 app.use(cors({
-    origin: ['https://resumeai-itv1.onrender.com'],
+    origin: ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
