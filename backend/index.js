@@ -62,6 +62,10 @@ app.get("/home", (req, res) => {
     res.send("Home Page");
 });
 
+app.get('/', (req, res) => {
+    res.send('Welcome to ResumeAI Backend!');
+});
+
 app.listen(3002, () => {
     console.log("Server is running on port 3002");
     start();
