@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 
-
-
 export default function PersonalForm({ enableNext }) {
     const { resumeData, updatePersonalInfo } = useResume();
     const [loading, setLoading] = useState(false);
@@ -39,6 +37,7 @@ export default function PersonalForm({ enableNext }) {
 
             <form onSubmit={handleSubmit}>
                 <div className="row g-3 justify-content-between">
+
                     <div className="col d-flex flex-column">
                         <label htmlFor="firstName" className="mb-1 fw-medium">First Name</label>
                         <input
@@ -51,6 +50,7 @@ export default function PersonalForm({ enableNext }) {
                             value={resumeData.personalInfo?.firstName || "" }         
                         />
                     </div>
+
                     <div className="col d-flex flex-column">
                         <label htmlFor="lastName" className="mb-1 fw-medium">Last Name</label>
                         <input
@@ -63,6 +63,7 @@ export default function PersonalForm({ enableNext }) {
                             value={resumeData.personalInfo?.lastName || ""}
                         />
                     </div>
+
                     <div className=" d-flex flex-column">
                         <label htmlFor="jobTitle" className="mb-1 fw-medium">Job Title</label>
                         <input
@@ -75,6 +76,7 @@ export default function PersonalForm({ enableNext }) {
                             onChange={handleChange}
                         />
                     </div>
+
                     <div className=" d-flex flex-column">
                         <label htmlFor="address" className="mb-1 fw-medium">Address</label>
                         <input
@@ -87,6 +89,7 @@ export default function PersonalForm({ enableNext }) {
                             onChange={handleChange}
                         />
                     </div>
+
                     <div className="col d-flex flex-column">
                         <label htmlFor="phone" className="mb-1 fw-medium">Phone</label>
                         <input
@@ -99,6 +102,7 @@ export default function PersonalForm({ enableNext }) {
                             onChange={handleChange}
                         />
                     </div>
+
                     <div className="col d-flex flex-column">
                         <label htmlFor="email" className="mb-1 fw-medium">Email</label>
                         <input
@@ -115,6 +119,7 @@ export default function PersonalForm({ enableNext }) {
                     <div className=" d-flex justify-content-center align-items-center text-end">
                         <button className="btn btn-primary text-white fw-semibold fs-5  mx-auto pe-1 ps-1 py-1  " style={{ width: "7rem" }} disabled={loading} type="submit">{loading ? <CircularProgress size={20} /> : "Save"}</button>
                     </div>
+                    
                 </div>
             </form>
         </div>

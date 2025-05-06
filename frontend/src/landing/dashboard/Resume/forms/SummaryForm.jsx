@@ -12,18 +12,18 @@ export default function SummaryForm({enableNext}) {
     const [loading, setLoading] = useState(false);
     const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle} , Depend on my job title give me summary for my resume within 4-5 lines`;
 
-  
     useEffect(() => {
         enableNext(false);
     }, [summary]);
 
     const generateSummaryAI = async () => {
+
         try {
+
             setLoading(true);
             const response = await AIChatSession.sendMessage(prompt);
             const responseText = await response.response.text();
             const parsedResponse = JSON.parse(responseText);
-            console.log(parsedResponse);
           
             const formattedSummary = parsedResponse.summary.join('\n\n');
             
@@ -52,10 +52,10 @@ export default function SummaryForm({enableNext}) {
             updatePersonalInfo({ summary: summary });
           
             enableNext(true);
-        } catch (error) {
-            console.error("Error saving summary:", error);
-          
+
+        } catch (error) {          
             enableNext(false);
+
         } finally {
             setLoading(false);
         }
@@ -81,6 +81,7 @@ export default function SummaryForm({enableNext}) {
                         {loading ? <CircularProgress size={20} /> : "Generate From AI"}
                     </Button>
                 </div>
+
                 <TextEditor 
                     name="summary" 
                     id="summary" 

@@ -4,18 +4,14 @@ import Form from './form';
 export default function SignInPage(){
     return(
         <>
-            <div className="container p-4" style={{marginTop: "0vh"}}>
-                <div className="row p-4">
-                    
-                    <div className="col">
-                        <img src="/image/Sign.png" style={{width:"100%"}} alt="" />
+            <div className="boxs p-4" style={{marginTop: "5vh"}}>
+                    <div className="left-img">
+                        <img src="/image/Sign.png"  alt="" />
                     </div>
 
-                    <div className="col signin-col-2">
+                    <div className="right-box signin ">
                         <Form/>
                     </div>
-
-                </div>
             </div>
         </>
     )

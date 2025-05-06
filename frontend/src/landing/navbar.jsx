@@ -9,7 +9,6 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const [theme, setTheme] = useState("light-theme");
-  
 
   // Logic of Dark Mode 
   const toggleTheme = () => {
@@ -32,26 +31,22 @@ export default function Navbar() {
 
   return (
       <div className="navbar-container sticky-top " id="no-print" >
-      <div className="nav-row">
+        <div className="nav-row">
 
-        <div className="nav-col-1" onClick={handleClick}>
-          <img src="/image/logo.png"  className="logo-image" alt="Company Logo"/>
+          <div className="nav-col-1" onClick={handleClick}>
+            <img src="/image/logo.png"  className="logo-image" alt="Company Logo"/>
+          </div>
+
+          <div className="nav-col-2 m-0">
+            <Button variant="outlined">
+              <Link className="nav-link" to="/signin">Login</Link>
+            </Button>
+            <span className="material-symbols-outlined px-3" style={{cursor: "pointer", color: "black"}} onClick={toggleTheme}>
+              dark_mode
+            </span>
+          </div>
+
         </div>
-
-        <div className="nav-col-2 m-0">
-          <Button variant="outlined">
-            <Link className="nav-link" to="/signin">Login</Link>
-          </Button>
-          <Button variant="contained">
-            <Link className="nav-link" to="/dashboard">Analyser</Link>
-          </Button>
-          <span className="material-symbols-outlined px-3" style={{cursor: "pointer", color: "black"}} onClick={toggleTheme}>
-            dark_mode
-          </span>
-          
-        </div>
-
       </div>
-    </div>
   );
 }

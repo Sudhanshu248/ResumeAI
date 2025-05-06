@@ -39,6 +39,7 @@ const resumeSchema = new mongoose.Schema({
         rating: Number,
     }],
 });
+
 const Resume = mongoose.model('Resume', resumeSchema);
 
 module.exports = Resume; 

@@ -8,13 +8,10 @@
 .logo-image{
     height: 3rem;
     width: 12rem;
-
 }
 
 .nav-col-1>img{
     height: 3rem;
     width: 9rem;
-    /* padding: 1rem; */
-    /* background: transparent; */
     cursor: pointer;
 }

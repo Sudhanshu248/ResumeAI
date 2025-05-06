@@ -6,3 +6,27 @@
     background-color: rgb(23,108,199);
     color: white;
 }
+
+.home-row{
+    padding: 1.2rem;
+}
+
+@media screen and (max-width: 800px) {
+    .cards{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .home-row h1{
+        font-size: 45px ;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .home-row h1{
+        font-size: 38px ;
+    }
+    .home-row div{
+        font-size: 15px ;
+    }
+}

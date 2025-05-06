@@ -4,7 +4,7 @@ export default function Card() {
     return (
         <>
             <div className="container text-start  card-container">
-                <div className="row">
+                <div className="row cards">
 
                     <div className="col">
                         <div className="card p-3 border border-0 h-100 rounded-4" >
@@ -22,8 +22,7 @@ export default function Card() {
                                 <i className="fa-solid fa-pen-to-square card-logo-2"></i>
                             </div>
                             <h1 className="fs-4 ">Update Your Information</h1>
-                            <p>
-                                Enter your personal details, work experience, education, and skills into the provided form. Our AI assists you in filling out each section accurately and effectively.</p>
+                            <p>Enter your personal details, work experience, education, and skills into the provided form. Our AI assists you in filling out each section accurately and effectively.</p>
                         </div>
                     </div>
 
