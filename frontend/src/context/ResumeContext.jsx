@@ -1,14 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 const ResumeContext = createContext();
-
 const backendBaseURL = 'https://resumeai-itv1.onrender.com';
 
-const axiosInstance = axios.create({
-  baseURL: backendBaseURL,
-  withCredentials: true,
-});
+
+// const axiosInstance = axios.create({
+//   baseURL: backendBaseURL,
+//   withCredentials: true,
+// });
 
 export const ResumeProvider = ({ children }) => {
   const [resumeData, setResumeData] = useState({
@@ -49,50 +49,50 @@ export const ResumeProvider = ({ children }) => {
     themeColor: "#0d6efd"
   });
 
-  const [resumesList, setResumesList] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [resumesList, setResumesList] = useState([]);
+  // const [loading, setLoading] = useState(false);
 
-  // Fetch all resumes from backend
-  const fetchAllResumes = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get('/all-resumes');
-      setResumesList(response.data);
-    } catch (error) {
-      console.error('Error fetching resumes:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  // Fetch resume by id
-  const fetchResumeById = async (id) => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get(`/resume-by-id/${id}`);
-      setResumeData(response.data);
-    } catch (error) {
-      console.error('Error fetching resume:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchAllResumes = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axiosInstance.get('/all-resumes');
+  //     setResumesList(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching resumes:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  // Create new resume
-  const createResume = async (newResume) => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.post('/create-resume', newResume);
-      // Update resumes list after creation
-      await fetchAllResumes();
-      return response.data;
-    } catch (error) {
-      console.error('Error creating resume:', error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
+  
+  // const fetchResumeById = async (id) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axiosInstance.get(`/resume-by-id/${id}`);
+  //     setResumeData(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching resume:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+  // const createResume = async (newResume) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axiosInstance.post('/create-resume', newResume);
+   
+  //     await fetchAllResumes();
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error creating resume:', error);
+  //     throw error;
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const updatePersonalInfo = (data) => {
     setResumeData(prev => ({
@@ -137,14 +137,13 @@ export const ResumeProvider = ({ children }) => {
     <ResumeContext.Provider value={{
       resumeData,
       setResumeData,
-      resumesList,
-      loading,
-      fetchAllResumes,
-      fetchResumeById,
-      createResume,
-
+      // resumesList,
+      // loading,
+      // fetchAllResumes,
+      // fetchResumeById,
+      // createResume,
       updateResumeData,
-      updatePersonalInfo,
+       updatePersonalInfo,
       updateExperience,
       updateEducation,
       updateSkills

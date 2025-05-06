@@ -14,6 +14,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const cors = require('cors');
+app.use(cors({ origin: 'https://resume-ai-wheat.vercel.app' }));
+
+
 app.use(cors({
     origin: ['https://resumeai-itv1.onrender.com'],
     credentials: true,
