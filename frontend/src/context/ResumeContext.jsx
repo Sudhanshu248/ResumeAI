@@ -5,7 +5,6 @@ const ResumeContext = createContext();
 
 const backendBaseUrl = "https://resumeai-itv1.onrender.com";
 
-const response = await axios.get(`${backendBaseUrl}/api/all-resumes`);
 
 export const ResumeProvider = ({ children }) => {
 
