@@ -59,6 +59,10 @@ export default function Dashboard() {
     } finally {
       setLoader(false);
       setNewResumeTitle('');
+
+       
+   
+
     }
   };
 

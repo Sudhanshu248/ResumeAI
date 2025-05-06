@@ -20,22 +20,22 @@ const formFields = {
     workSummery: '',
 }
 
-export default function ExperienceForm({enableNext}) {
-    const {resumeData, updateExperience} = useResume();
+export default function ExperienceForm({ enableNext }) {
+    const { resumeData, updateExperience } = useResume();
     const [experience, setExperience] = useState(resumeData?.experience || [{ ...formFields }]);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
-        const updatedExperience = experience.map((item, i) => 
-            i === index ? { 
-                ...item, 
+        const updatedExperience = experience.map((item, i) =>
+            i === index ? {
+                ...item,
                 [name]: type === 'checkbox' ? checked : value,
                 // If currently working is checked, set endDate to empty
                 ...(name === 'currentlyWorking' && checked ? { endDate: '' } : {})
             } : item
         );
-        
+
         setExperience(updatedExperience);
         updateExperience(updatedExperience);
     };
@@ -55,15 +55,15 @@ export default function ExperienceForm({enableNext}) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        
+
         try {
             // Validate that all required fields are filled
-            const isValid = experience.every(item => 
-                item.title.trim() !== "" && 
-                item.companyName.trim() !== "" && 
-                item.city.trim() !== "" && 
-                item.state.trim() !== "" && 
-                item.startDate !== "" && 
+            const isValid = experience.every(item =>
+                item.title.trim() !== "" &&
+                item.companyName.trim() !== "" &&
+                item.city.trim() !== "" &&
+                item.state.trim() !== "" &&
+                item.startDate !== "" &&
                 (item.currentlyWorking || item.endDate !== "")
             );
 
@@ -74,11 +74,11 @@ export default function ExperienceForm({enableNext}) {
 
             // Update context with validated data
             updateExperience(experience);
-            
+
             enableNext(true);
         } catch (error) {
             console.error('Error saving experience:', error);
-           
+
         } finally {
             setLoading(false);
         }
@@ -89,7 +89,7 @@ export default function ExperienceForm({enableNext}) {
             <h4 className="fw-bold pb-1 m-0 mt-2">Personal Experience</h4>
             <p className="pb-4">Add your work experience</p>
 
-            <form onSubmit={handleSubmit}>
+          
                 <div className="container g-2 justify-content-between border border-1 border-dark rounded-3 p-3">
                     {experience.map((items, index) => (
                         <div key={index} className="row g-2 justify-content-between mb-4">
@@ -118,12 +118,12 @@ export default function ExperienceForm({enableNext}) {
                             <div className="col d-flex flex-column">
                                 <label htmlFor="endDate" className="fw-medium">End Date</label>
                                 <div className="d-flex flex-column">
-                                    <input 
-                                        type="date" 
-                                        name="endDate" 
-                                        value={items.endDate} 
-                                        onChange={(e) => handleChange(e, index)} 
-                                        className="p-1" 
+                                    <input
+                                        type="date"
+                                        name="endDate"
+                                        value={items.endDate}
+                                        onChange={(e) => handleChange(e, index)}
+                                        className="p-1"
                                         required={!items.currentlyWorking}
                                         disabled={items.currentlyWorking}
                                     />
@@ -139,10 +139,10 @@ export default function ExperienceForm({enableNext}) {
                                     />
                                 </div>
                             </div>
-                            
+
                             <div className="col-12 d-flex flex-column mt-2">
                                 <label htmlFor="workSummery" className="fw-medium">Work Summary</label>
-                                <TextEditor 
+                                <TextEditor
                                     name="workSummery"
                                     value={items.workSummery}
                                     onChange={(e) => handleChange(e, index)}
@@ -153,9 +153,9 @@ export default function ExperienceForm({enableNext}) {
                             </div>
 
                             <div className="col-12 d-flex justify-content-between align-items-center mt-3">
-                                <Button 
-                                    variant="contained" 
-                                    color="error" 
+                                <Button
+                                    variant="contained"
+                                    color="error"
                                     startIcon={<DeleteIcon />}
                                     onClick={() => handleRemoveExperience(index)}
                                     disabled={experience.length === 1}
@@ -164,9 +164,9 @@ export default function ExperienceForm({enableNext}) {
                                     Remove Experience
                                 </Button>
                                 {index === experience.length - 1 && (
-                                    <Button 
-                                        variant="contained" 
-                                        type="button" 
+                                    <Button
+                                        variant="contained"
+                                        type="button"
                                         onClick={handleAddExperience}
                                     >
                                         Add Experience
@@ -178,16 +178,17 @@ export default function ExperienceForm({enableNext}) {
                 </div>
 
                 <div className="d-flex justify-content-center align-items-center text-end mt-4">
-                    <button 
-                        className="btn btn-primary text-white fw-semibold fs-5 mx-auto pe-1 ps-1 py-1" 
-                        style={{width:"7rem"}} 
-                        disabled={loading} 
+                    <button
+                        className="btn btn-primary text-white fw-semibold fs-5 mx-auto pe-1 ps-1 py-1"
+                        style={{ width: "7rem" }}
+                        onClick={handleSubmit}
+                        disabled={loading}
                         type="submit"
                     >
                         {loading ? <CircularProgress size={20} /> : "Save"}
                     </button>
                 </div>
-            </form>
+      
         </div>
     )
 }

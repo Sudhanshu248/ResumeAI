@@ -7,7 +7,7 @@ export default function Skills({ resumeData }) {
             <div style={{ border: `0.5px solid ${resumeData.themeColor}` }}></div>
             <div className="d-flex flex-row flex-wrap mt-3">
                 {
-                    resumeData.skills.map((skill, index) => (
+                    resumeData.skills?.map((skill, index) => (
                         <div key={index} className="me-2  mb-2 pe-2 ps-2">
                           <ul>
                           <li className="text-start m-0" style={{ fontSize: "1.2rem" }}>{skill.name}</li>
