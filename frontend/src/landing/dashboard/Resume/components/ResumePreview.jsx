@@ -6,13 +6,11 @@ import Summary from "../preview/Summary.jsx";
 import Education from "../preview/Education.jsx";
 import Experience from "../preview/Experience.jsx";
 import Skills from "../preview/Skills.jsx";
-// import resume from "../../../../context/ResumeContext.jsx";
 
 export default function ResumePreview() {
     const { resumeData, setResumeData } = useResume();  
     
     const response = localStorage.getItem('ResumeData');
-    console.log(response);
  
     useEffect(() => {
         if (response) {

@@ -22,6 +22,7 @@ export default function Form() {
   }
 
 const handleSignUp = async () => {
+
     try {
         setLoading(true);
         setError("");
@@ -32,8 +33,6 @@ const handleSignUp = async () => {
             setLoading(false);
             return;
         }
-
-        console.log("Sending signup request:", { name, username, email, password });
 
         const response = await axios.post("http://localhost:3002/signin", {
             name: name,
@@ -47,8 +46,6 @@ const handleSignUp = async () => {
             timeout: 10000 // 10 second timeout
         });
 
-        console.log("Signup response:", response.data);
-
         if (response.data && response.data.token) {
             // Validate token format before storing
             const token = response.data.token;
@@ -61,8 +58,8 @@ const handleSignUp = async () => {
             toast.success("Account created successfully!");
             navigate('/dashboard');
         }
+
     } catch (error) {
-        console.error("Signup error:", error);
         if (error.response && error.response.data && error.response.data.message) {
             setError(error.response.data.message);
         } else if (error.message === 'Invalid token received from server') {
@@ -72,11 +69,11 @@ const handleSignUp = async () => {
         } else {
             setError("An error occurred during signup. Please try again later.");
         }
+
     } finally {
         setLoading(false);
     }
 }
-
 
 const handleLogin = async () => {
   if (!email || !password) {
@@ -108,22 +105,19 @@ const handleLogin = async () => {
           
           // Store token with proper formatting
           const formattedToken = token.trim();
-          console.log('Storing token:', formattedToken.substring(0, 20) + '...');
           localStorage.setItem('token', formattedToken);
           
           // Verify token was stored correctly
           const storedToken = localStorage.getItem('token');
-          console.log('Stored token verification:', storedToken ? 'Token exists' : 'No token');
           
           toast.success("Login successful!");
           navigate('/dashboard');
+
       } else {
           setError("Invalid credentials. Please try again.");
       }
 
   } catch (error) {
-      console.error("Login error:", error);
-
       if (error.response && error.response.data && error.response.data.message) {
           setError(error.response.data.message);
       } else if (error.message === 'Invalid token received from server') {
@@ -137,91 +131,75 @@ const handleLogin = async () => {
   }
 };
 
-
-
-  
-
-
   return (
     <>
-    {isRegistered  ? 
+      {isRegistered  
+        
+        ? 
 
         <div className="box-form  pe-4 ps-4 pt-5 pb-5" style={{ height: "fit-content" }}>
+          <div className='box-form-h3 d-flex justify-content-center mb-3  border-top-0 border-start-0 border-end-0 border-dark'>
+            <h3 style={{ fontFamily: "'Poppins', sans-serif" }}>Log In </h3>
+          </div>
 
-        <div className='box-form-h3 d-flex justify-content-center mb-3  border-top-0 border-start-0 border-end-0 border-dark'>
-          <h3 style={{ fontFamily: "'Poppins', sans-serif" }}>Log In </h3>
-        </div>
+          <p>{error && <div className="alert alert-danger">{error}</div>}</p>
 
-        <p>{error && <div className="alert alert-danger">{error}</div>}</p>
+          <div className="input-box h-100 ">
+              <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'
+                onChange={(e) => setPassword(e.target.value)} 
+              />
+          </div>
 
-        <div className="input-box h-100 ">
-            <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {/* <label htmlFor="password"></label> */}
-            <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-        </div>
-
-        <div className="login-btn mt-2 mb-3">
-          <Button variant="contained" color="primary" onClick={handleLogin} disabled={loading}>
-          Login 
-          </Button>
-        </div>
-
+          <div className="login-btn mt-2 mb-3">
+            <Button variant="contained" color="primary" onClick={handleLogin} disabled={loading}>
+              Login 
+            </Button>
+          </div>
         </div>
       
         :
-// SignUp page
+        
+        // SignUp page
         <div className="box-form  pe-4 ps-4 pt-5 " style={{ height: "fit-content" }}>
 
-        <div className='box-form-h3 d-flex justify-content-center mb-3  border-top-0 border-start-0 border-end-0 border-dark'>
-          <h3 style={{ fontFamily: "'Poppins', sans-serif" }} className=''>Sign Up </h3>
-          {/* <div className='border border-1 border-dark'></div>
-          <h3 style={{ fontFamily: "'Poppins', sans-serif" }}>Sign In </h3> */}
-        </div>
-
-        <p>{error && <div className="alert alert-danger">{error}</div>}</p>
-
-        <div className="input-box h-100 ">
-            {/* <label htmlFor="name"></label> */}
-            <input type="name" id="name" placeholder="Enter your name" className='mb-5 mt-3' 
-              onChange={(e) => {setName(e.target.value); console.log(name);}}
-            />
-            {/* <label htmlFor="username"></label> */}
-            <input type="name" id="username" placeholder="Enter your username" className='mb-5 mt-3'
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            {/* <label htmlFor="email "></label> */}
-            <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {/* <label htmlFor="password"></label> */}
-            <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-        </div>
-
-        <div className="login-btn mt-2 mb-3">
-          <Button variant="contained" color="primary" onClick={handleSignUp} disabled={loading}>
-          Sign Up
-          </Button>
-        </div>
-
-        <div className='d-flex justify-content-center m-4'>
-
-          <div className=''>
-            {/* <a href="">Forgot Password?</a> */}
-            <p>Already have an account? &nbsp;</p>
+          <div className='box-form-h3 d-flex justify-content-center mb-3  border-top-0 border-start-0 border-end-0 border-dark'>
+            <h3 style={{ fontFamily: "'Poppins', sans-serif" }} className=''>Sign Up </h3>
           </div>
-          
-          <Button type="button" onClick={handleAction} style={{ background: 'none', height: "fit-content", border: 'none', padding: 0, margin: "0", color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
-                Log In
-          </Button>
 
-        </div>
+          <p>{error && <div className="alert alert-danger">{error}</div>}</p>
 
+          <div className="input-box h-100 ">
+              <input type="name" id="name" placeholder="Enter your name" className='mb-5 mt-3' 
+              />
+              <input type="name" id="username" placeholder="Enter your username" className='mb-5 mt-3'
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'
+                onChange={(e) => setPassword(e.target.value)} 
+              />
+          </div>
+
+          <div className="login-btn mt-2 mb-3">
+            <Button variant="contained" color="primary" onClick={handleSignUp} disabled={loading}>
+              Sign Up
+            </Button>
+          </div>
+
+          <div className='d-flex justify-content-center ' style={{marginBottom: "10px"}}>
+            <div className=''>
+              <p>Already have an account? &nbsp;</p>
+            </div>
+            
+            <Button type="button" onClick={handleAction} style={{ background: 'none', height: "fit-content", border: 'none', padding: 0, margin: "0", color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
+              Log In
+            </Button>
+          </div>
         </div>
       }
     </>

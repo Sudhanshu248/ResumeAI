@@ -75,6 +75,7 @@ export default function SkillForm({enableNext}) {
                         onClick={() => handleRatingChange(i, skillId)}
                     />
                 );
+
             } else if (i - 0.5 <= rating) {
                 stars.push(
                     <StarHalfIcon
@@ -87,6 +88,7 @@ export default function SkillForm({enableNext}) {
                         onClick={() => handleRatingChange(i - 0.5, skillId)}
                     />
                 );
+
             } else {
                 stars.push(
                     <StarBorderIcon
@@ -139,10 +141,11 @@ export default function SkillForm({enableNext}) {
             updateSkills(skillList);
             toast.success("Skills saved successfully!");
             enableNext(true);
+
         } catch (error) {
-            console.error("Error saving skills:", error);
             toast.error("Error saving skills");
             enableNext(false);
+            
         } finally {
             setLoading(false);
         }
@@ -157,6 +160,7 @@ export default function SkillForm({enableNext}) {
                 <div className="mb-4">
                     {skillList.map((skill) => (
                         <div key={skill.id} className="mb-3 p-3 border rounded">
+
                             <div className="d-flex justify-content-between align-items-center mb-2">
                                 <h6 className="m-0">Skill {skillList.indexOf(skill) + 1}</h6>
                                 <Button
@@ -170,7 +174,9 @@ export default function SkillForm({enableNext}) {
                                     <DeleteIcon />
                                 </Button>
                             </div>
+
                             <div className="row g-3">
+
                                 <div className="col-md-6">
                                     <div className="d-flex flex-column">
                                         <label htmlFor={`name-${skill.id}`} className="mb-1 fw-medium">Skill Name</label>
@@ -186,6 +192,7 @@ export default function SkillForm({enableNext}) {
                                         <p className="text-start m-0" style={{ fontSize: "1.2rem" }}>{CaseUpper(skill.name)}</p>
                                     </div>
                                 </div>
+
                                 <div className="col-md-6">
                                     <div className="d-flex flex-column">
                                         <label htmlFor={`rating-${skill.id}`} className="mb-1 fw-medium">Rating</label>
@@ -194,12 +201,14 @@ export default function SkillForm({enableNext}) {
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     ))}
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center">
+
                     <Button
                         variant="contained"
                         color="primary"
@@ -208,6 +217,7 @@ export default function SkillForm({enableNext}) {
                     >
                         Add Skill
                     </Button>
+
                     <Button
                         variant="contained"
                         color="success"
@@ -216,6 +226,7 @@ export default function SkillForm({enableNext}) {
                     >
                         {loading ? <CircularProgress size={24} /> : "Save"}
                     </Button>
+                    
                 </div>
             </form>
         </div>

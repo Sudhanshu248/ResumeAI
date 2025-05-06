@@ -6,7 +6,6 @@ const userRoutes = require("./routes/userRoute.js");
 const resumeRoutes = require("./routes/resumeRoute.js");
 const dotenv = require("dotenv");
 
-
 dotenv.config();
 const dblink = process.env.DB_CONNECT;
 

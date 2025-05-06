@@ -70,13 +70,7 @@ export const ResumeProvider = ({ children }) => {
     }));
   };
 
-
-
- 
-
- 
-
-
+  
   return (
     <ResumeContext.Provider value={{
       resumeData,

@@ -1,8 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-
-
-  
 const apiKey = "AIzaSyDVCTt7BM6lN53NTI5DF7m4jkZmWBXQfC4";
 console.log("API Key loaded:", apiKey ? "Yes" : "No"); 
   
@@ -23,7 +20,6 @@ const generationConfig = {
     maxOutputTokens: 8192,
     responseMimeType: "application/json",
 };
-  
   
 export const AIChatSession = model.startChat({
     generationConfig,

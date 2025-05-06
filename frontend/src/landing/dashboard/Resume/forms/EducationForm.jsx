@@ -75,10 +75,11 @@ export default function EducationForm({ enableNext }) {
             updateEducation(education);
             toast.success("Education information saved successfully");
             enableNext(true);
+
         } catch (error) {
-            console.error("Error saving education:", error);
             toast.error("Error saving education information");
             enableNext(false);
+
         } finally {
             setLoading(false);
         }
@@ -98,6 +99,7 @@ export default function EducationForm({ enableNext }) {
                 <div className="container g-2 justify-content-between border border-1 border-dark rounded-3 p-3">
                     {education.map((items, index) => (
                         <div key={index} className="row g-2 justify-content-between mb-4">
+
                             <div className="col d-flex flex-column">
                                 <label htmlFor="universityName" className="fw-medium">University Name</label>
                                 <input type="text" name="universityName" value={items.universityName} onChange={(e) => handleChange(e, index)} className="p-1" required />
@@ -140,6 +142,7 @@ export default function EducationForm({ enableNext }) {
                                         }
                                         label="Currently studying here"
                                     />
+
                                 </div>
                             </div>
 
@@ -166,6 +169,7 @@ export default function EducationForm({ enableNext }) {
                                 >
                                     Remove Education
                                 </Button>
+
                                 {index === education.length - 1 && (
                                     <Button
                                         variant="contained"
@@ -191,7 +195,6 @@ export default function EducationForm({ enableNext }) {
                         {loading ? <CircularProgress size={20} /> : "Save"}
                     </button>
                 </div>
-       
         </div>
     )
 }

@@ -27,10 +27,12 @@ export default function ResumeForm() {
     return (
         <div className="p-2">
             <div className="d-flex justify-content-between">
+
                 <ThemeSelector 
                     currentTheme={resumeData?.themeColor} 
                     onThemeChange={handleThemeChange}
                 />
+
                 <div className="d-flex gap-2">
                     {activeForm > 1 && (
                         <Button variant="contained" color="info" onClick={() => setActiveForm(activeForm - 1)}>
@@ -48,6 +50,7 @@ export default function ResumeForm() {
                         </Button>
                     )}
                 </div>
+                
             </div>
 
             {activeForm === 1 ? <PersonalForm enableNext={(v) => setEnableNext(v)} /> : null}
