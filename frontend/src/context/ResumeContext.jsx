@@ -2,8 +2,8 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 // import axios from 'axios';
 
 const ResumeContext = createContext();
-const backendBaseURL = 'https://resumeai-itv1.onrender.com';
 
+// const backendBaseURL = 'https://resumeai-itv1.onrender.com/api';
 
 // const axiosInstance = axios.create({
 //   baseURL: backendBaseURL,
