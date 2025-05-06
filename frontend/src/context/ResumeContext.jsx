@@ -3,6 +3,7 @@ import axios from "axios";
 
 const ResumeContext = createContext();
 
+const backendBaseUrl = "https://resumeai-itv1.onrender.com";
 
 export const ResumeProvider = ({ children }) => {
   const [resumeData, setResumeData] = useState({
@@ -43,7 +44,29 @@ export const ResumeProvider = ({ children }) => {
     themeColor: "#0d6efd"
   });
 
+  const [resumes, setResumes] = useState([]);
 
+  // Fetch all resumes from backend
+  const fetchResumes = async () => {
+    try {
+      const response = await axios.get(`${backendBaseUrl}/api/all-resumes`);
+      setResumes(response.data);
+    } catch (error) {
+      console.error("Error fetching resumes:", error);
+    }
+  };
+
+  // Create a new resume in backend
+  const createResume = async (newResume) => {
+    try {
+      const response = await axios.post(`${backendBaseUrl}/api/create-resume`, newResume);
+      setResumes(prev => [...prev, response.data]);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating resume:", error);
+      throw error;
+    }
+  };
 
   const updatePersonalInfo = (data) => {
     setResumeData(prev => ({
@@ -73,22 +96,25 @@ export const ResumeProvider = ({ children }) => {
     }));
   };
 
-
-
   const updateResumeData = (newColor)=>{
     setResumeData(prev =>({
       ...prev , themeColor:newColor
     }))
   }
 
-  
+  useEffect(() => {
+    fetchResumes();
+  }, []);
+
   return (
     <ResumeContext.Provider value={{
       resumeData,
       setResumeData,
-
+      resumes,
+      fetchResumes,
+      createResume,
       updateResumeData,
-       updatePersonalInfo,
+      updatePersonalInfo,
       updateExperience,
       updateEducation,
       updateSkills
