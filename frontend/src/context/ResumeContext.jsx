@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ResumeContext = createContext();
 
-const backendBaseURL = 'https://resumeai-itv1.onrender.com/api';
+const backendBaseURL = 'https://resumeai-itv1.onrender.com';
 
 const axiosInstance = axios.create({
   baseURL: backendBaseURL,
