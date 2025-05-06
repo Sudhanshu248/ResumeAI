@@ -12,16 +12,13 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 import ThemeSelector from "./ThemeSelector";
 
 export default function ResumeForm() {
-    const [activeForm, setActiveForm] = useState(1);
+    const [activeForm, setActiveForm] = useState(5);
     const [enableNext, setEnableNext] = useState(false);
     const { id } = useParams();
     const { resumeData, updateResumeData } = useResume();
 
     const handleThemeChange = (newColor) => {
-        updateResumeData(prevState => ({
-            ...prevState,
-            themeColor: newColor
-        }));
+        updateResumeData(newColor);
     };
 
     return (

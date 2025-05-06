@@ -27,16 +27,3 @@ export const AIChatSession = model.startChat({
 });
   
   
-/* 
-// const {
-//     GoogleGenerativeAI,
-//     HarmCategory,
-//     HarmBlockThreshold,
-//   } = require("@google/generative-ai");
-*/
-
-/* 
-
-    // safetySettings: Adjust safety settings
-    // See https://ai.google.dev/gemini-api/docs/safety-settings
-*/

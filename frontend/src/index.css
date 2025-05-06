@@ -60,7 +60,7 @@ window.print() method
 
 .home-grad{
   background:linear-gradient(45deg, rgb(17 51 110), rgb(62 159 239));
- -webkit-background-clip: text;
+ background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -83,19 +83,19 @@ window.print() method
 /* Card */
 .card-logo-1{
   background:linear-gradient(45deg, rgb(17 51 110), rgb(62 159 239));
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .card-logo-2{
   background:linear-gradient(45deg, rgb(139, 50, 241), rgb(62 159 239));
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .card-logo-3{
 
   background:linear-gradient(45deg, rgb(135, 170, 231), rgb(62 159 239));
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -128,24 +128,24 @@ window.print() method
 /* footer */
 .footer-text{
   background:linear-gradient(45deg, rgb(17 51 110), rgb(62 159 239));
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .footer-logo-1{
   background:linear-gradient(45deg, rgb(17 51 110), rgb(62 159 239));
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .footer-logo-3{
   background:linear-gradient(120deg, rgb(16, 108, 236), rgb(0, 183, 255));
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .footer-logo-4{
   background:linear-gradient(45deg, rgb(226, 29, 236), rgb(62 159 239));
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }

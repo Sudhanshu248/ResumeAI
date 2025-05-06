@@ -70,11 +70,18 @@ export const ResumeProvider = ({ children }) => {
     }));
   };
 
+  const updateResumeData = (newColor)=>{
+    setResumeData(prev =>({
+      ...prev , themeColor:newColor
+    }))
+  }
+
   
   return (
     <ResumeContext.Provider value={{
       resumeData,
       setResumeData,
+      updateResumeData,
       updatePersonalInfo,
       updateExperience,
       updateEducation,
