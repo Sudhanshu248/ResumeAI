@@ -49,7 +49,7 @@ export default function EditResume() {
                 </div>
             </div>
 
-            <div className="d-flex justify-content-center mb-4">
+            {/* <div className="d-flex justify-content-center mb-4">
                 <button 
                     className="btn btn-primary btn-lg" 
                     onClick={handleSaveResume}
@@ -57,7 +57,7 @@ export default function EditResume() {
                 >
                     {loading ? <CircularProgress size={24} /> : (isNewResume ? "Create Resume" : "Save Resume")}
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 }

@@ -126,6 +126,13 @@ export const ResumeProvider = ({ children }) => {
     fetchAllResumes();
   }, []);
 
+  const updateResumeData = (newColor)=>{
+    setResumeData(prev =>({
+      ...prev , themeColor:newColor
+    }))
+  }
+
+  
   return (
     <ResumeContext.Provider value={{
       resumeData,
@@ -135,6 +142,8 @@ export const ResumeProvider = ({ children }) => {
       fetchAllResumes,
       fetchResumeById,
       createResume,
+
+      updateResumeData,
       updatePersonalInfo,
       updateExperience,
       updateEducation,
