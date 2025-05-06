@@ -23,6 +23,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use('/', userRoutes);  // This will handle /signup and /login directly
 app.use('/api', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
