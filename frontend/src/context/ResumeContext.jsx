@@ -5,7 +5,6 @@ const ResumeContext = createContext();
 
 const backendBaseUrl = "https://resumeai-itv1.onrender.com";
 
-
 export const ResumeProvider = ({ children }) => {
 
   const [resumeData, setResumeData] = useState({
