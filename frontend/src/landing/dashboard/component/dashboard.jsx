@@ -10,12 +10,10 @@ import Input from '@mui/material/Input';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import ResumeCard from "./resumeCard";
-import { useResume } from "../../../context/ResumeContext";
+
 
 export default function Dashboard() {
-  const { resumesList, loading, createResume, fetchAllResumes } = useResume();
-
-  const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
   const [newResumeTitle, setNewResumeTitle] = React.useState('');
   const [loader, setLoader] = React.useState(false);
   const navigate = useNavigate();
