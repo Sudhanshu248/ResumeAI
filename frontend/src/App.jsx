@@ -10,6 +10,7 @@ import NotFound from './landing/Notfound'
 import GoToTop from './landing/GoToTop'
 import ViewResume from './landing/viewResume/view/viewResume'
 import { ResumeProvider } from './context/ResumeContext'
+import ConnectionTest from './components/ConnectionTest'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <ResumeProvider>
         <BrowserRouter>
           <Navbar />
+          <ConnectionTest />
           <Routes>
             <Route path='/' element={<HomePage />}></Route>
             <Route path='/signin' element={<SignInPage />}></Route>

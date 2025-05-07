@@ -10,7 +10,7 @@ import Input from '@mui/material/Input';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import ResumeCard from "./resumeCard";
-import { useResume } from '../../context/ResumeContext';
+import { useResume } from '../../../context/ResumeContext';
 
 export default function Dashboard() {
 

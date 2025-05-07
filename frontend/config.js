@@ -1,4 +1,5 @@
-// Example using fetch
-fetch(`${process.env.REACT_APP_API_URL}/api/users`)
-  .then(res => res.json())
-  .then(data => console.log(data));
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://resume-ai-wheat.vercel.app' 
+  : 'http://localhost:3002';
+
+export default API_URL;
