@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
 
+
 app.use(cors({
     origin: ['https://resume-ai-wheat.vercel.app', 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
     credentials: true,
@@ -23,6 +24,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use('/', userRoutes);  // This will handle /signup and /login directly
 app.use('/api', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
@@ -60,6 +62,10 @@ app.use((err, req, res, next) => {
 
 app.get("/home", (req, res) => {
     res.send("Home Page");
+});
+
+app.get('/', (req, res) => {
+    res.send('Welcome to ResumeAI Backend!');
 });
 
 app.listen(3002, () => {
