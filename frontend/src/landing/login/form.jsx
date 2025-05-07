@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import {clientServer} from '../../../config';
 
 export default function Form() {
 
@@ -34,14 +35,14 @@ const handleSignUp = async () => {
             return;
         }
 
-        const response = await axios.post("http://localhost:3002/signin", {
+        const response = await clientServer.post("/signin", {
             name: name,
             username: username,
             email: email,
             password: password,
         }, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             },
             timeout: 10000 // 10 second timeout
         });
@@ -85,13 +86,13 @@ const handleLogin = async () => {
       setLoading(true);
       setError("");
 
-      const response = await axios.post("http://localhost:3002/login", {
+      const response = await clientServer.post(`/login`, {
           email: email.trim(),
           password: password.trim(),
       }, 
       {
           headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'multipart/form-data',
           },
           timeout: 10000, // 10-second timeout
       });

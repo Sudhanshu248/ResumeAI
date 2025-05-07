@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
 
+
 app.use(cors({
     origin: ['https://resume-ai-wheat.vercel.app', 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
     credentials: true,
