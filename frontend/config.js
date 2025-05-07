@@ -1,4 +1,25 @@
-// Example using fetch
-fetch(`${process.env.REACT_APP_API_URL}/api/users`)
-  .then(res => res.json())
-  .then(data => console.log(data));
+import axios from "axios";
+
+export const BASE_URL = "https://resumeai-itv1.onrender.com";
+
+const clientServer = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+
+clientServer.interceptors.request.use(
+  (config) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export default clientServer;

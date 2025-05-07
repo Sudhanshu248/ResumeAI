@@ -1,8 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-
+import axios from "axios";
 
 const ResumeContext = createContext();
-
 
 
 export const ResumeProvider = ({ children }) => {
@@ -46,7 +45,6 @@ export const ResumeProvider = ({ children }) => {
 
 
 
-
   const updatePersonalInfo = (data) => {
     setResumeData(prev => ({
       ...prev,
@@ -75,9 +73,7 @@ export const ResumeProvider = ({ children }) => {
     }));
   };
 
-  useEffect(() => {
-    fetchAllResumes();
-  }, []);
+
 
   const updateResumeData = (newColor)=>{
     setResumeData(prev =>({
@@ -90,7 +86,7 @@ export const ResumeProvider = ({ children }) => {
     <ResumeContext.Provider value={{
       resumeData,
       setResumeData,
-    
+
       updateResumeData,
        updatePersonalInfo,
       updateExperience,

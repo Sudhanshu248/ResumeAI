@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/userRoute.js");
 const resumeRoutes = require("./routes/resumeRoute.js");
@@ -15,11 +14,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
-app.use(cors({ origin: 'https://resume-ai-wheat.vercel.app' }));
 
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
+    origin: ['https://resume-ai-wheat.vercel.app', 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
