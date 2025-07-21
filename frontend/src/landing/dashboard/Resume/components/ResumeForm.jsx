@@ -22,8 +22,9 @@ export default function ResumeForm() {
     };
 
     return (
-        <div className="p-2">
-            <div className="d-flex justify-content-between">
+        <div className="py-2">
+    
+            <div className="d-flex justify-content-between" >
 
                 <ThemeSelector 
                     currentTheme={resumeData?.themeColor} 

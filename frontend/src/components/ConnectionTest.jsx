@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import API_URL from '../../config.js';
+import {API_URL} from '../../config.js';
 
 const ConnectionTest = () => {
     const [status, setStatus] = useState('Testing connection...');
@@ -26,12 +26,13 @@ const ConnectionTest = () => {
     }, []);
 
     return (
-        <div style={{ padding: '20px', margin: '20px', border: '1px solid #ccc' }}>
-            <h2>Backend Connection Test</h2>
-            <p>Status: {status}</p>
-            {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-            <p>API URL: {API_URL}</p>
-        </div>
+        <></>
+        // <div style={{ padding: '20px', margin: '20px', border: '1px solid #ccc' }}>
+        //     <h2>Backend Connection Test</h2>
+        //     <p>Status: {status}</p>
+        //     {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        //     <p>API URL: {API_URL}</p>
+        // </div>
     );
 };
 

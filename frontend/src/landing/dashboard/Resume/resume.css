@@ -1,0 +1,20 @@
+.edit-form{
+    margin: 25px 5px;
+}
+
+.preview-column {
+    margin-top: 4.2rem;
+}
+
+@media screen and (max-width: 800px) {
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+    }
+   .preview-column{
+        margin-top: 1.2rem;
+    }
+    .edit-phone{
+        width: 100%;
+    }
+}

@@ -24,8 +24,8 @@ export default function ResumePreview() {
     }
 
     return (
-        <div className="border-bottom-0 border-start-0 border-end-0 me-2 ms-2 mb-0 mt-0 pb-3 ps-2 pe-2 text-center"
-            style={{ boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px", border: `20px solid ${resumeData.themeColor}`, borderColor: resumeData.themeColor, borderRadius: '0rem' }}>
+        <div className="border-bottom-0 border-start-0 border-end-0 mb-0 mt-0 pb-3 text-center rounded-4"
+            style={{ boxShadow: "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px", height: "98.5%", border: `20px solid ${resumeData.themeColor}`, borderColor: resumeData.themeColor, borderRadius: '0rem' }}>
 
             <PersonalInfo resumeData={resumeData} />
             <Summary resumeData={resumeData} />
