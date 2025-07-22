@@ -1,27 +1,16 @@
-import axios from "axios";
+import axios from "axios"
 
-export const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://resume-ai-wheat.vercel.app' 
-  : 'http://localhost:3002';
+// Define URLs for frontend & backend of the application
+const BASE_URL = "http://localhost:3002";
+const FRONTEND_URL = "http://localhost:5173";
 
-export const BASE_URL = "https://resumeai-itv1.onrender.com";
-
-export const clientServer = axios.create({
-  baseURL: BASE_URL,
+// Create an Axios instance pre-configured with base settings
+const clientServer = axios.create({
+  baseURL: BASE_URL,  // Use the backend API base URL
   headers: {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",  // Default content type for requests
+  },
 });
 
-clientServer.interceptors.request.use(
-  (config) => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+// Export the Axios instance for use across the application
+export default clientServer;

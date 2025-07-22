@@ -17,7 +17,7 @@ const cors = require('cors');
 
 
 app.use(cors({
-    origin: ['https://resume-ai-wheat.vercel.app', 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
+    origin: ['http://localhost:5173'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -70,5 +70,5 @@ app.get('/', (req, res) => {
 
 app.listen(3002, () => {
     console.log("Server is running on port 3002");
-    start();
+    // start();
 });
