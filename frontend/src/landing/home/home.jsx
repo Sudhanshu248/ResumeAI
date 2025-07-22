@@ -16,11 +16,9 @@ export default function Home() {
                     <div className="home-btn">
 
                         <Button variant="contained"> 
-                        <Link className="nav-link" to="/signin" >Get Started</Link>
+                        <Link className="nav-link" to="/signup" >Get Started</Link>
                         </Button>
-                        <Button variant="outlined" >
-                        <Link className="nav-link" to="" >More</Link>
-                        </Button>
+                      
                         
 
                     </div>

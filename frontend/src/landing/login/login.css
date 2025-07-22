@@ -1,0 +1,139 @@
+.signin-col-2 {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-form {
+    width:80%;
+    border: none;   
+    border-radius: 10px;
+    box-shadow: rgba(136, 165, 191, 0.48) 1px 1px 10px 0px, rgba(255, 255, 255, 0.8) -1px -1px 10px 0px;
+}
+
+.login-button {
+    background: none;   
+    height: fit-content;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.login-form {
+    padding: 10px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: start;
+}
+
+.input-box {
+    padding: 10px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: start;
+    width: 100%;
+}
+
+.input-box label {
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+#email,
+#password ,#username ,#name {
+    outline: none;
+    border: none;
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid #000;
+    width: 100%;
+    padding: 10px;
+}
+
+.login-btn{
+text-align: center;
+}
+
+.login-btn button{
+    width: 45%;
+   font-size: 15px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.boxs{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.left-img{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-img>img{
+    width: 80%;
+    height: 80%;
+}
+
+.right-box{
+    width: 40%;
+}
+
+@media screen   and (max-width: 1100px) {
+    .boxs{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        gap: 5rem;
+    }
+    .right-box{
+        width: 55%;
+    }
+    .left-img{
+        width: 45%;
+    }
+    .left-img>img{
+        width: 100%;
+    }
+}
+
+@media screen   and (max-width: 800px) {
+    .boxs{
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5rem;
+        margin: auto;
+    }
+    .box-form{
+        width: 100%;
+        padding-inline: 10px !important;
+    }
+    .left-img{
+        width: 55%;
+    }
+}
+
+@media screen   and (max-width: 500px) {
+    .right-box{
+        width: 95%;
+    }
+    .left-img{
+        width: 85%;
+    }
+}
