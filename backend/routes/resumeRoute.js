@@ -1,10 +1,11 @@
-const express = require('express');
+import express from 'express';
+import { createResume, allResumes, getResume } from '../controllers/resumeController.js';
+
 const router = express.Router();
-const { createResume, allResumes, getResume } = require('../controllers/resumeController');
 
 // Apply auth middleware to all resume routes
 router.route("/create-resume").post(createResume);
 router.route("/all-resumes").get(allResumes);
 router.route("/resume-by-id/:id").get(getResume);
 
-module.exports = router;
+export default router;

@@ -27,7 +27,7 @@ export default function ExperienceForm({ enableNext }) {
 
     const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
-        const updatedExperience = experience.map((item, i) =>
+        const updatedexperience = experience.map((item, i) =>
             i === index ? {
                 ...item,
                 [name]: type === 'checkbox' ? checked : value,
@@ -36,8 +36,8 @@ export default function ExperienceForm({ enableNext }) {
             } : item
         );
 
-        setExperience(updatedExperience);
-        updateExperience(updatedExperience);
+        setExperience(updatedexperience);
+        updateExperience(updatedexperience);
     };
 
     const handleAddExperience = () => {
@@ -47,9 +47,9 @@ export default function ExperienceForm({ enableNext }) {
     };
 
     const handleRemoveExperience = (index) => {
-        const updatedExperience = experience.filter((_, i) => i !== index);
-        setExperience(updatedExperience);
-        updateExperience(updatedExperience);
+        const updatedexperience = experience.filter((_, i) => i !== index);
+        setExperience(updatedexperience);
+        updateExperience(updatedexperience);
     };
 
     const handleSubmit = (e) => {

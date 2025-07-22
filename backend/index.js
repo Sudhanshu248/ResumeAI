@@ -1,55 +1,41 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const userRoutes = require("./routes/userRoute.js");
-const resumeRoutes = require("./routes/resumeRoute.js");
-const dotenv = require("dotenv");
+import mongoose from "mongoose";
+import express from "express";
+import bodyParser from "body-parser";
+import userRoutes from "./routes/userRoute.js";
+import resumeRoutes from "./routes/resumeRoute.js"
+import dotenv from "dotenv";
+import cors from "cors";
 
+
+const app = express();
 dotenv.config();
 const dblink = process.env.DB_CONNECT;
 
-const app = express();
-
+// Middleware to parse JSON and URL-encoded data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const cors = require('cors');
-
 
 app.use(cors({
-    origin: ['https://resume-ai-wheat.vercel.app', 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:3002'],
+    origin: ['https://resume-ai-wheat.vercel.app', 'http://localhost:5173', 'http://localhost:3002'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(express.json());
-app.use(express.static('public'));
 
-app.use('/', userRoutes);  // This will handle /signup and /login directly
-app.use('/api', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
-
-const start = async () => {
+// MongoDB connection setup
+const connectDB = async () => {
     try {
-        await mongoose.connect("mongodb+srv://sainisudhanshu389:pae3A04OxUkxC19s@resumeaicluster.vebonud.mongodb.net/resumeai?retryWrites=true&w=majority&appName=ResumeAICluster", {
-            ssl: true,
-            tls: true,
-            tlsAllowInvalidCertificates: true,
-            serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
-            socketTimeoutMS: 45000, // Increase socket timeout to 45 seconds
-            connectTimeoutMS: 30000, // Increase connection timeout to 30 seconds
-            maxPoolSize: 10, // Limit the number of connections in the pool
-            minPoolSize: 2, // Maintain at least 2 connections in the pool
-            maxIdleTimeMS: 30000, // Close idle connections after 30 seconds
-            retryWrites: true,
-            retryReads: true
-        });
-        console.log("Connected to MongoDB successfully");
+        await mongoose.connect(dblink);
+        console.log("SuccessFully Mongoose Connected !");
     } catch (error) {
         console.error("MongoDB connection error:", error);
         process.exit(1);
     }
-}
+};
 
 // Add error handling middleware
 app.use((err, req, res, next) => {
@@ -60,15 +46,17 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.get("/home", (req, res) => {
-    res.send("Home Page");
-});
+app.use('/', userRoutes);  // This will handle /signup and /login directly
+app.use('/', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
 
 app.get('/', (req, res) => {
+    res.send('Welcome to ResumeAI Backend!');
+});
+app.get('/home', (req, res) => {
     res.send('Welcome to ResumeAI Backend!');
 });
 
 app.listen(3002, () => {
     console.log("Server is running on port 3002");
-    start();
+    connectDB();
 });

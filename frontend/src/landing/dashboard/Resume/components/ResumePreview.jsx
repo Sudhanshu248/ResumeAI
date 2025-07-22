@@ -10,13 +10,6 @@ import Skills from "../preview/Skills.jsx";
 export default function ResumePreview() {
     const { resumeData, setResumeData } = useResume();  
     
-    const response = localStorage.getItem('ResumeData');
- 
-    useEffect(() => {
-        if (response) {
-          setResumeData(JSON.parse(response));
-        }
-      }, [response, setResumeData]);
       
 
     if (!resumeData) {

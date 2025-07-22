@@ -13,26 +13,26 @@ export default function EditResume() {
     const { resumeData, saveResume, createResume } = useResume();
     const [loading, setLoading] = useState(false);
     const [isNewResume, setIsNewResume] = useState(!id);
-       
+
     const handleSaveResume = async () => {
         try {
 
             setLoading(true);
-            
+
             if (isNewResume) {
-               
+
                 const result = await createResume();
-            
+
                 navigate(`/resume/${result.resume._id}/edit`);
             } else {
-              
+
                 await saveResume(id);
                 toast.success("Resume saved successfully!");
             }
 
         } catch (error) {
             toast.error(error.message || "Failed to save resume");
-            
+
         } finally {
             setLoading(false);
         }
@@ -42,7 +42,7 @@ export default function EditResume() {
         <div>
             <div className="edit-form row">
                 <div className="col rounded-3 mb-3">
-                    <ResumeForm/>
+                    <ResumeForm />
                 </div>
 
                 <div className="preview-column col rounded-3 mb-3">
@@ -50,15 +50,15 @@ export default function EditResume() {
                 </div>
             </div>
 
-            {/* <div className="d-flex justify-content-center mb-4">
-                <button 
-                    className="btn btn-primary btn-lg" 
+            <div className="d-flex justify-content-center mb-4">
+                <button
+                    className="btn btn-primary btn-lg"
                     onClick={handleSaveResume}
                     disabled={loading}
                 >
                     {loading ? <CircularProgress size={24} /> : (isNewResume ? "Create Resume" : "Save Resume")}
                 </button>
-            </div> */}
+            </div>
         </div>
     );
 }
