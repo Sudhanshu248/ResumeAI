@@ -21,7 +21,7 @@ function App() {
           <ConnectionTest />
           <Routes>
             <Route path='/' element={<HomePage />}></Route>
-            <Route path='/signin' element={<SignInPage />}></Route>
+            <Route path='/signup' element={<SignInPage />}></Route>
             <Route path='/dashboard' element={<Dashboard />}></Route>
             <Route path='/resume/:id/edit' element={<EditResume/>}></Route>
             <Route path='/resume/:id/view' element={<ViewResume/>}></Route>

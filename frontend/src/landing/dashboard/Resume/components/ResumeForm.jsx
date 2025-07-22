@@ -42,7 +42,7 @@ export default function ResumeForm() {
                         <Button variant="contained" color="info" disabled={!enableNext} onClick={() => {
                             setActiveForm(activeForm + 1);
                             setEnableNext(false);
-                            localStorage.setItem('ResumeData', JSON.stringify(resumeData));
+                           
                         }}>
                             Next<ArrowRight />
                         </Button>

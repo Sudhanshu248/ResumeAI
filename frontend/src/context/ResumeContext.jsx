@@ -3,7 +3,7 @@ import axios from "axios";
 
 const ResumeContext = createContext();
 
-const backendBaseUrl = "https://resumeai-itv1.onrender.com";
+const backendBaseUrl = "http://localhost:3002";
 
 export const ResumeProvider = ({ children }) => {
 
@@ -50,7 +50,7 @@ export const ResumeProvider = ({ children }) => {
   // Fetch all resumes from backend
   const fetchResumes = async () => {
     try {
-      const response = await axios.get(`${backendBaseUrl}/api/all-resumes`);
+      const response = await axios.get(`${backendBaseUrl}/all-resumes`);
       setResumes(response.data);
     } catch (error) {
       console.error("Error fetching resumes:", error);
@@ -60,7 +60,7 @@ export const ResumeProvider = ({ children }) => {
   // Create a new resume in backend
   const createResume = async (newResume) => {
     try {
-      const response = await axios.post(`${backendBaseUrl}/api/create-resume`, newResume);
+      const response = await axios.post(`${backendBaseUrl}/create-resume`, newResume);
       setResumes(prev => [...prev, response.data]);
       return response.data;
     } catch (error) {
