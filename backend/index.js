@@ -24,6 +24,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use('/', userRoutes);  // This will handle /signup and /login directly
 app.use('/api', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
@@ -61,6 +62,10 @@ app.use((err, req, res, next) => {
 
 app.get("/home", (req, res) => {
     res.send("Home Page");
+});
+
+app.get('/', (req, res) => {
+    res.send('Welcome to ResumeAI Backend!');
 });
 
 app.listen(3002, () => {

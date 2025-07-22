@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const apiKey = "AIzaSyDVCTt7BM6lN53NTI5DF7m4jkZmWBXQfC4";
+const apiKey = "2";
 console.log("API Key loaded:", apiKey ? "Yes" : "No"); 
   
 if (!apiKey) {

@@ -9,7 +9,18 @@
     width:80%;
     border: none;   
     border-radius: 10px;
-    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+    box-shadow: rgba(136, 165, 191, 0.48) 1px 1px 10px 0px, rgba(255, 255, 255, 0.8) -1px -1px 10px 0px;
+}
+
+.login-button {
+    background: none;   
+    height: fit-content;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .login-form {
@@ -68,11 +79,14 @@ text-align: center;
 
 .left-img{
     width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .left-img>img{
-    width: 90%;
-    height: 90%;
+    width: 80%;
+    height: 80%;
 }
 
 .right-box{
@@ -98,7 +112,7 @@ text-align: center;
 }
 
 @media screen   and (max-width: 800px) {
-    .box-form{
+    /* .box-form{
         width: 100%;
     }
     .right-box{
@@ -106,11 +120,29 @@ text-align: center;
     }
     .left-img{
         display: none;
+    } */
+    .boxs{
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5rem;
+        margin: auto;
+    }
+    .box-form{
+        width: 100%;
+        padding-inline: 10px !important;
+    }
+    .left-img{
+        width: 55%;
     }
 }
 
 @media screen   and (max-width: 500px) {
     .right-box{
         width: 95%;
+    }
+    .left-img{
+        width: 85%;
     }
 }

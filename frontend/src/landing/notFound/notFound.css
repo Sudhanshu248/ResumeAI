@@ -1,0 +1,22 @@
+.notFound{
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notFound-text{
+    font-size: 18.9vh;
+}
+
+@media screen and (max-width: 800px) {
+    .notFound-text{
+        font-size: 16.9vh !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .notFound-text{
+        font-size: 14.9vh !important;
+    }
+}

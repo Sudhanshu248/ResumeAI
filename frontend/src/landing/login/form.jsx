@@ -198,7 +198,7 @@ const handleLogin = async () => {
               <p>Already have an account? &nbsp;</p>
             </div>
             
-            <Button type="button" onClick={handleAction} style={{ background: 'none', height: "fit-content", border: 'none', padding: 0, margin: "0", color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
+            <Button type="button" onClick={handleAction} className='login-button'>
               Log In
             </Button>
           </div>
