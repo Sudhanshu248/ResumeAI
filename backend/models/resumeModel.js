@@ -15,13 +15,15 @@ const resumeSchema = new mongoose.Schema({
         lastName: String,
         jobTitle: String,
         address: String,
-        phone: String,
+        phone: Number,
         email: String,
         summary: String
     },
     experience: [{
         company: String,
         position: String,
+        city: String,
+        state: String,
         startDate: Date,
         endDate: Date,
         description: String
@@ -32,7 +34,7 @@ const resumeSchema = new mongoose.Schema({
         field: String,
         startDate: Date,
         endDate: Date,
-        gpa: String
+        description: String
     }],
     skills: [{
         name: String,

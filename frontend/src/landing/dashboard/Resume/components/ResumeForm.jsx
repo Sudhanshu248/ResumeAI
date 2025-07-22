@@ -6,8 +6,7 @@ import EducationForm from "../forms/EducationForm";
 import Button from "@mui/material/Button";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import ThemeSelector from "./ThemeSelector";
 
