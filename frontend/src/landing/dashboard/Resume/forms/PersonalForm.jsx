@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
+import "../resume.css";
 
 export default function PersonalForm({ enableNext }) {
     const { resumeData, updatePersonalInfo } = useResume();
@@ -30,9 +31,12 @@ export default function PersonalForm({ enableNext }) {
         updatePersonalInfo({ [name]: value });
     };
 
+    // <div className="pt-3 pb-5 ps-3 pe-3 rounded-3 mt-4" style={{ height: "fit-content", borderTop: "8px solid #0d6ff2f2", boxShadow: "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px"}}>
     return (
-        <div className="pt-2 pb-5 ps-3 pe-3 rounded-3 mt-4 ms-3" style={{ height: "fit-content", borderTop: "5px solid #0d6ff2f2", boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}>
+
+        <div className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4 " style={{ height: "fit-content", borderTop: "5px solid #0d6ff2f2", boxShadow: "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px"}}>
             <h4 className="fw-bold pb-1 m-0 mt-2">Personal Detail</h4>
+            
             <p className="pb-4">Get started with the basic information about yourself</p>
 
             <form onSubmit={handleSubmit}>
@@ -96,7 +100,7 @@ export default function PersonalForm({ enableNext }) {
                             type="text"
                             name="phone"
                             required
-                            className="p-1"
+                            className="edit-phone p-1"
                             id="phone"
                             value={resumeData.personalInfo?.phone || ""}
                             onChange={handleChange}

@@ -85,7 +85,7 @@ export default function ExperienceForm({ enableNext }) {
     };
 
     return (
-        <div className="pt-2 pb-5 ps-3 pe-3 rounded-3 mt-4 ms-3" style={{ height: "fit-content", borderTop: "5px solid #0d6ff2f2", boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" }}>
+        <div className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4 " style={{ height: "fit-content", borderTop: "5px solid #0d6ff2f2", boxShadow: "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px"}}>
             <h4 className="fw-bold pb-1 m-0 mt-2">Personal Experience</h4>
             <p className="pb-4">Add your work experience</p>
 

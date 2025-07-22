@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import ResumePreview from "../../dashboard/Resume/components/ResumePreview";
 import { useResume } from "../../../context/ResumeContext.jsx";
 import { ResumeProvider } from "../../../context/ResumeContext.jsx";
+import "./ViewResume.css";
 
 export default function ViewResume() {
     const {resumeData , setResumeData} = useResume(); 
@@ -25,7 +26,7 @@ export default function ViewResume() {
                     </div>
                 </div>
                 
-                <div className="mt-3" style={{ width: '100%', margin: '0 auto' }}>
+                <div className="mt-3" style={{ width: '97%', margin: '0 auto 4rem' }}>
                     <ResumePreview />
                 </div>
             </ResumeProvider>

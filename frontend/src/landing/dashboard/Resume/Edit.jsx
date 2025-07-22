@@ -4,6 +4,7 @@ import ResumeForm from "./components/ResumeForm";
 import ResumePreview from "./components/ResumePreview";
 import { useResume } from "../../../context/ResumeContext.jsx";
 import { toast } from "react-toastify";
+import "./resume.css";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function EditResume() {
@@ -39,12 +40,12 @@ export default function EditResume() {
 
     return (
         <div>
-            <div className="row">
-                <div className="col">
+            <div className="edit-form row">
+                <div className="col rounded-3 mb-3">
                     <ResumeForm/>
                 </div>
 
-                <div className="col rounded-3 mb-3">
+                <div className="preview-column col rounded-3 mb-3">
                     <ResumePreview />
                 </div>
             </div>
