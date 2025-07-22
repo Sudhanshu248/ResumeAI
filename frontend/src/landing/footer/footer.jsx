@@ -17,10 +17,10 @@ export default function Footer() {
                         <div className="links">
                             <div className="sub-link  text-center">
                                 <h5 className="footer" style={{paddingBottom: "0.8rem"}}>Quick Links</h5>
-                                <a href="" className="text-decoration-none">Home</a> <br />
-                                <a href="" className="text-decoration-none">Templates</a><br />
-                                <a href="" className="text-decoration-none">Pricing</a><br />
-                                <a href="" className="text-decoration-none">Contact</a><br />
+                                <a href="/" className="text-decoration-none">Home</a> <br />
+                                <a href="/" className="text-decoration-none">Templates</a><br />
+                                <a href="/" className="text-decoration-none">Pricing</a><br />
+                                <a href="/" className="text-decoration-none">Contact</a><br />
                             </div>
                         </div>
                     </div>
@@ -29,10 +29,10 @@ export default function Footer() {
                         <div className="links">
                             <div className="sub-link text-center">
                                 <h5 className="footer" style={{paddingBottom: "0.8rem"}}>Resources</h5>
-                                <a href="" className="text-decoration-none">Blog</a> <br />
-                                <a href="" className="text-decoration-none">FAQs</a><br />
-                                <a href="" className="text-decoration-none">Privacy Policy</a><br />
-                                <a href="" className="text-decoration-none">Terms of Service</a><br />
+                                <a href="/" className="text-decoration-none">Blog</a> <br />
+                                <a href="/" className="text-decoration-none">FAQs</a><br />
+                                <a href="/" className="text-decoration-none">Privacy Policy</a><br />
+                                <a href="/" className="text-decoration-none">Terms of Service</a><br />
                             </div>
                         </div>
 
@@ -40,9 +40,9 @@ export default function Footer() {
                             <div className="sub-link  text-center">
                                 <h5 className="footer" style={{paddingBottom: "0.8rem"}}>Follow us</h5>
                                 <div className="d-flex flex-direction-column m-3">
-                                    <a href="" className=" m-2"><i className="fa-brands fa-instagram"></i></a> <br />
-                                    <a href="" className="m-2"><i className="fa-brands fa-linkedin-in"></i></a><br />
-                                    <a href="" className="m-2"><i className="fa-regular fa-envelope"></i></a><br />
+                                    <a href="https://www.instagram.com/beast__ashu__/" target="_blank" className=" m-2"><i className="fa-brands fa-instagram"></i></a> <br />
+                                    <a href="https://www.linkedin.com/in/sudhanshusaini24" target="_blank" className="m-2"><i className="fa-brands fa-linkedin-in"></i></a><br />
+                                    <a href="mailto:hk1832141@gmail.com" target="_blank" className="m-2"><i className="fa-regular fa-envelope"></i></a><br />
                                 </div>
                             </div>
                         </div>

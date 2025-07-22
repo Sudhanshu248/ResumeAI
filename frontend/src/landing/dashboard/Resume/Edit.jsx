@@ -10,7 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 export default function EditResume() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { resumeData, saveResume, createResume } = useResume();
+    const { saveResume, createResume } = useResume();
     const [loading, setLoading] = useState(false);
     const [isNewResume, setIsNewResume] = useState(!id);
 

@@ -1,125 +1,176 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import  { createContext, useState, useContext, useEffect } from 'react';
 import axios from "axios";
+import {BASE_URL} from "../axiosConfig.js"
+
 
 const ResumeContext = createContext();
 
-const backendBaseUrl = "http://localhost:3002";
-
 export const ResumeProvider = ({ children }) => {
-
-  const [resumeData, setResumeData] = useState({
-    title: '',
-    personalInfo: {
-      firstName: '',
-      lastName: '',
-      jobTitle: '',
-      address: '',
-      phone: '',
-      email: '',
-      summary: ''
-    },
-    experience: [{
-      id:1,
-      companyName:'',
-      startDate:'',
-      endDate:'',
-      jobTitle:'',
-      workSummary:''
-    }],
-    education:[{
-      id:1,
-      universityName:'',
-      startDate:'',
-      endDate:'',
-      degree:'',
-      major:'',
-      description:''
-    }],
-    skills: [
-      {
-        id:1,
-        name:'',
-        rating:''
-      }
-    ],
-    themeColor: "#0d6efd"
-  });
-
+  const [resumeData, setResumeData] = useState(null);
   const [resumes, setResumes] = useState([]);
+  const [currentResumeId, setCurrentResumeId] = useState(null);
 
-  // Fetch all resumes from backend
+  // ✅ Fetch all resumes (dashboard/list)
   const fetchResumes = async () => {
+    const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`${backendBaseUrl}/all-resumes`);
-      setResumes(response.data);
+      const response = await axios.get(`${BASE_URL}/all-resumes`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+      setResumes(response?.data?.resumes || []);
     } catch (error) {
       console.error("Error fetching resumes:", error);
+      setResumes([]); // fallback
     }
   };
 
-  // Create a new resume in backend
-  const createResume = async (newResume) => {
+
+  // ✅ Load resume by ID
+  const loadResume = async (resumeId) => {
+    const token = localStorage.getItem("token");
     try {
-      const response = await axios.post(`${backendBaseUrl}/create-resume`, newResume);
-      setResumes(prev => [...prev, response.data]);
-      return response.data;
+      const response = await axios.get(`${BASE_URL}/resume-by-id/${resumeId}`, {
+        headers: { Authorization: token },
+      });
+      const resume = response.data.resume;
+      setResumeData(resume);
+      setCurrentResumeId(resume._id);
+    } catch (error) {
+      console.error("Error loading resume:", error);
+    }
+  };
+
+  // ✅ Save current resume to backend
+  const saveResume = async (resumeId) => {
+    const token = localStorage.getItem("token");
+    console.log("saveResume funciton is running ",resumeData);
+    try {
+      await axios.put(`${BASE_URL}/update-resume/${resumeId}`, resumeData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+    } catch (error) {
+      console.error("Error saving resume:", error);
+      throw error;
+    }
+  };
+
+  // ✅ Update one or more resume sections to backend
+  const updateResumeSection = async (updatedFields) => {
+    const token = localStorage.getItem("token");
+      console.log("UpdateResumeScetion  funciton is running ",updatedFields);
+    if (!currentResumeId) return;
+
+    try {
+      await axios.put(`${BASE_URL}/update-resume/${currentResumeId}`, updatedFields, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+      setResumeData(prev => ({ ...prev, ...updatedFields }));
+    } catch (error) {
+      console.error("Error updating resume section:", error);
+    }
+  };
+
+    // ✅ Create new resume
+  const createResume = async (newResume = {}) => {
+    const token = localStorage.getItem("token");
+     console.log("Create Resume  funciton is running ",newResume);
+    try {
+      const response = await axios.post(`${BASE_URL}/create-resume`, newResume, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const created = response.data.resume;
+      setCurrentResumeId(created._id);
+      setResumeData(created);
+      setResumes(prev => [...prev, created]);
+      return created;
     } catch (error) {
       console.error("Error creating resume:", error);
       throw error;
     }
   };
 
-  const updatePersonalInfo = (data) => {
-    setResumeData(prev => ({
+  // ✅ Local update (no backend)
+  const updateLocalResumeData = (updatedSection) => {
+    setResumeData((prev) => ({
       ...prev,
-      personalInfo: { ...prev.personalInfo, ...data }
+      ...updatedSection,
     }));
   };
 
-  const updateExperience = (experiences) => {
-    setResumeData(prev => ({
-      ...prev,
-      experience: experiences
-    }));
-  };
+ // ✅ Update entire personalInfo block (name, jobTitle, email, etc.)
+const updatePersonalInfo = (data) => {
+  updateLocalResumeData({
+    personalInfo: {
+      ...resumeData?.personalInfo,
+      ...data,
+    },
+  });
+};
 
-  const updateEducation = (education) => {
-    setResumeData(prev => ({
-      ...prev,
-      education: education
-    }));
-  };
+// ✅ Update only the summary inside personalInfo
+const updateSummary = (summary) => {
+  updateLocalResumeData({
+    personalInfo: {
+      ...resumeData?.personalInfo,
+      summary,
+    },
+  });
+};
 
-  const updateSkills = (skills) => {
-    setResumeData(prev => ({
-      ...prev,
-      skills: skills
-    }));
-  };
+// ✅ Other section updates remain the same
+const updateExperience = (data) =>
+  updateLocalResumeData({ experience: data });
 
-  const updateResumeData = (newColor)=>{
-    setResumeData(prev =>({
-      ...prev , themeColor:newColor
-    }))
-  }
+const updateEducation = (data) =>
+  updateLocalResumeData({ education: data });
 
+const updateSkills = (data) =>
+  updateLocalResumeData({ skills: data });
+
+const updateThemeColor = (color) =>
+  updateLocalResumeData({ themeColor: color });
+
+
+  // Load all resumes on initial mount
   useEffect(() => {
     fetchResumes();
   }, []);
 
   return (
-    <ResumeContext.Provider value={{
-      resumeData,
-      setResumeData,
-      resumes,
-      fetchResumes,
-      createResume,
-      updateResumeData,
-      updatePersonalInfo,
-      updateExperience,
-      updateEducation,
-      updateSkills
-    }}>
+    <ResumeContext.Provider
+      value={{
+        resumeData,
+        resumes,
+        currentResumeId,
+        setResumeData, // exposed in case needed directly
+        fetchResumes,
+        createResume,
+        loadResume,
+        saveResume,
+        updateResumeSection,
+
+        // Section-specific helpers
+        updateLocalResumeData,
+        updatePersonalInfo,
+        updateSummary,
+        updateExperience,
+        updateEducation,
+        updateSkills,
+        updateThemeColor,
+      }}
+    >
       {children}
     </ResumeContext.Provider>
   );

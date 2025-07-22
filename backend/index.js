@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import express from "express";
 import bodyParser from "body-parser";
-import userRoutes from "./routes/userRoute.js";
-import resumeRoutes from "./routes/resumeRoute.js"
+import userRoutes from "./routes/user.route.js";
+import resumeRoutes from "./routes/resume.route.js"
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(cors({
-    origin: ['https://resume-ai-wheat.vercel.app', 'http://localhost:5173', 'http://localhost:3002'],
+    origin: ['http://localhost:5173'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -46,13 +46,10 @@ app.use((err, req, res, next) => {
     });
 });
 
+app.use("/", resumeRoutes); // ✅ Mount the router
 app.use('/', userRoutes);  // This will handle /signup and /login directly
-app.use('/', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
 
 app.get('/', (req, res) => {
-    res.send('Welcome to ResumeAI Backend!');
-});
-app.get('/home', (req, res) => {
     res.send('Welcome to ResumeAI Backend!');
 });
 
