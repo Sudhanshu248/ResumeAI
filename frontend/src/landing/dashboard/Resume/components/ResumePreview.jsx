@@ -1,6 +1,5 @@
 import {  useEffect } from "react";
 import { useResume } from "../../../../context/ResumeContext.jsx";
-import dummy from "../../../data/dummy.jsx";
 import PersonalInfo from "../preview/Personal.jsx";
 import Summary from "../preview/Summary.jsx";
 import Education from "../preview/Education.jsx";
@@ -8,7 +7,7 @@ import Experience from "../preview/Experience.jsx";
 import Skills from "../preview/Skills.jsx";
 
 export default function ResumePreview() {
-    const { resumeData, setResumeData } = useResume();  
+    const { resumeData } = useResume();  
     
       
 

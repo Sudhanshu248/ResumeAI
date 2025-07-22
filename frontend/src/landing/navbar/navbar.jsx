@@ -39,7 +39,7 @@ export default function Navbar() {
 
           <div className="nav-col-2 m-0">
             <Button variant="outlined">
-              <Link className="nav-link" to="/signin">Sign Up</Link>
+              <Link className="nav-link" to="/signup">Sign Up</Link>
             </Button>
             <span className="material-symbols-outlined px-3" style={{cursor: "pointer", color: "black"}} onClick={toggleTheme}>
               dark_mode

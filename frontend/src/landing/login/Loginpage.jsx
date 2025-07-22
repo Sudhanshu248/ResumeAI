@@ -1,7 +1,8 @@
-import './form.css';
-import Form from './form';
+import './login.css'
+import Login from './login';
 
-export default function SignInPage(){
+
+export default function LogInPage(){
     return(
         <>
             <div className="boxs p-4" style={{marginTop: "5vh"}}>
@@ -10,7 +11,7 @@ export default function SignInPage(){
                     </div>
 
                     <div className="right-box signin ">
-                        <Form/>
+                        <Login/>
                     </div>
             </div>
         </>
