@@ -11,10 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import ResumeCard from "./resumeCard";
 import { useResume } from '../../../context/ResumeContext';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Dashboard() {
-
-  const { resumes, createResume } = useResume();
 
   const [open, setOpen] = React.useState(false);
   const [newResumeTitle, setNewResumeTitle] = React.useState('');
@@ -22,15 +21,19 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
 
+  const { resumes, createResume } = useResume();
   const onCreateResume = async () => {
     try {
       setLoader(true);
       const newResume = {
+        id: uuidv4(), // 👈 Add unique ID here
         title: newResumeTitle,
         createdAt: new Date().toISOString()
       };
+
       const created = await createResume(newResume);
       setOpen(false);
+
       if (created && created._id) {
         navigate(`/resume/${created._id}/edit`);
       }
@@ -56,20 +59,20 @@ export default function Dashboard() {
         <h1 className="fs-3 fw-bold">My Resume </h1>
         <p className="fs-5 opacity-75">Start creating your resume for your next job</p>
 
-       <div className="container">
-         <div className="row d-flex flex-wrap">
-          <div className="col " onClick={handleClickOpen}>
-            <AddResume />
-          </div>
-
-          {resumes.length > 0 && resumes.map((resume) => (
-            <div className="col card-logo-1" key={resume._id} onClick={() => { navigate(`/resume/${resume._id}/view`) }}>
-              <ResumeCard resume={resume} />
+        <div className="container">
+          <div className="row d-flex flex-wrap">
+            <div className="col " onClick={handleClickOpen}>
+              <AddResume />
             </div>
-          ))}
 
+            {resumes.length > 0 && resumes.map((resume) => (
+              <div className="col card-logo-1" key={resume._id} onClick={() => { navigate(`/resume/${resume._id}/view`) }}>
+                <ResumeCard resume={resume} />
+              </div>
+            ))}
+
+          </div>
         </div>
-       </div>
 
         <Dialog
           open={open}
@@ -80,9 +83,12 @@ export default function Dashboard() {
           <DialogTitle id="alert-dialog-title">
             {"Create New Resume"}
           </DialogTitle>
+          
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <p>  Add new title for your resume</p>
+            <div id="alert-dialog-description">
+              <DialogContentText>
+                Add new title for your resume
+              </DialogContentText>
               <Input
                 type="text"
                 placeholder="Enter title"
@@ -90,8 +96,9 @@ export default function Dashboard() {
                 value={newResumeTitle}
                 onChange={(e) => { setNewResumeTitle(e.target.value) }}
               />
-            </DialogContentText>
+            </div>
           </DialogContent>
+
           <DialogActions>
             <Button variant="outlined" onClick={handleClose}>Cancel</Button>
             <Button variant="contained" disabled={!newResumeTitle} onClick={onCreateResume} autoFocus>

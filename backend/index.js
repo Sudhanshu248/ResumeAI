@@ -46,8 +46,8 @@ app.use((err, req, res, next) => {
     });
 });
 
+app.use("/", resumeRoutes); // ✅ Mount the router
 app.use('/', userRoutes);  // This will handle /signup and /login directly
-app.use('/', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
 
 app.get('/', (req, res) => {
     res.send('Welcome to ResumeAI Backend!');

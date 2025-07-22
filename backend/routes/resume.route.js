@@ -1,11 +1,11 @@
 import express from 'express';
-import { createResume, allResumes, getResume } from '../controllers/resume.controller.js';
+import {  createResume,  allResumes,  getResume,  updateResume} from '../controllers/resume.controller.js';
 
 const router = express.Router();
 
-// Apply auth middleware to all resume routes
-router.route("/create-resume").post(createResume);
-router.route("/all-resumes").get(allResumes);
-router.route("/resume-by-id/:id").get(getResume);
+router.post("/create-resume", createResume);
+router.put("/update-resume/:id", updateResume); // ✅ corrected
+router.get("/all-resumes", allResumes);
+router.get("/resume-by-id/:id", getResume);
 
 export default router;

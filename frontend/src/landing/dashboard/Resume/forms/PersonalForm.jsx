@@ -1,57 +1,95 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
+import { toast } from "react-toastify";
 import "../resume.css";
 
 export default function PersonalForm({ enableNext }) {
-    const { resumeData, updatePersonalInfo } = useResume();
+    const { resumeData, updatePersonalInfo } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setLoading(true);
+    const [personalInfo, setPersonalInfo] = useState({
+        firstName: "",
+        lastName: "",
+        jobTitle: "",
+        address: "",
+        phone: "",
+        email: "",
+    });
 
-        // Update the resume data in the context
-        updatePersonalInfo({
-            firstName: resumeData.personalInfo.firstName,
-            lastName: resumeData.personalInfo.lastName,
-            jobTitle: resumeData.personalInfo.jobTitle,
-            address: resumeData.personalInfo.address,
-            phone: resumeData.personalInfo.phone,
-            email: resumeData.personalInfo.email
-        });       
-
-        enableNext(true);
-        setLoading(false);
-       
-    }
+    // ✅ Sync form state when resumeData is loaded
+    useEffect(() => {
+        if (resumeData?.personalInfo) {
+            setPersonalInfo(resumeData.personalInfo);
+        }
+        enableNext(false); // Always reset on mount
+    }, [resumeData, enableNext]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        updatePersonalInfo({ [name]: value });
+        const updated = { ...personalInfo, [name]: value };
+        setPersonalInfo(updated);
+        updatePersonalInfo(updated); // ✅ Use context-safe updater
     };
 
-    // <div className="pt-3 pb-5 ps-3 pe-3 rounded-3 mt-4" style={{ height: "fit-content", borderTop: "8px solid #0d6ff2f2", boxShadow: "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px"}}>
-    return (
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
 
-        <div className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4 " style={{ height: "fit-content", borderTop: "5px solid #0d6ff2f2", boxShadow: "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px"}}>
+            // console.log("PersonalForm.jsx data  handlesubmit", personalInfo)
+            if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
+                toast.error("Please fill out all fields.");
+                enableNext(false);
+                setLoading(false);
+                return;
+            }
+
+            // 1. Update local context
+            updatePersonalInfo(personalInfo);
+
+
+            // 2. Persist to backend
+            const response = await updateResumeSection({ personalInfo });
+            console.log(response);
+            toast.success("Personal details saved");
+            enableNext(true);
+        } catch (error) {
+            toast.error("Failed to save personal details to server");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+
+    return (
+        <div
+            className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
+            style={{
+                height: "fit-content",
+                borderTop: "5px solid #0d6ff2f2",
+                boxShadow:
+                    "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px"
+            }}
+        >
             <h4 className="fw-bold pb-1 m-0 mt-2">Personal Detail</h4>
-            
             <p className="pb-4">Get started with the basic information about yourself</p>
 
             <form onSubmit={handleSubmit}>
                 <div className="row g-3 justify-content-between">
-
                     <div className="col d-flex flex-column">
                         <label htmlFor="firstName" className="mb-1 fw-medium">First Name</label>
                         <input
                             type="text"
                             name="firstName"
-                            required
-                            className="p-1"
                             id="firstName"
+                            className="p-1"
+                            value={personalInfo.firstName}
                             onChange={handleChange}
-                            value={resumeData.personalInfo?.firstName || "" }         
+                            required
                         />
                     </div>
 
@@ -60,37 +98,37 @@ export default function PersonalForm({ enableNext }) {
                         <input
                             type="text"
                             name="lastName"
-                            required
-                            className="p-1"
                             id="lastName"
+                            className="p-1"
+                            value={personalInfo.lastName}
                             onChange={handleChange}
-                            value={resumeData.personalInfo?.lastName || ""}
+                            required
                         />
                     </div>
 
-                    <div className=" d-flex flex-column">
+                    <div className="d-flex flex-column">
                         <label htmlFor="jobTitle" className="mb-1 fw-medium">Job Title</label>
                         <input
                             type="text"
                             name="jobTitle"
-                            required
-                            className="p-1"
                             id="jobTitle"
-                            value={resumeData.personalInfo?.jobTitle || ""}
+                            className="p-1"
+                            value={personalInfo.jobTitle}
                             onChange={handleChange}
+                            required
                         />
                     </div>
 
-                    <div className=" d-flex flex-column">
+                    <div className="d-flex flex-column">
                         <label htmlFor="address" className="mb-1 fw-medium">Address</label>
                         <input
                             type="text"
                             name="address"
-                            required
-                            className="p-1"
                             id="address"
-                            value={resumeData.personalInfo?.address || ""}
+                            className="p-1"
+                            value={personalInfo.address}
                             onChange={handleChange}
+                            required
                         />
                     </div>
 
@@ -99,11 +137,11 @@ export default function PersonalForm({ enableNext }) {
                         <input
                             type="number"
                             name="phone"
-                            required
-                            className="edit-phone p-1"
                             id="phone"
-                            value={resumeData.personalInfo?.phone || ""}
+                            className="edit-phone p-1"
+                            value={personalInfo.phone}
                             onChange={handleChange}
+                            required
                         />
                     </div>
 
@@ -112,20 +150,26 @@ export default function PersonalForm({ enableNext }) {
                         <input
                             type="email"
                             name="email"
-                            required
-                            className="p-1 border border-1 border-dark"
                             id="email"
-                            value={resumeData.personalInfo?.email || ""}
+                            className="p-1 border border-1 border-dark"
+                            value={personalInfo.email}
                             onChange={handleChange}
+                            required
                         />
                     </div>
 
-                    <div className=" d-flex justify-content-center align-items-center text-end">
-                        <button className="btn btn-primary text-white fw-semibold fs-5  mx-auto pe-1 ps-1 py-1  " style={{ width: "7rem" }} disabled={loading} type="submit">{loading ? <CircularProgress size={20} /> : "Save"}</button>
+                    <div className="d-flex justify-content-center align-items-center text-end mt-3">
+                        <button
+                            className="btn btn-primary text-white fw-semibold fs-5 mx-auto px-4 py-2"
+                            style={{ width: "7rem" }}
+                            onClick={handleSubmit}
+                        // disabled={loading}
+                        >
+                            {loading ? <CircularProgress size={20} /> : "Save"}
+                        </button>
                     </div>
-                    
                 </div>
             </form>
         </div>
-    )
+    );
 }

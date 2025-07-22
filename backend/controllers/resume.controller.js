@@ -1,81 +1,93 @@
 import User from "../models/userModel.js";
 import Resume from "../models/resumeModel.js";
+import jwt from 'jsonwebtoken';
+import dotenv from "dotenv";
+
+dotenv.config();
+const JWT_SECRETS = process.env.JWT_SECRETS;
+
+// ✅ Token helper
+const verifyToken = (authHeader) => {
+  const token = authHeader?.split(" ")[1];
+  if (!token) throw new Error("No token provided");
+  return jwt.verify(token, JWT_SECRETS);
+};
 
 export const createResume = async (req, res) => {
-    try {
-        const token = req.headers.authorization;
-        if (!token) return res.status(401).json({ message: 'No Token found'});
+  try {
+    const decoded = verifyToken(req.headers.authorization);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-        const user = await User.findOne({ token });
-        if (!user) return res.status(404).json({message: 'User not found'});
+    const { title } = req.body;
+    if (!title) return res.status(400).json({ message: 'Title is required' });
 
-        const { title, personalInfo, experience, education, skills, themeColor } = req.body;
-        if (!title || !personalInfo || !experience || !education || !skills) {
-            return res.status(400).json({ message: 'All data are not provided'});
-        }
+    const resume = new Resume({ userId: user._id, title });
+    await resume.save();
 
-        const userId = user._id;
+    res.status(201).json({ message: 'Resume created', resume });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-        const resume = new Resume({
-            userId,
-            title,
-            personalInfo,
-            experience,
-            education,
-            skills,
-            themeColor
-        });
-        await resume.save();
+export const updateResume = async (req, res) => {
+  try {
+    const decoded = verifyToken(req.headers.authorization);
+    const { id } = req.params;
+    const updates = req.body;
 
-        res.status(201).json({
-            message: 'Resume created successfully',
-            resume
-        });
+    console.log(updates);
+    const updatedResume = await Resume.findOneAndUpdate(
+      { _id: id, userId: decoded.id },
+      { $set: updates },
+      { new: true }
+    );
 
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
+    if (!updatedResume) return res.status(404).json({ message: "Resume not found" });
+
+    res.status(200).json({ message: 'Resume updated', resume: updatedResume });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const allResumes = async (req, res) => {
-    try {
-        const token = req.headers.authorization;
-        if (!token) return res.status(401).json({ message: 'No Token found'});
+  try {
+    const decoded = verifyToken(req.headers.authorization);
+    const resumes = await Resume.find({ userId: decoded.id });
 
-        const user = await User.findOne({ token });
-        if (!user) return res.status(404).json({ message: "User not found" });
-
-        const userId = user._id;
-
-        const resumes = await Resume.find({ userId });
-        if (!resumes || resumes.length === 0) {
-            return res.status(404).json({ message: "No resumes found" });
-        }
-
-        return res.status(200).json({ message: "Resumes fetched successfully", resumes });
-
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
+    if (!resumes || resumes.length === 0) {
+      return res.status(404).json({ message: "No resumes found" });
     }
+
+    return res.status(200).json({
+      message: "Resumes fetched successfully",
+      resumes,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 export const getResume = async (req, res) => {
-    try {
-        const token = req.headers.authorization;
-        if(!token) return res.status(401).json({ message: 'No Token found' });
+  try {
+    const decoded = verifyToken(req.headers.authorization);
+    const { id } = req.params;
 
-        const user = await User.findOne({ token });
-        if (!user) return res.status(404).json({ message: "User not found" });
-        
-        const { id } = req.params;
-        const userId = user._id;
+    const resume = await Resume.findOne({
+      _id: id,
+      userId: decoded.id
+    });
 
-        const resume = await Resume.findOne({ id, userId });
-        if (!resume) return res.status(404).json({ message: 'Resume not found' });
+    if (!resume) return res.status(404).json({ message: 'Resume not found' });
 
-        return res.status(200).json({ message: "Resumes fetched successfully", resume });
+    return res.status(200).json({
+      message: "Resume fetched successfully",
+      resume
+    });
 
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

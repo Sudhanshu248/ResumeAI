@@ -1,25 +1,35 @@
-export default function Education({ resumeData }) {
-    return (
-        <div className="ps-3 pe-3 pt-3">
-            <h5 className="text-start" style={{ color: resumeData.themeColor }}>Education</h5>
-            <div style={{ border: `0.5px solid ${resumeData.themeColor}` }}></div>
+export default function Education({ resumes }) {
+  const educationList = resumes?.education || [];
 
-            {
-                resumeData.education?.map((education) => (
-                    <div key={education.id} className="m-0">
-                        <h6 className="text-start fw-bold mt-2">{education.universityName}</h6>
+  if (educationList.length === 0) return null;
 
-                        <div className="d-flex justify-content-between m-0" >
-                            <p className="text-start " >{education.fieldofstudy}  {education.degree}</p>
-                            <p className="text-start ">{education.startDate}  {education.endDate}</p>
-                        </div>
-                        
-                        <div className="text-start">
-                            <div dangerouslySetInnerHTML={{ __html: education.description }} />
-                        </div>
-                    </div>
-                ))
-            }
+  return (
+    <div className="ps-3 pe-3 pt-3">
+      <h5 className="text-start" style={{ color: resumes.themeColor }}>
+        Education
+      </h5>
+      <div style={{ border: `0.5px solid ${resumes.themeColor}` }} className="mb-2"></div>
+
+      {educationList.map((education) => (
+        <div key={education.id} className="mb-3">
+          <h6 className="text-start fw-bold">{education.universityName}</h6>
+
+          <div className="d-flex justify-content-between flex-wrap">
+            <p className="text-start m-0">
+              {education.fieldofstudy} — {education.degree}
+            </p>
+            <p className="text-end m-0">
+              {education.startDate} - {education.endDate}
+            </p>
+          </div>
+
+          {education.description && (
+            <div className="text-start mt-1">
+              <div dangerouslySetInnerHTML={{ __html: education.description }} />
+            </div>
+          )}
         </div>
-    )
+      ))}
+    </div>
+  );
 }

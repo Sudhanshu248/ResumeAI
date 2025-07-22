@@ -1,61 +1,82 @@
-import PersonalForm from "../forms/PersonalForm";
-import SummaryForm from "../forms/SummaryForm";
-import SkillForm from "../forms/SkillForm";
-import ExperienceForm from "../forms/ExperienceForm";
-import EducationForm from "../forms/EducationForm";
-import Button from "@mui/material/Button";
-import { ArrowRight, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
+import Button from "@mui/material/Button";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import PersonalForm from "../forms/PersonalForm.jsx";
+import SummaryForm from "../forms/SummaryForm.jsx";
+import SkillForm from "../forms/SkillForm.jsx";
+import ExperienceForm from "../forms/ExperienceForm.jsx";
+import EducationForm from "../forms/EducationForm.jsx";
+import ThemeSelector from "./ThemeSelector.jsx";
 import { useResume } from "../../../../context/ResumeContext.jsx";
-import ThemeSelector from "./ThemeSelector";
 
 export default function ResumeForm() {
-    const [activeForm, setActiveForm] = useState(1);
-    const [enableNext, setEnableNext] = useState(false);
-    const { id } = useParams();
-    const { resumeData, updateResumeData } = useResume();
+  const [activeForm, setActiveForm] = useState(1);
+  const [enableNext, setEnableNext] = useState(false);
+  const { id } = useParams();
+  const { resumeData, updateResumeData } = useResume();
 
-    const handleThemeChange = (newColor) => {
-        updateResumeData(newColor);
-    };
+  const handleThemeChange = (newColor) => {
+    updateResumeData(newColor);
+  };
 
-    return (
-        <div className="py-2">
-    
-            <div className="d-flex justify-content-between" >
+  const handleNext = () => {
+    setActiveForm((prev) => prev + 1);
+    setEnableNext(false); // Reset on new form
+  };
 
-                <ThemeSelector 
-                    currentTheme={resumeData?.themeColor} 
-                    onThemeChange={handleThemeChange}
-                />
+  const handleBack = () => {
+    setActiveForm((prev) => prev - 1);
+  };
 
-                <div className="d-flex gap-2">
-                    {activeForm > 1 && (
-                        <Button variant="contained" color="info" onClick={() => setActiveForm(activeForm - 1)}>
-                            <ArrowLeft /> Back
-                        </Button>
-                    )}
+  const renderForm = () => {
+    switch (activeForm) {
+      case 1:
+        return <PersonalForm enableNext={setEnableNext} />;
+      case 2:
+        return <SummaryForm enableNext={setEnableNext} />;
+      case 3:
+        return <ExperienceForm enableNext={setEnableNext} />;
+      case 4:
+        return <EducationForm enableNext={setEnableNext} />;
+      case 5:
+        return <SkillForm enableNext={setEnableNext} />;
+      case 6:
+        return <Navigate to={`/resume/${id}/view`} />;
+      default:
+        return null;
+    }
+  };
 
-                    {activeForm < 6 && (
-                        <Button variant="contained" color="info" disabled={!enableNext} onClick={() => {
-                            setActiveForm(activeForm + 1);
-                            setEnableNext(false);
-                           
-                        }}>
-                            Next<ArrowRight />
-                        </Button>
-                    )}
-                </div>
-                
-            </div>
+  return (
+    <div className="py-2">
+      <div className="d-flex justify-content-between mb-3">
+        <ThemeSelector
+          currentTheme={resumeData?.themeColor}
+          onThemeChange={handleThemeChange}
+        />
 
-            {activeForm === 1 ? <PersonalForm enableNext={(v) => setEnableNext(v)} /> : null}
-            {activeForm === 2 ? <SummaryForm enableNext={(v) => setEnableNext(v)} /> : null}
-            {activeForm === 3 ? <ExperienceForm enableNext={(v) => setEnableNext(v)} /> : null}
-            {activeForm === 4 ? <EducationForm enableNext={(v) => setEnableNext(v)} /> : null}
-            {activeForm === 5 ? <SkillForm enableNext={(v) => setEnableNext(v)} /> : null}
-            {activeForm === 6 ? <Navigate to={`/resume/${id}/view`}  resumeData={resumeData} /> : null}
+        <div className="d-flex gap-2">
+          {activeForm > 1 && (
+            <Button variant="contained" color="info" onClick={handleBack}>
+              <ArrowLeft className="me-1" /> Back
+            </Button>
+          )}
+
+          {activeForm < 6 && (
+            <Button
+              variant="contained"
+              color="info"
+              disabled={!enableNext}
+              onClick={handleNext}
+            >
+              Next <ArrowRight className="ms-1" />
+            </Button>
+          )}
         </div>
-    )
+      </div>
+
+      {renderForm()}
+    </div>
+  );
 }

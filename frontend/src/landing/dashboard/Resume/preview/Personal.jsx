@@ -1,19 +1,32 @@
-import React from "react";
+export default function Personal({ resumes }) {
+  const personal = resumes?.personalInfo || {};
+  const themeColor = resumes?.themeColor || "#ccc";
 
-export default function PersonalInfo({ resumeData }) {
+  return (
+    <div className="pe-3 ps-3 pt-3 m-0">
+      <h2 className="text-center fs-4 fw-bold">
+        {personal.firstName || ""} {personal.lastName || ""}
+      </h2>
 
-    return (
-        <div className="pe-3 ps-3 pt-3  m-0">
-            <h2 className="text-center fs-4">{resumeData.personalInfo?.firstName} {resumeData.personalInfo?.lastName}</h2>
-            <h2 className="text-center fs-5">{resumeData.personalInfo?.jobTitle}</h2>
-            <p className="text-center fw-600">{resumeData.personalInfo?.address}</p>
+      {personal.jobTitle && (
+        <h3 className="text-center fs-5 text-secondary mb-1">{personal.jobTitle}</h3>
+      )}
 
-            <div className="d-flex justify-content-between align-items-center">
-                <p>{resumeData.personalInfo?.phone}</p>
-                <p>{resumeData.personalInfo?.email}</p>
-            </div>
-            
-            <div className="m-0" style={{border:`1px solid ${resumeData.themeColor}`,borderColor:resumeData.themeColor}} ></div>
-        </div>
-    )
+      {personal.address && (
+        <p className="text-center fw-medium">{personal.address}</p>
+      )}
+
+      <div className="d-flex justify-content-center gap-4 flex-wrap mb-2">
+        {personal.phone && <p className="m-0">{personal.phone}</p>}
+        {personal.email && <p className="m-0">{personal.email}</p>}
+      </div>
+
+      <div
+        className="m-0"
+        style={{
+          border: `1px solid ${themeColor}`,
+        }}
+      ></div>
+    </div>
+  );
 }
