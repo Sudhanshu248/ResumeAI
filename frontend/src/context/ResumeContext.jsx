@@ -1,9 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from "axios";
+import { BASE_URL } from "../axiosConfig.js";
 
 const ResumeContext = createContext();
-
-const backendBaseUrl = "http://localhost:3002";
 
 export const ResumeProvider = ({ children }) => {
 
@@ -50,7 +49,7 @@ export const ResumeProvider = ({ children }) => {
   // Fetch all resumes from backend
   const fetchResumes = async () => {
     try {
-      const response = await axios.get(`${backendBaseUrl}/all-resumes`);
+      const response = await axios.get(`${BASE_URL}/all-resumes`);
       setResumes(response.data);
     } catch (error) {
       console.error("Error fetching resumes:", error);
@@ -60,7 +59,7 @@ export const ResumeProvider = ({ children }) => {
   // Create a new resume in backend
   const createResume = async (newResume) => {
     try {
-      const response = await axios.post(`${backendBaseUrl}/create-resume`, newResume);
+      const response = await axios.post(`${BASE_URL}/create-resume`, newResume);
       setResumes(prev => [...prev, response.data]);
       return response.data;
     } catch (error) {

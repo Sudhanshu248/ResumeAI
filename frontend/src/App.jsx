@@ -15,22 +15,37 @@ import ConnectionTest from './components/ConnectionTest'
 function App() {
   return (
     <>
-      <ResumeProvider>
-        <BrowserRouter>
-          <Navbar />
-          <ConnectionTest />
-          <Routes>
-            <Route path='/' element={<HomePage />}></Route>
-            <Route path='/signup' element={<SignInPage />}></Route>
-            <Route path='/dashboard' element={<Dashboard />}></Route>
-            <Route path='/resume/:id/edit' element={<EditResume/>}></Route>
-            <Route path='/resume/:id/view' element={<ViewResume/>}></Route>
-            <Route path='*' element={<NotFound/>}></Route>
-          </Routes>
-          <GoToTop/>
-          <Footer />
-        </BrowserRouter>
-      </ResumeProvider>
+<BrowserRouter>
+        <Navbar />
+        <ConnectionTest />
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/signin' element={<SignInPage />} />
+          
+          {/* Wrap only these routes with ResumeProvider */}
+          <Route
+            path='/dashboard'
+            element={
+              <ResumeProvider>
+                <Dashboard />
+              </ResumeProvider>
+            }
+          />
+          <Route
+            path='/resume/:id/edit'
+            element={
+              <ResumeProvider>
+                <EditResume />
+              </ResumeProvider>
+            }
+          />
+
+          <Route path='/resume/:id/view' element={<ViewResume />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+        <GoToTop />
+        <Footer />
+      </BrowserRouter>
     </>
   )
 }

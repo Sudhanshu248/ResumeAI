@@ -20,7 +20,7 @@ const formFields = {
 }
 
 export default function EducationForm({ enableNext }) {
-    const { resumeData, updateEducation } = useResume();
+    const { resumeData, setResumeData } = useResume();
     const [education, setEducation] = useState(resumeData?.education || [{ ...formFields }]);
     const [loading, setLoading] = useState(false);
 
@@ -36,19 +36,19 @@ export default function EducationForm({ enableNext }) {
         );
 
         setEducation(updatedEducation);
-        updateEducation(updatedEducation);
+        setResumeData(updatedEducation);
     };
 
     const handleAddEducation = () => {
         const newEducation = [...education, { ...formFields, id: uuidv4() }];
         setEducation(newEducation);
-        updateEducation(newEducation);
+        setResumeData(newEducation);
     };
 
     const handleRemoveEducation = (index) => {
         const updatedEducation = education.filter((_, i) => i !== index);
         setEducation(updatedEducation);
-        updateEducation(updatedEducation);
+        setResumeData(updatedEducation);
     };
 
     const handleSubmit = (e) => {
@@ -72,7 +72,7 @@ export default function EducationForm({ enableNext }) {
             }
 
             // Update context with validated data
-            updateEducation(education);
+            setResumeData(education);
             toast.success("Education information saved successfully");
             enableNext(true);
 

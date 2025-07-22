@@ -21,7 +21,7 @@ const formFields = {
 }
 
 export default function ExperienceForm({ enableNext }) {
-    const { resumeData, updateExperience } = useResume();
+    const { resumeData, setResumeData } = useResume();
     const [experience, setExperience] = useState(resumeData?.experience || [{ ...formFields }]);
     const [loading, setLoading] = useState(false);
 
@@ -37,19 +37,19 @@ export default function ExperienceForm({ enableNext }) {
         );
 
         setExperience(updatedexperience);
-        updateExperience(updatedexperience);
+        setResumeData(updatedexperience);
     };
 
     const handleAddExperience = () => {
         const newExperience = [...experience, { ...formFields, id: uuidv4() }];
         setExperience(newExperience);
-        updateExperience(newExperience);
+        setResumeData(newExperience);
     };
 
     const handleRemoveExperience = (index) => {
         const updatedexperience = experience.filter((_, i) => i !== index);
         setExperience(updatedexperience);
-        updateExperience(updatedexperience);
+        setResumeData(updatedexperience);
     };
 
     const handleSubmit = (e) => {
@@ -73,7 +73,7 @@ export default function ExperienceForm({ enableNext }) {
             }
 
             // Update context with validated data
-            updateExperience(experience);
+            setResumeData(experience);
 
             enableNext(true);
         } catch (error) {

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import express from "express";
 import bodyParser from "body-parser";
-import userRoutes from "./routes/userRoute.js";
-import resumeRoutes from "./routes/resumeRoute.js"
+import userRoutes from "./routes/user.route.js";
+import resumeRoutes from "./routes/resume.route.js"
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -50,9 +50,6 @@ app.use('/', userRoutes);  // This will handle /signup and /login directly
 app.use('/', resumeRoutes);  // Changed from '/api/resumes' to '/api' to make routes more accessible
 
 app.get('/', (req, res) => {
-    res.send('Welcome to ResumeAI Backend!');
-});
-app.get('/home', (req, res) => {
     res.send('Welcome to ResumeAI Backend!');
 });
 
