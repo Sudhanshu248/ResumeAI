@@ -38,7 +38,7 @@ export default function ResumeForm() {
                         </Button>
                     )}
 
-                    {activeForm < 6 && (
+                    {activeForm < 6 || !enableNext && (
                         <Button variant="contained" color="info" disabled={!enableNext} onClick={() => {
                             setActiveForm(activeForm + 1);
                             setEnableNext(false);
