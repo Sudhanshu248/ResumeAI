@@ -97,7 +97,7 @@ export default function PersonalForm({ enableNext }) {
                     <div className="col d-flex flex-column">
                         <label htmlFor="phone" className="mb-1 fw-medium">Phone</label>
                         <input
-                            type="text"
+                            type="number"
                             name="phone"
                             required
                             className="edit-phone p-1"
