@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "../resume.css";
 
 export default function PersonalForm({ enableNext }) {
-    const { resumeData, updatePersonalInfo, updateResumeSection } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
+    const { resumeData, updatePersonalInfo, updateResumeSection } = useResume(); //  Use updatePersonalInfo, not updateLocalResumeData
     const [loading, setLoading] = useState(false);
 
     const [personalInfo, setPersonalInfo] = useState({
