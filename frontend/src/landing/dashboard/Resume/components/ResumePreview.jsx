@@ -4,23 +4,20 @@ import Summary from "../preview/Summary.jsx";
 import Education from "../preview/Education.jsx";
 import Experience from "../preview/Experience.jsx";
 import Skills from "../preview/Skills.jsx";
+import "../resume.css";
 
 export default function ResumePreview() {
   const { resumeData } = useResume();
 
-//   if (!resumeData) return <p className="text-center mt-5">Loading resume...</p>;
+  if (!resumeData) return <p className="text-center mt-5">Loading resume...</p>;
 
   const borderColor = resumeData.themeColor || "#0d6efd";
 
   return (
     <div
-      className="border-bottom-0 border-start-0 border-end-0 mb-0 mt-0 pb-3 text-center rounded-4"
+      className="resume-preview border-bottom-0 border-start-0 border-end-0 mb-0 mt-0 pb-3 text-center rounded-4"
       style={{
-        boxShadow:
-          "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px",
-        height: "98.5%",
-        border: `20px solid ${borderColor}`,
-        borderRadius: "0rem",
+        border: '20px solid ${borderColor}', 
       }}
     >
       <Personal resumes={resumeData} />
@@ -31,4 +28,3 @@ export default function ResumePreview() {
     </div>
   );
 }
-

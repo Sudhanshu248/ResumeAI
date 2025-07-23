@@ -4,8 +4,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import "../resume.css";
 
-export default function PersonalForm({ setEnableNext }) {
-    const { resumeData, updatePersonalInfo } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
+export default function PersonalForm({ enableNext }) {
+    const { resumeData, updatePersonalInfo, updateResumeSection } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
     const [loading, setLoading] = useState(false);
 
     const [personalInfo, setPersonalInfo] = useState({
@@ -22,8 +22,7 @@ export default function PersonalForm({ setEnableNext }) {
         if (resumeData?.personalInfo) {
             setPersonalInfo(resumeData.personalInfo);
         }
-        setEnableNext(false); // Always reset on mount
-    }, [resumeData, setEnableNext]);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,34 +31,46 @@ export default function PersonalForm({ setEnableNext }) {
         updatePersonalInfo(updated); // ✅ Use context-safe updater
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
+    try {
         const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
 
-        // console.log("PersonalForm.jsx data  handlesubmit", personalInfo)
         if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
             toast.error("Please fill out all fields.");
-            setEnableNext(false);
+            enableNext(false);
             setLoading(false);
             return;
         }
 
         // 1. Update local context
         updatePersonalInfo(personalInfo);
-        try {
-            // 2. Persist to backend
-            const response = await updateResumeSection({ personalInfo });
-            console.log(response);
-            toast.success("Personal details saved");
-            setEnableNext(true);
-        } catch (error) {
-            toast.error("Failed to save personal details to server");
-        } finally {
+
+        // 2. Check if resume ID is loaded before backend call
+        console.log("🪪 Resume ID in context:", resumeData?._id);
+
+        if (!resumeData?._id) {
+            toast.error("Resume ID not loaded yet. Try again in a moment.");
             setLoading(false);
+            return;
         }
-    };
+
+        // 3. Send to backend
+        const response = await updateResumeSection({ personalInfo });
+        console.log("✅ Server response after update:", response);
+
+        toast.success("Personal details saved");
+        enableNext(true);
+    } catch (error) {
+        toast.error("Failed to save personal details to server");
+        console.error("Error updating personal info:", error);
+    } finally {
+        setLoading(false);
+    }
+};
+
 
 
 
@@ -134,7 +145,7 @@ export default function PersonalForm({ setEnableNext }) {
                     <div className="col d-flex flex-column">
                         <label htmlFor="phone" className="mb-1 fw-medium">Phone</label>
                         <input
-                            type="text"
+                            type="number"
                             name="phone"
                             id="phone"
                             className="edit-phone p-1"
@@ -161,12 +172,11 @@ export default function PersonalForm({ setEnableNext }) {
                         <button
                             className="btn btn-primary text-white fw-semibold fs-5 mx-auto px-4 py-2"
                             style={{ width: "7rem" }}
-                            type="submit" // ✅ Correct: Use submit inside a form
-                            disabled={loading}
+                             type="submit"
+                        // disabled={loading}
                         >
-                            {loading ? <CircularProgress size={20} color="inherit" /> : "Save"}
+                            {loading ? <CircularProgress size={20} /> : "Save"}
                         </button>
-
                     </div>
                 </div>
             </form>

@@ -6,6 +6,12 @@
     margin-top: 4.2rem;
 }
 
+.resume-preview{
+    height: 98.5%;
+    border-radius: 0;
+    box-shadow: rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px;
+}
+
 @media screen and (max-width: 800px) {
     .edit-form {
         display: flex;
