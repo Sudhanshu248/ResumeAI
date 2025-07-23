@@ -39,16 +39,16 @@ export const updateResume = async (req, res) => {
   }
   }
     
-    export const createResume = async (req, res) => {
+export const createResume = async (req, res) => {
         try {
-const authHeader = req.headers.authorization;
-if (!authHeader) return res.status(401).json({ message: 'No Token found' });
+      const authHeader = req.headers.authorization;
+      if (!authHeader) return res.status(401).json({ message: 'No Token found' });
 
-const token = authHeader.split(" ")[1]; // ✅ extract token only
-const decoded = jwt.verify(token, JWT_SECRETS); // ✅ decode JWT
-const user = await User.findById(decoded.id); // ✅ find by ID
+      const token = authHeader.split(" ")[1]; // ✅ extract token only
+      const decoded = jwt.verify(token, JWT_SECRETS); // ✅ decode JWT
+      const user = await User.findById(decoded.id); // ✅ find by ID
 
-if (!user) return res.status(404).json({ message: 'User not found' });
+      if (!user) return res.status(404).json({ message: 'User not found' });
 
     
             if (!user) return res.status(404).json({message: 'User not found'});
@@ -68,48 +68,30 @@ if (!user) return res.status(404).json({ message: 'User not found' });
             return res.status(500).json({ message: error.message });
         }
     };
-//     export const createResume = async (req, res) => {
-//   try {
-//     const decoded = verifyToken(req.headers.authorization);
-//     const user = await User.findById(decoded.id);
-//     if (!user) return res.status(404).json({ message: 'User not found' });
+    
+export const allResumes = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: 'No token provided' });
 
-//     const { title } = req.body;
-//     if (!title) return res.status(400).json({ message: 'Title is required' });
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, JWT_SECRETS);
+    const user = await User.findById(decoded.id);
 
-//     const resume = new Resume({ userId: user._id, title });
-//     await resume.save();
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-//     res.status(201).json({ message: 'Resume created', resume });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-    
-    // export const allResumes = async (req, res) => {
-    //     try {
-    // const authHeader = req.headers.authorization;
-    // if (!authHeader) return res.status(401).json({ message: 'No Token found' });
-    
-    // const token = authHeader.split(" ")[1];
-    // const decoded = jwt.verify(token, JWT_SECRETS);
-    // const user = await User.findById(decoded.id);
-    
-    //         if (!user) return res.status(404).json({ message: "User not found" });
-    
-    //         const userId = user._id;
-    
-    //         const resumes = await Resume.find({ userId });
-    //         if (!resumes || resumes.length === 0) {
-    //             return res.status(404).json({ message: "No resumes found" });
-    //         }
-    
-    //         return res.status(200).json({ message: "Resumes fetched successfully", resumes });
-    
-    //     } catch (error) {
-    //         return res.status(500).json({ message: error.message });
-    //     }
-    // };
+    const resumes = await Resume.find({ userId: user._id }).sort({ createdAt: -1 }); // newest first (optional)
+
+    return res.status(200).json({
+      message: "Resumes fetched successfully",
+      resumes,
+    });
+
+  } catch (error) {
+    console.error("allResumes error:", error);
+    return res.status(500).json({ message: "Server error: " + error.message });
+ }
+};
     
     // export const getResume = async (req, res) => {
     //     try {
