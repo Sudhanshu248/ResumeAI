@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "../resume.css";
 
 export default function PersonalForm({ enableNext }) {
-    const { resumeData, updatePersonalInfo } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
+    const { resumeData, updatePersonalInfo, updateResumeSection } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
     const [loading, setLoading] = useState(false);
 
     const [personalInfo, setPersonalInfo] = useState({
@@ -45,14 +45,16 @@ export default function PersonalForm({ enableNext }) {
                 setLoading(false);
                 return;
             }
-
+            console.log("PersonalForm.jsx data  handlesubmit", personalInfo);
             // 1. Update local context
             updatePersonalInfo(personalInfo);
 
 
             // 2. Persist to backend
-            const response = await updateResumeSection({ personalInfo });
-            console.log(response);
+     
+const response = await updateResumeSection({ personalInfo });
+console.log("✅ Server response after update:", response);
+
             toast.success("Personal details saved");
             enableNext(true);
         } catch (error) {
@@ -135,7 +137,7 @@ export default function PersonalForm({ enableNext }) {
                     <div className="col d-flex flex-column">
                         <label htmlFor="phone" className="mb-1 fw-medium">Phone</label>
                         <input
-                            type="text"
+                            type="number"
                             name="phone"
                             id="phone"
                             className="edit-phone p-1"
