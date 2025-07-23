@@ -70,28 +70,32 @@ export const ResumeProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     if (!currentResumeId) return;
 
-    try {
-      const response = await axios.put(
-        `${BASE_URL}/update-resume/${currentResumeId}`,
-        updatedFields,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Make sure it includes "Bearer"
-          },
-        }
-      );
-      setResumeData((prev) => ({ ...prev, ...updatedFields }));
-      return response.data;
-    } catch (error) {
-      console.error("Error updating resume section:", error);
-      throw error;
-    }
-  };
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/update-resume/${currentResumeId}`,
+      updatedFields,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // console.log("🔍 Raw response object:", response); // <== Add this
+
+    setResumeData((prev) => ({ ...prev, ...updatedFields }));
+    return response.data; // <== This is where the data should come from
+  } catch (error) {
+    console.error("Error updating resume section:", error);
+    throw error;
+  }
+};
 
 
 
-  //  Create new resume
+
+    // ✅ Create new resume
   const createResume = async (newResume = {}) => {
     const token = localStorage.getItem("token");
     console.log("Create Resume  funciton is running ", newResume);
@@ -141,18 +145,51 @@ export const ResumeProvider = ({ children }) => {
     });
   };
 
-  //  Other section updates remain the same
-  const updateExperience = (data) =>
-    updateLocalResumeData({ experience: data });
+// ✅ Other section updates remain the same
+const updateExperience = async (data) => {
+  try {
+    const updated = await updateResumeSection({ experience: data });
+    return updated;
+  } catch (err) {
+    console.error("❌ Error updating experience:", err);
+    throw err;
+  }
+};
 
-  const updateEducation = (data) =>
-    updateLocalResumeData({ education: data });
 
-  const updateSkills = (data) =>
-    updateLocalResumeData({ skills: data });
+const updateEducation = async (data) => {
+  try {
+    const updated = await updateResumeSection({ education: data });
+    return updated;
+  } catch (err) {
+    console.error("❌ Error updating education:", err);
+    throw err;
+  }
+};
 
-  const updateThemeColor = (color) =>
-    updateLocalResumeData({ themeColor: color });
+
+
+const updateSkills = async (data) =>{ 
+  try {
+    const updated = await updateResumeSection({ skills: data });
+      return updated;
+  } catch (err) {
+    console.error("❌ Error updating education:", err);
+    throw err;
+  }
+};
+
+const updateThemeColor = async (color) => {
+  try {
+    updateLocalResumeData({ themeColor: color }); // optional
+    const updated = await updateResumeSection({ themeColor: color });
+    return updated;
+  } catch (err) {
+    console.error("❌ Error updating theme color:", err);
+    throw err;
+  }
+};
+
 
 
   // Load all resumes on initial mount

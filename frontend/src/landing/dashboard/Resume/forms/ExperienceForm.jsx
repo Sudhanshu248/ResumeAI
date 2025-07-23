@@ -10,14 +10,14 @@ import { v4 as uuidv4 } from "uuid";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 
 const createNewExperience = () => ({
-    id: uuidv4(),
-    jobTitle: "",
-    companyName: "",
-    location: "",
-    startDate: "",
-    endDate: "",
-    description: "",
-    currentlyWorking: false,
+  id: uuidv4(),
+  jobTitle: "",
+  companyName: "",
+  location: "",
+  startDate: "",
+  endDate: "",
+  description: "",
+  currentlyWorking: false,
 });
 
 export default function ExperienceForm({ enableNext }) {
