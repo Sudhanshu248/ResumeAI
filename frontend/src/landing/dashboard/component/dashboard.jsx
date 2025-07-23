@@ -1,5 +1,5 @@
 import AddResume from "./addResume"
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,14 +14,13 @@ import { useResume } from '../../../context/ResumeContext';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Dashboard() {
-
-  const [open, setOpen] = React.useState(false);
-  const [newResumeTitle, setNewResumeTitle] = React.useState('');
-  const [loader, setLoader] = React.useState(false);
+  const { resumes, createResume, fetchResumes } = useResume();
+  const [open, setOpen] = useState(false);
+  const [newResumeTitle, setNewResumeTitle] = useState('');
+  const [loader, setLoader] = useState(false);
 
   const navigate = useNavigate();
 
-  const { resumes, createResume } = useResume();
   const onCreateResume = async () => {
     try {
       setLoader(true);
@@ -40,12 +39,24 @@ export default function Dashboard() {
 
     } catch (error) {
       console.error('Error creating resume:', error);
-      
+
     } finally {
       setLoader(false);
       setNewResumeTitle('');
     }
   };
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const loadResumes = async () => {
+      setLoading(true);
+      await fetchResumes();
+      setLoading(false);
+    };
+
+    loadResumes();
+  }, []);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,11 +78,21 @@ export default function Dashboard() {
               <AddResume />
             </div>
 
-            {resumes.length > 0 && resumes.map((resume) => (
-              <div className="col card-logo-1" key={resume._id} onClick={() => { navigate(`/resume/${resume._id}/view`) }}>
-                <ResumeCard resume={resume} />
-              </div>
-            ))}
+            {loading ? (
+              <p>Loading resumes...</p>
+            ) : resumes.length === 0 ? (
+              <p></p>
+            ) : (
+              resumes.map(resume => (
+                <div
+                  className="col card-logo-1"
+                  key={resume._id}
+                  onClick={() => navigate(`/resume/${resume._id}/view`)}
+                >
+                  <ResumeCard resume={resume} />
+                </div>
+              ))
+            )}
 
           </div>
         </div>
@@ -85,7 +106,7 @@ export default function Dashboard() {
           <DialogTitle id="alert-dialog-title">
             {"Create New Resume"}
           </DialogTitle>
-          
+
           <DialogContent>
             <div id="alert-dialog-description">
               <DialogContentText>

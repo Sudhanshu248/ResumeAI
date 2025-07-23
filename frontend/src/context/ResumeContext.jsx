@@ -1,26 +1,26 @@
-import  { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import axios from "axios";
-import {BASE_URL} from "../axiosConfig.js"
-
+import { BASE_URL } from "../axiosConfig.js"
+import { v4 as uuidv4 } from 'uuid';
 
 const ResumeContext = createContext();
 
 export const ResumeProvider = ({ children }) => {
-  const [resumeData, setResumeData] = useState(null);
+  const [resumeData, setResumeData] = useState("");
   const [resumes, setResumes] = useState([]);
   const [currentResumeId, setCurrentResumeId] = useState(null);
 
-  // ✅ Fetch all resumes (dashboard/list)
+  //  Fetch all resumes (dashboard/list)
   const fetchResumes = async () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${BASE_URL}/all-resumes`, {
-    headers: {
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${token}`, // ✅ FIXED
-},
-
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       setResumes(response?.data?.resumes || []);
     } catch (error) {
       console.error("Error fetching resumes:", error);
@@ -29,13 +29,14 @@ export const ResumeProvider = ({ children }) => {
   };
 
 
-  // ✅ Load resume by ID
+
+  //  Load resume by ID
   const loadResume = async (resumeId) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${BASE_URL}/resume-by-id/${resumeId}`, {
         headers: {
-           Authorization: `Bearer ${token}` 
+          Authorization: `Bearer ${token}`
         },
       });
       const resume = response.data.resume;
@@ -46,16 +47,16 @@ export const ResumeProvider = ({ children }) => {
     }
   };
 
-  // ✅ Save current resume to backend
+  //  Save current resume to backend
   const saveResume = async (resumeId) => {
     const token = localStorage.getItem("token");
-    console.log("saveResume funciton is running ",resumeData);
+    console.log("saveResume funciton is running ", resumeData);
     try {
       await axios.put(`${BASE_URL}/update-resume/${resumeId}`, resumeData, {
-      headers: {
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${token}`, // ✅ FIXED
-},
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, //  FIXED
+        },
 
       });
     } catch (error) {
@@ -64,10 +65,10 @@ export const ResumeProvider = ({ children }) => {
     }
   };
 
-  // ✅ Update one or more resume sections to backend
-const updateResumeSection = async (updatedFields) => {
-  const token = localStorage.getItem("token");
-  if (!currentResumeId) return;
+  //  Update one or more resume sections to backend
+  const updateResumeSection = async (updatedFields) => {
+    const token = localStorage.getItem("token");
+    if (!currentResumeId) return;
 
   try {
     const response = await axios.put(
@@ -97,7 +98,7 @@ const updateResumeSection = async (updatedFields) => {
     // ✅ Create new resume
   const createResume = async (newResume = {}) => {
     const token = localStorage.getItem("token");
-     console.log("Create Resume  funciton is running ",newResume);
+    console.log("Create Resume  funciton is running ", newResume);
     try {
       const response = await axios.post(`${BASE_URL}/create-resume`, newResume, {
         headers: {
@@ -116,7 +117,7 @@ const updateResumeSection = async (updatedFields) => {
     }
   };
 
-  // ✅ Local update (no backend)
+  //  Local update (no backend)
   const updateLocalResumeData = (updatedSection) => {
     setResumeData((prev) => ({
       ...prev,
@@ -124,25 +125,25 @@ const updateResumeSection = async (updatedFields) => {
     }));
   };
 
- // ✅ Update entire personalInfo block (name, jobTitle, email, etc.)
-const updatePersonalInfo = (data) => {
-  updateLocalResumeData({
-    personalInfo: {
-      ...resumeData?.personalInfo,
-      ...data,
-    },
-  });
-};
+  //  Update entire personalInfo block (name, jobTitle, email, etc.)
+  const updatePersonalInfo = (data) => {
+    updateLocalResumeData({
+      personalInfo: {
+        ...resumeData?.personalInfo,
+        ...data,
+      },
+    });
+  };
 
-// ✅ Update only the summary inside personalInfo
-const updateSummary = (summary) => {
-  updateLocalResumeData({
-    personalInfo: {
-      ...resumeData?.personalInfo,
-      summary,
-    },
-  });
-};
+  //  Update only the summary inside personalInfo
+  const updateSummary = (summary) => {
+    updateLocalResumeData({
+      personalInfo: {
+        ...resumeData?.personalInfo,
+        summary,
+      },
+    });
+  };
 
 // ✅ Other section updates remain the same
 const updateExperience = async (data) => {
@@ -216,7 +217,7 @@ const updateThemeColor = async (color) => {
         updateExperience,
         updateEducation,
         updateSkills,
-        updateThemeColor,
+        updateThemeColor,       
       }}
     >
       {children}

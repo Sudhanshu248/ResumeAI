@@ -46,7 +46,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.use("/", resumeRoutes); // ✅ Mount the router
+app.use("/", resumeRoutes); //  Mount the router
 app.use('/', userRoutes);  // This will handle /signup and /login directly
 
 app.get('/', (req, res) => {
