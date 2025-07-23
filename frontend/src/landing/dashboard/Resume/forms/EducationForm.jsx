@@ -11,9 +11,9 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 
 const defaultEducation = {
   id: uuidv4(),
-  universityName: '',
-  degree: '',
-  fieldofstudy: '',
+  institution: '',
+  field: '',
+    degree: '',
   startDate: '',
   endDate: '',
   currentlyStudying: false,
@@ -21,7 +21,7 @@ const defaultEducation = {
 };
 
 export default function EducationForm({ enableNext }) {
-  const { resumeData, updateEducation, setResumeData } = useResume();
+  const { resumeData, updateEducation, setResumeData, updateResumeSection } = useResume();
 const [education, setEducation] = useState(
   resumeData?.education?.length ? resumeData.education : [{ ...defaultEducation }]
 );
@@ -40,41 +40,43 @@ const [education, setEducation] = useState(
     );
     setEducation(updated);
     setResumeData(prev => ({ ...prev, education: updated }));
-    updateEducation(updated); //  correct
+    updateEducation(updated); // ✅ correct
   };
 
-  const handleDescriptionChange = (value, index) => {
-    const updated = [...education];
-    updated[index].description = value;
-    setEducation(updated);
-    setResumeData(prev => ({ ...prev, education: updated }));
-    updateEducation(updated); //  correct
-  };
+const handleDescriptionChange = (value, index) => {
+  const updated = [...education];
+  updated[index].description = typeof value === "string" ? value : "";
+  setEducation(updated);
+  setResumeData(prev => ({ ...prev, education: updated }));
+  updateEducation(updated);
+};
+
 
   const addEducation = () => {
     const newEdu = [...education, { ...defaultEducation, id: uuidv4() }];
     setEducation(newEdu);
     setResumeData(prev => ({ ...prev, education: newEdu }));
-    updateEducation(newEdu); //  correct
+    updateEducation(newEdu); // ✅ correct
   };
 
   const removeEducation = (index) => {
     const updated = education.filter((_, i) => i !== index);
     setEducation(updated);
     setResumeData(prev => ({ ...prev, education: updated }));
-    updateEducation(updated); //  correct
+    updateEducation(updated); // ✅ correct
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const isValid = education.every(item =>
-      item.universityName.trim() !== "" &&
-      item.degree.trim() !== "" &&
-      item.fieldofstudy.trim() !== "" &&
-      item.startDate !== "" &&
-      (item.currentlyStudying || item.endDate !== "")
+  try {
+    const isValid = education.every(
+      (item) =>
+        item.institution.trim() !== "" &&
+        item.degree.trim() !== "" &&
+        item.field.trim() !== "" &&
+        item.startDate !== "" &&
+        (item.currentlyStudying || item.endDate !== "")
     );
 
     if (!isValid) {
@@ -84,11 +86,32 @@ const [education, setEducation] = useState(
       return;
     }
 
-    updateEducation(education); //  fixed (was previously wrapped inside an object)
+    // 🔄 Update locally first
+    updateEducation(education);
+
+    console.log(" Education data to be saved:", education);
+
+    // ✅ Ensure this is awaited
+    const response = await updateResumeSection({ education });
+
+    console.log("✅ Server response after update:", response);
+
     toast.success("Education information saved");
+
+    // ✅ Enable Next *after successful save*
     enableNext(true);
+
+  } catch (error) {
+    console.error("❌ Error saving education:", error);
+    toast.error("Failed to save education to server");
+
+    // ❌ Don't enable next if saving fails
+    enableNext(false);
+
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   useEffect(() => {
     enableNext(false);
@@ -113,8 +136,8 @@ const [education, setEducation] = useState(
               <label className="fw-medium">University Name</label>
               <input
                 type="text"
-                name="universityName"
-                value={item.universityName}
+                name="institution"
+                value={item.institution}
                 onChange={(e) => handleChange(e, index)}
                 className="p-1"
                 required
@@ -137,8 +160,8 @@ const [education, setEducation] = useState(
               <label className="fw-medium">Field of Study</label>
               <input
                 type="text"
-                name="fieldofstudy"
-                value={item.fieldofstudy}
+                name="field"
+                value={item.field}
                 onChange={(e) => handleChange(e, index)}
                 className="p-1"
                 required
@@ -182,16 +205,17 @@ const [education, setEducation] = useState(
 
             <div className="col-12 d-flex flex-column mt-2">
               <label className="fw-medium">Description</label>
-              <TextEditor
-                value={item.description}
-                onChange={(value) => handleDescriptionChange(value, index)}
-                style={{
-                  minHeight: "150px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  padding: "10px"
-                }}
-              />
+          <TextEditor
+  value={item.description || ""}
+  onChange={(e) => handleDescriptionChange(e.target.value, index)}
+  style={{
+    minHeight: "150px",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px"
+  }}
+/>
+
             </div>
 
             <div className="col-12 d-flex justify-content-between align-items-center mt-3">

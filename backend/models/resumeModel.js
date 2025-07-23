@@ -18,20 +18,20 @@ const resumeSchema = new mongoose.Schema({
     address: String,
     phone: String,
     email: String,
-    summary: String
   }],
   summary: [{
     type: String,
   }],
-  experience: [{
-    company: String,
-    position: String,
-    city: String,
-    state: String,
-    startDate: Date,
-    endDate: Date,
-    description: String
-  }],
+experience: [{
+  jobTitle: String,
+  companyName: String,
+  location: String,
+  startDate: Date,
+  endDate: Date,
+  description: String,
+  currentlyWorking: Boolean
+}],
+
   education: [{
     institution: String,
     degree: String,
@@ -44,10 +44,10 @@ const resumeSchema = new mongoose.Schema({
     name: String,
     rating: Number
   }],
-  themeColor: [{
+  themeColor: {
     type: String,
     default: "#0d6efd"
-  }]
+  }
 }, { timestamps: true });
 
 

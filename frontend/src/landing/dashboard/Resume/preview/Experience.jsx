@@ -1,5 +1,5 @@
 export default function Experience({ resumes }) {
-  const experienceList = resumes?.experience || [];
+const experienceList = Array.isArray(resumes?.experience) ? resumes.experience : [];
 
   if (experienceList.length === 0) return null;
 

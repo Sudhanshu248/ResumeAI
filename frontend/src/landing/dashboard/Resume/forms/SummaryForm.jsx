@@ -7,7 +7,7 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 import { AIChatSession } from "../../../../server/AIModel.js";
 
 export default function SummaryForm({ enableNext }) {
-  const { resumeData, setResumeData, updateSummary } = useResume();
+  const { resumeData, setResumeData, updateSummary, updateResumeSection } = useResume();
   const [summary, setSummary] = useState(resumeData?.personalInfo?.summary || "");
   const [loading, setLoading] = useState(false);
 
@@ -15,7 +15,7 @@ export default function SummaryForm({ enableNext }) {
 
   useEffect(() => {
     enableNext(false);
-  }, []);
+  }, [enableNext]);
 
   const handleAI = async () => {
     setLoading(true);
@@ -26,6 +26,8 @@ export default function SummaryForm({ enableNext }) {
       const generatedSummary = parsed.summary.join("\n\n");
 
       setSummary(generatedSummary);
+
+      // Update local resume data
       setResumeData((prev) => ({
         ...prev,
         personalInfo: {
@@ -33,6 +35,8 @@ export default function SummaryForm({ enableNext }) {
           summary: generatedSummary,
         },
       }));
+
+      toast.success("AI summary generated!");
     } catch (error) {
       console.error("AI Summary Error:", error);
       toast.error("Failed to generate summary.");
@@ -41,24 +45,45 @@ export default function SummaryForm({ enableNext }) {
     }
   };
 
- const handleSubmit = (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  if (!summary.trim()) {
-    toast.error("Please enter a summary");
-    enableNext(false);
-    setLoading(false);
-    return;
-  }
+    try {
 
-  updateSummary({ summary });
+    if (!summary.trim()) {
+      toast.error("Please enter a summary");
+      enableNext(false);
+      setLoading(false);
+      return;
+    }
 
-  toast.success("Summary saved successfully!");
-  enableNext(true);
-  setLoading(false);
-};
+      // Update local state
+      const updatedData = {
+        ...resumeData,
+        personalInfo: {
+          ...resumeData.personalInfo,
+          summary: summary,
+        },
+      };
+      setResumeData(updatedData);
 
+      // Save to backend via context
+      updateSummary( summary );
+    console.log("Summary data to be saved:", summary);
+
+          const response = await updateResumeSection({ summary });
+    console.log("✅ Server response after update:", response);
+
+      toast.success("Summary saved successfully!");
+      enableNext(true);
+    } catch (err) {
+      toast.error("Error saving summary!");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -96,13 +121,10 @@ export default function SummaryForm({ enableNext }) {
         </div>
 
         <TextEditor
-          name="summary"
-          id="summary"
-          className="form-control p-2"
-          required
-          placeholder="Write your professional summary here..."
-          value={summary}
+          value={String(summary)}
           onChange={(e) => setSummary(e.target.value)}
+          placeholder="Write your professional summary here..."
+          className="form-control p-2"
         />
 
         <div className="d-flex justify-content-center mt-4">
