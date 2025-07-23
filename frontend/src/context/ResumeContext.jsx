@@ -15,10 +15,11 @@ export const ResumeProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${BASE_URL}/all-resumes`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
+    headers: {
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${token}`, // ✅ FIXED
+},
+
       });
       setResumes(response?.data?.resumes || []);
     } catch (error) {
@@ -33,7 +34,9 @@ export const ResumeProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${BASE_URL}/resume-by-id/${resumeId}`, {
-        headers: { Authorization: token },
+        headers: {
+           Authorization: `Bearer ${token}` 
+        },
       });
       const resume = response.data.resume;
       setResumeData(resume);
@@ -49,10 +52,11 @@ export const ResumeProvider = ({ children }) => {
     console.log("saveResume funciton is running ",resumeData);
     try {
       await axios.put(`${BASE_URL}/update-resume/${resumeId}`, resumeData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
+      headers: {
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${token}`, // ✅ FIXED
+},
+
       });
     } catch (error) {
       console.error("Error saving resume:", error);
@@ -61,23 +65,31 @@ export const ResumeProvider = ({ children }) => {
   };
 
   // ✅ Update one or more resume sections to backend
-  const updateResumeSection = async (updatedFields) => {
-    const token = localStorage.getItem("token");
-      console.log("UpdateResumeScetion  funciton is running ",updatedFields);
-    if (!currentResumeId) return;
+const updateResumeSection = async (updatedFields) => {
+  const token = localStorage.getItem("token");
+  if (!currentResumeId) return;
 
-    try {
-      await axios.put(`${BASE_URL}/update-resume/${currentResumeId}`, updatedFields, {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/update-resume/${currentResumeId}`,
+      updatedFields,
+      {
         headers: {
           "Content-Type": "application/json",
-          Authorization: token,
+          Authorization: `Bearer ${token}`, // Make sure it includes "Bearer"
         },
-      });
-      setResumeData(prev => ({ ...prev, ...updatedFields }));
-    } catch (error) {
-      console.error("Error updating resume section:", error);
-    }
-  };
+      }
+    );
+
+setResumeData((prev) => ({ ...prev, ...updatedFields }));
+return response.data;
+  } catch (error) {
+    console.error("Error updating resume section:", error);
+    throw error;
+  }
+};
+
+
 
     // ✅ Create new resume
   const createResume = async (newResume = {}) => {

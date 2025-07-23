@@ -7,8 +7,11 @@ const resumeSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  title: { type: String, required: true },
-  personalInfo: {
+  title: {
+    type: String,
+    required: true 
+  },
+  personalInfo: [{
     firstName: String,
     lastName: String,
     jobTitle: String,
@@ -16,7 +19,10 @@ const resumeSchema = new mongoose.Schema({
     phone: String,
     email: String,
     summary: String
-  },
+  }],
+  summary: [{
+    type: String,
+  }],
   experience: [{
     company: String,
     position: String,
@@ -38,10 +44,10 @@ const resumeSchema = new mongoose.Schema({
     name: String,
     rating: Number
   }],
-  themeColor: {
+  themeColor: [{
     type: String,
     default: "#0d6efd"
-  }
+  }]
 }, { timestamps: true });
 
 

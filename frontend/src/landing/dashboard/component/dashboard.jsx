@@ -37,8 +37,10 @@ export default function Dashboard() {
       if (created && created._id) {
         navigate(`/resume/${created._id}/edit`);
       }
+
     } catch (error) {
       console.error('Error creating resume:', error);
+      
     } finally {
       setLoader(false);
       setNewResumeTitle('');
