@@ -4,7 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import "../resume.css";
 
-export default function PersonalForm({ enableNext }) {
+export default function PersonalForm({ setEnableNext }) {
     const { resumeData, updatePersonalInfo } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
     const [loading, setLoading] = useState(false);
 
@@ -22,8 +22,8 @@ export default function PersonalForm({ enableNext }) {
         if (resumeData?.personalInfo) {
             setPersonalInfo(resumeData.personalInfo);
         }
-        enableNext(false); // Always reset on mount
-    }, [resumeData, enableNext]);
+        setEnableNext(false); // Always reset on mount
+    }, [resumeData, setEnableNext]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -35,26 +35,25 @@ export default function PersonalForm({ enableNext }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
+
+        // console.log("PersonalForm.jsx data  handlesubmit", personalInfo)
+        if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
+            toast.error("Please fill out all fields.");
+            setEnableNext(false);
+            setLoading(false);
+            return;
+        }
+
+        // 1. Update local context
+        updatePersonalInfo(personalInfo);
         try {
-            const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
-
-            // console.log("PersonalForm.jsx data  handlesubmit", personalInfo)
-            if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
-                toast.error("Please fill out all fields.");
-                enableNext(false);
-                setLoading(false);
-                return;
-            }
-
-            // 1. Update local context
-            updatePersonalInfo(personalInfo);
-
-
             // 2. Persist to backend
             const response = await updateResumeSection({ personalInfo });
             console.log(response);
             toast.success("Personal details saved");
-            enableNext(true);
+            setEnableNext(true);
         } catch (error) {
             toast.error("Failed to save personal details to server");
         } finally {
@@ -162,11 +161,12 @@ export default function PersonalForm({ enableNext }) {
                         <button
                             className="btn btn-primary text-white fw-semibold fs-5 mx-auto px-4 py-2"
                             style={{ width: "7rem" }}
-                            onClick={handleSubmit}
-                        // disabled={loading}
+                            type="submit" // ✅ Correct: Use submit inside a form
+                            disabled={loading}
                         >
-                            {loading ? <CircularProgress size={20} /> : "Save"}
+                            {loading ? <CircularProgress size={20} color="inherit" /> : "Save"}
                         </button>
+
                     </div>
                 </div>
             </form>

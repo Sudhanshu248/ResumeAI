@@ -1,12 +1,12 @@
-import  { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import axios from "axios";
-import {BASE_URL} from "../axiosConfig.js"
-
+import { BASE_URL } from "../axiosConfig.js"
+import { v4 as uuidv4 } from 'uuid';
 
 const ResumeContext = createContext();
 
 export const ResumeProvider = ({ children }) => {
-  const [resumeData, setResumeData] = useState(null);
+  const [resumeData, setResumeData] = useState("");
   const [resumes, setResumes] = useState([]);
   const [currentResumeId, setCurrentResumeId] = useState(null);
 
@@ -46,7 +46,7 @@ export const ResumeProvider = ({ children }) => {
   // ✅ Save current resume to backend
   const saveResume = async (resumeId) => {
     const token = localStorage.getItem("token");
-    console.log("saveResume funciton is running ",resumeData);
+    console.log("saveResume funciton is running ", resumeData);
     try {
       await axios.put(`${BASE_URL}/update-resume/${resumeId}`, resumeData, {
         headers: {
@@ -63,11 +63,11 @@ export const ResumeProvider = ({ children }) => {
   // ✅ Update one or more resume sections to backend
   const updateResumeSection = async (updatedFields) => {
     const token = localStorage.getItem("token");
-      console.log("UpdateResumeScetion  funciton is running ",updatedFields);
-    if (!currentResumeId) return;
+    console.log("UpdateResumeScetion  funciton is running ", updatedFields);
 
+    const id = uuidv4();
     try {
-      await axios.put(`${BASE_URL}/update-resume/${currentResumeId}`, updatedFields, {
+      await axios.post(`${BASE_URL}/update-resume/${id}`, updatedFields, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -79,10 +79,10 @@ export const ResumeProvider = ({ children }) => {
     }
   };
 
-    // ✅ Create new resume
+  // ✅ Create new resume
   const createResume = async (newResume = {}) => {
     const token = localStorage.getItem("token");
-     console.log("Create Resume  funciton is running ",newResume);
+    console.log("Create Resume  funciton is running ", newResume);
     try {
       const response = await axios.post(`${BASE_URL}/create-resume`, newResume, {
         headers: {
@@ -109,38 +109,38 @@ export const ResumeProvider = ({ children }) => {
     }));
   };
 
- // ✅ Update entire personalInfo block (name, jobTitle, email, etc.)
-const updatePersonalInfo = (data) => {
-  updateLocalResumeData({
-    personalInfo: {
-      ...resumeData?.personalInfo,
-      ...data,
-    },
-  });
-};
+  // ✅ Update entire personalInfo block (name, jobTitle, email, etc.)
+  const updatePersonalInfo = (data) => {
+    updateLocalResumeData({
+      personalInfo: {
+        ...resumeData?.personalInfo,
+        ...data,
+      },
+    });
+  };
 
-// ✅ Update only the summary inside personalInfo
-const updateSummary = (summary) => {
-  updateLocalResumeData({
-    personalInfo: {
-      ...resumeData?.personalInfo,
-      summary,
-    },
-  });
-};
+  // ✅ Update only the summary inside personalInfo
+  const updateSummary = (summary) => {
+    updateLocalResumeData({
+      personalInfo: {
+        ...resumeData?.personalInfo,
+        summary,
+      },
+    });
+  };
 
-// ✅ Other section updates remain the same
-const updateExperience = (data) =>
-  updateLocalResumeData({ experience: data });
+  // ✅ Other section updates remain the same
+  const updateExperience = (data) =>
+    updateLocalResumeData({ experience: data });
 
-const updateEducation = (data) =>
-  updateLocalResumeData({ education: data });
+  const updateEducation = (data) =>
+    updateLocalResumeData({ education: data });
 
-const updateSkills = (data) =>
-  updateLocalResumeData({ skills: data });
+  const updateSkills = (data) =>
+    updateLocalResumeData({ skills: data });
 
-const updateThemeColor = (color) =>
-  updateLocalResumeData({ themeColor: color });
+  const updateThemeColor = (color) =>
+    updateLocalResumeData({ themeColor: color });
 
 
   // Load all resumes on initial mount

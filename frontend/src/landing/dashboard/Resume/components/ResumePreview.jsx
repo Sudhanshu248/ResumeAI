@@ -6,11 +6,11 @@ import Experience from "../preview/Experience.jsx";
 import Skills from "../preview/Skills.jsx";
 
 export default function ResumePreview() {
-  const { resumes } = useResume();
+  const { resumeData } = useResume();
 
-  if (!resumes) return <p className="text-center mt-5">Loading resume...</p>;
+//   if (!resumeData) return <p className="text-center mt-5">Loading resume...</p>;
 
-  const borderColor = resumes.themeColor || "#0d6efd";
+  const borderColor = resumeData.themeColor || "#0d6efd";
 
   return (
     <div
@@ -23,11 +23,11 @@ export default function ResumePreview() {
         borderRadius: "0rem",
       }}
     >
-      <Personal resumes={resumes} />
-      <Summary resumes={resumes} />
-      <Experience resumes={resumes} />
-      <Education resumes={resumes} />
-      <Skills resumes={resumes} />
+      <Personal resumes={resumeData} />
+      <Summary resumes={resumeData} />
+      <Experience resumes={resumeData} />
+      <Education resumes={resumeData} />
+      <Skills resumes={resumeData} />
     </div>
   );
 }
