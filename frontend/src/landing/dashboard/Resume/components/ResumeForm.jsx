@@ -9,16 +9,22 @@ import ExperienceForm from "../forms/ExperienceForm.jsx";
 import EducationForm from "../forms/EducationForm.jsx";
 import ThemeSelector from "./ThemeSelector.jsx";
 import { useResume } from "../../../../context/ResumeContext.jsx";
+import { useEffect } from "react";
 
 export default function ResumeForm() {
   const [activeForm, setActiveForm] = useState(1);
   const [enableNext, setEnableNext] = useState(false);
   const { id } = useParams();
-  const { resumeData, updateResumeData } = useResume();
+const { resumeData, updateThemeColor } = useResume();
 
-  const handleThemeChange = (newColor) => {
-    updateResumeData(newColor);
-  };
+  useEffect(()=>{
+ console.log(enableNext);
+  }, [])
+
+const handleThemeChange = async (newColor) => {
+  await updateThemeColor(newColor); // ✅ this saves to backend too
+};
+
 
   const handleNext = () => {
     setActiveForm((prev) => prev + 1);
@@ -33,13 +39,13 @@ export default function ResumeForm() {
     switch (activeForm) {
       case 1:
         return <PersonalForm enableNext={setEnableNext} />;
-      case 2:
-        return <SummaryForm enableNext={setEnableNext} />;
-      case 3:
-        return <ExperienceForm enableNext={setEnableNext} />;
-      case 4:
-        return <EducationForm enableNext={setEnableNext} />;
       case 5:
+        return <SummaryForm enableNext={setEnableNext} />;
+      case 2:
+        return <ExperienceForm enableNext={setEnableNext} />;
+      case 3:
+        return <EducationForm enableNext={setEnableNext} />;
+      case 4:
         return <SkillForm enableNext={setEnableNext} />;
       case 6:
         return <Navigate to={`/resume/${id}/view`} />;

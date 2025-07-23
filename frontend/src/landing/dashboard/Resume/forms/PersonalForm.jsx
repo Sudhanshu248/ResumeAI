@@ -22,8 +22,7 @@ export default function PersonalForm({ enableNext }) {
         if (resumeData?.personalInfo) {
             setPersonalInfo(resumeData.personalInfo);
         }
-        enableNext(false); // Always reset on mount
-    }, [resumeData, enableNext]);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,37 +31,46 @@ export default function PersonalForm({ enableNext }) {
         updatePersonalInfo(updated); // ✅ Use context-safe updater
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-            // console.log("PersonalForm.jsx data  handlesubmit", personalInfo)
-            if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
-                toast.error("Please fill out all fields.");
-                enableNext(false);
-                setLoading(false);
-                return;
-            }
-            console.log("PersonalForm.jsx data  handlesubmit", personalInfo);
-            // 1. Update local context
-            updatePersonalInfo(personalInfo);
+    try {
+        const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
 
-
-            // 2. Persist to backend
-     
-const response = await updateResumeSection({ personalInfo });
-console.log("✅ Server response after update:", response);
-
-            toast.success("Personal details saved");
-            enableNext(true);
-        } catch (error) {
-            toast.error("Failed to save personal details to server");
-        } finally {
+        if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
+            toast.error("Please fill out all fields.");
+            enableNext(false);
             setLoading(false);
+            return;
         }
-    };
+
+        // 1. Update local context
+        updatePersonalInfo(personalInfo);
+
+        // 2. Check if resume ID is loaded before backend call
+        console.log("🪪 Resume ID in context:", resumeData?._id);
+
+        if (!resumeData?._id) {
+            toast.error("Resume ID not loaded yet. Try again in a moment.");
+            setLoading(false);
+            return;
+        }
+
+        // 3. Send to backend
+        const response = await updateResumeSection({ personalInfo });
+        console.log("✅ Server response after update:", response);
+
+        toast.success("Personal details saved");
+        enableNext(true);
+    } catch (error) {
+        toast.error("Failed to save personal details to server");
+        console.error("Error updating personal info:", error);
+    } finally {
+        setLoading(false);
+    }
+};
+
 
 
 
@@ -164,7 +172,7 @@ console.log("✅ Server response after update:", response);
                         <button
                             className="btn btn-primary text-white fw-semibold fs-5 mx-auto px-4 py-2"
                             style={{ width: "7rem" }}
-                            onClick={handleSubmit}
+                             type="submit"
                         // disabled={loading}
                         >
                             {loading ? <CircularProgress size={20} /> : "Save"}
