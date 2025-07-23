@@ -1,14 +1,16 @@
 export default function Education({ resumes }) {
   const educationList = resumes?.education || [];
+  const themeColor = resumes?.themeColor || "#0d6efd";
 
   if (educationList.length === 0) return null;
 
   return (
     <div className="ps-3 pe-3 pt-3">
-      <h5 className="text-start" style={{ color: resumes.themeColor }}>
+      <h5 className="text-start" style={{ color: themeColor }}>
         Education
       </h5>
-      <div style={{ border: `0.5px solid ${resumes.themeColor}` }} className="mb-2"></div>
+
+      {/* <div style={{ border: `0.5px solid ${themeColor}` }} className="mb-2"></div> */}
 
       {educationList.map((education) => (
         <div key={education.id} className="mb-3">

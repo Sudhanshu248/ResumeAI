@@ -4,6 +4,7 @@ export default function Skills({ resumes }) {
 
   return (
     <div className="ps-3 pe-3 pt-4 pb-3">
+      
       <h5 className="text-start" style={{ color: themeColor }}>
         Skills
       </h5>

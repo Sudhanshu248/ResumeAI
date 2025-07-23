@@ -49,16 +49,6 @@ export default function EditResume() {
                     <ResumePreview />
                 </div>
             </div>
-
-            <div className="d-flex justify-content-center mb-4">
-                <button
-                    className="btn btn-primary btn-lg"
-                    onClick={handleSaveResume}
-                    disabled={loading}
-                >
-                    {loading ? <CircularProgress size={24} /> : (isNewResume ? "Create Resume" : "Save Resume")}
-                </button>
-            </div>
         </div>
     );
 }

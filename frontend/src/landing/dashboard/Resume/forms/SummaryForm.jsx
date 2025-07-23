@@ -1,3 +1,4 @@
+// ✅ SummaryForm.jsx
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { CircularProgress } from "@mui/material";
@@ -7,15 +8,16 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 import { AIChatSession } from "../../../../server/AIModel.js";
 
 export default function SummaryForm({ enableNext }) {
-  const { resumeData, setResumeData, updateSummary } = useResume();
+  const { resumeData, setResumeData, updateSummary, updateResumeSection } = useResume();
   const [summary, setSummary] = useState(resumeData?.personalInfo?.summary || "");
   const [loading, setLoading] = useState(false);
+  const [wasValidated, setWasValidated] = useState(false);
 
-  const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle}, based on my job title, give me a resume summary within 4–5 lines.`;
+  const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle}, based on my job title, give me a resume summary within 4-5 lines.`;
 
   useEffect(() => {
     enableNext(false);
-  }, []);
+  }, [enableNext]);
 
   const handleAI = async () => {
     setLoading(true);
@@ -26,6 +28,7 @@ export default function SummaryForm({ enableNext }) {
       const generatedSummary = parsed.summary.join("\n\n");
 
       setSummary(generatedSummary);
+
       setResumeData((prev) => ({
         ...prev,
         personalInfo: {
@@ -33,6 +36,8 @@ export default function SummaryForm({ enableNext }) {
           summary: generatedSummary,
         },
       }));
+
+      toast.success("AI summary generated!");
     } catch (error) {
       console.error("AI Summary Error:", error);
       toast.error("Failed to generate summary.");
@@ -41,24 +46,39 @@ export default function SummaryForm({ enableNext }) {
     }
   };
 
- const handleSubmit = (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setWasValidated(true);
+    setLoading(true);
 
-  if (!summary.trim()) {
-    toast.error("Please enter a summary");
-    enableNext(false);
-    setLoading(false);
-    return;
-  }
+    try {
+      if (!summary.trim()) {
+        enableNext(false);
+        setLoading(false);
+        return;
+      }
 
-  updateSummary({ summary });
+      const updatedData = {
+        ...resumeData,
+        personalInfo: {
+          ...resumeData.personalInfo,
+          summary,
+        },
+      };
 
-  toast.success("Summary saved successfully!");
-  enableNext(true);
-  setLoading(false);
-};
+      setResumeData(updatedData);
+      updateSummary(summary);
+      await updateResumeSection({ summary });
 
+      toast.success("Summary saved successfully!");
+      enableNext(true);
+    } catch (err) {
+      toast.error("Error saving summary!");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -73,11 +93,9 @@ export default function SummaryForm({ enableNext }) {
       <h4 className="fw-bold pb-1 m-0 mt-2">Summary</h4>
       <p className="pb-4">Add a summary of your career and skills</p>
 
-      <form onSubmit={handleSubmit}>
+      <form className="needs-validation" noValidate onSubmit={handleSubmit}>
         <div className="d-flex justify-content-between align-items-center mb-3 px-2">
-          <label htmlFor="summary" className="fw-medium m-0">
-            Summary
-          </label>
+          <label htmlFor="summary" className="fw-medium m-0">Summary</label>
           <Button
             variant="outlined"
             color="info"
@@ -95,15 +113,18 @@ export default function SummaryForm({ enableNext }) {
           </Button>
         </div>
 
-        <TextEditor
-          name="summary"
-          id="summary"
-          className="form-control p-2"
-          required
-          placeholder="Write your professional summary here..."
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-        />
+        <div className="mb-3">
+          <TextEditor
+            value={String(summary) || ""}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="Write your professional summary here..."
+            className={`form-control p-2 ${wasValidated && !summary.trim() ? "is-invalid" : ""}`}
+            style={{ borderRadius: "4px", minHeight: "150px", border: "1px solid #ced4da" }}
+          />
+          {wasValidated && !summary.trim() && (
+            <div className="invalid-feedback d-block mt-1">Summary is required.</div>
+          )}
+        </div>
 
         <div className="d-flex justify-content-center mt-4">
           <Button

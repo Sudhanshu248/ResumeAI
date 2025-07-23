@@ -1,7 +1,6 @@
 import { Button } from "@mui/material";
 import ResumePreview from "../../dashboard/Resume/components/ResumePreview";
 import { useResume } from "../../../context/ResumeContext.jsx";
-import { ResumeProvider } from "../../../context/ResumeContext.jsx";
 import "./ViewResume.css";
 
 export default function ViewResume() {
@@ -9,11 +8,10 @@ export default function ViewResume() {
 
     const handleDownloadPDF = () => {
         window.print();
-        localStorage.removeItem('ResumeData');
     }
 
     return (
-            <ResumeProvider>
+        <>
                 <div id="no-print">
                     <div className="text-center p-3 m-2">
                         <h2 className="text-success p-2 rounded-3">Congratulations! Your resume has been successfully created.</h2>
@@ -21,7 +19,6 @@ export default function ViewResume() {
 
                         <div className="d-flex justify-content-evenly align-items-center gap-3 p-2">
                             <Button variant="contained" color="primary" onClick={handleDownloadPDF}>Download PDF</Button>
-                            <Button variant="outlined" color="primary">Share</Button>
                         </div>
                     </div>
                 </div>
@@ -29,7 +26,6 @@ export default function ViewResume() {
                 <div className="mt-3" style={{ width: '97%', margin: '0 auto 4rem' }}>
                     <ResumePreview />
                 </div>
-            </ResumeProvider>
-
+</>
     );
 }

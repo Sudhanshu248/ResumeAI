@@ -21,20 +21,21 @@ const createNewExperience = () => ({
 });
 
 export default function ExperienceForm({ enableNext }) {
-    const { resumeData, updateExperience } = useResume();
+    const { resumeData, updateExperience, updateResumeSection } = useResume();
     const [experience, setExperience] = useState([createNewExperience()]);
     const [loading, setLoading] = useState(false);
+    const [wasValidated, setWasValidated] = useState(false);
 
-    // Sync local state with resume context on load
+
     useEffect(() => {
-        if (resumeData?.experience?.length) {
+        if (Array.isArray(resumeData?.experience) && resumeData.experience.length) {
             setExperience(resumeData.experience);
         }
-        enableNext(false);
-    }, [resumeData, enableNext]);
+    }, []);
 
     const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
+
         const updated = experience.map((item, i) =>
             i === index
                 ? {
@@ -44,54 +45,66 @@ export default function ExperienceForm({ enableNext }) {
                 }
                 : item
         );
+
         setExperience(updated);
-        updateExperience({ experience: updated });
+        updateExperience(updated);
     };
 
     const handleDescriptionChange = (value, index) => {
         const updated = [...experience];
         updated[index].description = value;
         setExperience(updated);
-        updateExperience({ experience: updated });
+        updateExperience(updated);
     };
 
     const addExperience = () => {
         const newList = [...experience, createNewExperience()];
         setExperience(newList);
-        updateExperience({ experience: newList });
+        updateExperience(newList);
     };
 
     const removeExperience = (index) => {
         const updated = experience.filter((_, i) => i !== index);
         setExperience(updated);
-        updateExperience({ experience: updated });
+        updateExperience(updated);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Save button clicked!");
         setLoading(true);
 
-        const isValid = experience.every((item) =>
-            item.jobTitle.trim() &&
-            item.companyName.trim() &&
-            item.location.trim() &&
-            item.startDate &&
-            (item.currentlyWorking || item.endDate)
-        );
+        try {
+            const isValid = experience.every(
+                (item) =>
+                    item.jobTitle.trim() &&
+                    item.companyName.trim() &&
+                    item.location.trim() &&
+                    item.startDate &&
+                    (item.currentlyWorking || item.endDate)
+            );
 
-        if (!isValid) {
-            toast.error("Please fill all required fields");
-            enableNext(false);
+            if (!isValid) {
+                toast.error("Please fill all required fields");
+                enableNext(false);
+                setLoading(false);
+                return;
+            }
+
+            updateExperience(experience); //  correct flat array
+            console.log("Experience data to be saved:", experience);
+
+            const response = await updateResumeSection({ experience });
+            console.log(" Server response after update:", response);
+
+            toast.success("Experience information saved");
+            enableNext(true);
+        } catch (error) {
+            toast.error("Failed to save experience to server");
+        } finally {
             setLoading(false);
-            return;
         }
-
-        updateExperience({ experience });
-        toast.success("Experience information saved");
-        enableNext(true);
-        setLoading(false);
     };
-
 
     return (
         <div
@@ -106,124 +119,156 @@ export default function ExperienceForm({ enableNext }) {
             <h4 className="fw-bold pb-1 m-0 mt-2">Experience</h4>
             <p className="pb-4">Add your work experience</p>
 
-            <div className="container g-2 justify-content-between border border-1 border-dark rounded-3 p-3">
-                {experience.map((item, index) => (
-                    <div key={item.id} className="row g-2 justify-content-between mb-4">
-                        <div className="col-md-4 d-flex flex-column">
-                            <label className="fw-medium">Job Title</label>
-                            <input
-                                type="text"
-                                name="jobTitle"
-                                value={item.jobTitle}
-                                onChange={(e) => handleChange(e, index)}
-                                className="p-1"
-                                required
-                            />
-                        </div>
+            <form className="needs-validation" noValidate onSubmit={handleSubmit}>
+                <div className="container g-2 justify-content-between border border-1 border-dark rounded-3 p-3">
 
-                        <div className="col-md-4 d-flex flex-column">
-                            <label className="fw-medium">Company Name</label>
-                            <input
-                                type="text"
-                                name="companyName"
-                                value={item.companyName}
-                                onChange={(e) => handleChange(e, index)}
-                                className="p-1"
-                                required
-                            />
-                        </div>
-
-                        <div className="col-md-4 d-flex flex-column">
-                            <label className="fw-medium">Location</label>
-                            <input
-                                type="text"
-                                name="location"
-                                value={item.location}
-                                onChange={(e) => handleChange(e, index)}
-                                className="p-1"
-                                required
-                            />
-                        </div>
-
-                        <div className="col-md-4 d-flex flex-column">
-                            <label className="fw-medium">Start Date</label>
-                            <input
-                                type="date"
-                                name="startDate"
-                                value={item.startDate}
-                                onChange={(e) => handleChange(e, index)}
-                                className="p-1"
-                                required
-                            />
-                        </div>
-
-                        <div className="col-md-4 d-flex flex-column">
-                            <label className="fw-medium">End Date</label>
-                            <input
-                                type="date"
-                                name="endDate"
-                                value={item.endDate}
-                                onChange={(e) => handleChange(e, index)}
-                                className="p-1"
-                                required={!item.currentlyWorking}
-                                disabled={item.currentlyWorking}
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={item.currentlyWorking}
+                    {Array.isArray(experience) &&
+                        experience.map((item, index) => (
+                            <div key={item.id} className="row g-2 justify-content-between mb-4">
+                                {/* Job Title */}
+                                <div className="col-md-4 d-flex flex-column">
+                                    <label className="fw-medium">Job Title</label>
+                                    <input
+                                        type="text"
+                                        name="jobTitle"
+                                        value={item.jobTitle || ""}
                                         onChange={(e) => handleChange(e, index)}
-                                        name="currentlyWorking"
+                                        className={`p-1 form-control ${wasValidated && !item.jobTitle.trim() ? "is-invalid" : ""}`}
+                                        required
                                     />
-                                }
-                                label="Currently working here"
-                            />
-                        </div>
+                                    {wasValidated && !item.jobTitle.trim() && (
+                                        <div className="invalid-feedback d-block">Job title is required.</div>
+                                    )}
+                                </div>
 
-                        <div className="col-12 d-flex flex-column mt-2">
-                            <label className="fw-medium">Description</label>
-                            <TextEditor
-                                value={item.description}
-                                onChange={(value) => handleDescriptionChange(value, index)}
-                                style={{
-                                    minHeight: "150px",
-                                    border: "1px solid #ccc",
-                                    borderRadius: "4px",
-                                    padding: "10px",
-                                }}
-                            />
-                        </div>
+                                {/* Company Name */}
+                                <div className="col-md-4 d-flex flex-column">
+                                    <label className="fw-medium">Company Name</label>
+                                    <input
+                                        type="text"
+                                        name="companyName"
+                                        value={item.companyName || ""}
+                                        onChange={(e) => handleChange(e, index)}
+                                        className={`p-1 form-control ${wasValidated && !item.companyName.trim() ? "is-invalid" : ""}`}
+                                        required
+                                    />
+                                    {wasValidated && !item.companyName.trim() && (
+                                        <div className="invalid-feedback d-block">Company name is required.</div>
+                                    )}
+                                </div>
 
-                        <div className="col-12 d-flex justify-content-between align-items-center mt-3">
-                            <Button
-                                variant="contained"
-                                color="error"
-                                startIcon={<DeleteIcon />}
-                                onClick={() => removeExperience(index)}
-                                disabled={experience.length === 1}
-                            >
-                                Remove Experience
-                            </Button>
+                                {/* Location */}
+                                <div className="col-md-4 d-flex flex-column">
+                                    <label className="fw-medium">Location</label>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={item.location || ""}
+                                        onChange={(e) => handleChange(e, index)}
+                                        className={`p-1 form-control ${wasValidated && !item.location.trim() ? "is-invalid" : ""}`}
+                                        required
+                                    />
+                                    {wasValidated && !item.location.trim() && (
+                                        <div className="invalid-feedback d-block">Location is required.</div>
+                                    )}
+                                </div>
 
-                            {index === experience.length - 1 && (
-                                <Button variant="contained" onClick={addExperience}>
-                                    Add Experience
-                                </Button>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
+                                {/* Start Date */}
+                                <div className="col-md-4 d-flex flex-column">
+                                    <label className="fw-medium">Start Date</label>
+                                    <input
+                                        type="date"
+                                        name="startDate"
+                                        value={item.startDate || ""}
+                                        onChange={(e) => handleChange(e, index)}
+                                        className={`p-1 form-control ${wasValidated && !item.startDate ? "is-invalid" : ""}`}
+                                        required
+                                    />
+                                    {wasValidated && !item.startDate && (
+                                        <div className="invalid-feedback d-block">Start date is required.</div>
+                                    )}
+                                </div>
 
-            <div className="d-flex justify-content-center align-items-center mt-4">
-                <button
-                    className="btn btn-primary text-white fw-semibold fs-5 px-4 py-2"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                >
-                    {loading ? <CircularProgress size={20} /> : "Save"}
-                </button>
-            </div>
+                                {/* End Date */}
+                                <div className="col-md-4 d-flex flex-column">
+                                    <label className="fw-medium">End Date</label>
+                                    <input
+                                        type="date"
+                                        name="endDate"
+                                        value={item.endDate || ""}
+                                        onChange={(e) => handleChange(e, index)}
+                                        className={`p-1 form-control ${wasValidated && !item.currentlyWorking && !item.endDate
+                                                ? "is-invalid"
+                                                : ""
+                                            }`}
+                                        required={!item.currentlyWorking}
+                                        disabled={item.currentlyWorking}
+                                    />
+                                    {wasValidated && !item.currentlyWorking && !item.endDate && (
+                                        <div className="invalid-feedback d-block">End date is required.</div>
+                                    )}
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={item.currentlyWorking}
+                                                onChange={(e) => handleChange(e, index)}
+                                                name="currentlyWorking"
+                                            />
+                                        }
+                                        label="Currently working here"
+                                    />
+                                </div>
+
+                                {/* Description */}
+                                <div className="col-12 d-flex flex-column mt-2">
+                                    <label className="fw-medium">Description</label>
+                                    <TextEditor
+                                        value={typeof item.description === "string" ? item.description : ""}
+                                        onChange={(e) => handleDescriptionChange(e.target.value, index)}
+                                        style={{
+                                            minHeight: "150px",
+                                            border: "1px solid #ccc",
+                                            borderRadius: "4px",
+                                            padding: "10px",
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Add/Remove buttons */}
+                                <div className="col-12 d-flex justify-content-between align-items-center mt-3">
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        startIcon={<DeleteIcon />}
+                                        onClick={() => removeExperience(index)}
+                                        disabled={experience.length === 1}
+                                    >
+                                        Remove Experience
+                                    </Button>
+
+                                    {index === experience.length - 1 && (
+                                        <Button variant="contained" onClick={addExperience}>
+                                            Add Experience
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+
+
+
+                </div>
+
+                <div className="d-flex justify-content-center align-items-center mt-4">
+                    <button
+                        className="btn btn-primary text-white fw-semibold fs-5 px-4 py-2"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? <CircularProgress size={20} /> : "Save"}
+                    </button>
+                </div>
+            </form>
         </div>
     );
 }

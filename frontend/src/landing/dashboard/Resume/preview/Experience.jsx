@@ -1,14 +1,15 @@
 export default function Experience({ resumes }) {
-  const experienceList = resumes?.experience || [];
-
+const experienceList = Array.isArray(resumes?.experience) ? resumes.experience : [];
+ const themeColor = resumes?.themeColor || "#0d6efd";
   if (experienceList.length === 0) return null;
 
   return (
     <div className="ps-3 pe-3 pt-3 m-0">
-      <h5 className="text-start" style={{ color: resumes.themeColor }}>
+      <h5 className="text-start" style={{ color: themeColor }}>
         Experience
       </h5>
-      <div style={{ border: `0.5px solid ${resumes.themeColor}` }} className="mb-2"></div>
+
+      {/* <div style={{ border: `0.5px solid ${themeColor}`}} className="mb-2"></div> */}
 
       {experienceList.map((experience) => (
         <div key={experience.id} className="mb-3">
@@ -16,7 +17,7 @@ export default function Experience({ resumes }) {
 
           <div className="d-flex justify-content-between flex-wrap">
             <p className="text-start m-0">
-              {experience.companyName}, {experience.city}, {experience.state}
+              {experience.companyName}  {experience.city} {experience.state}
             </p>
             <p className="text-end m-0">
               {experience.startDate} - {experience.currentlyWorking ? "Present" : experience.endDate}
@@ -28,6 +29,7 @@ export default function Experience({ resumes }) {
               <div dangerouslySetInnerHTML={{ __html: experience.workSummery }} />
             </div>
           )}
+
         </div>
       ))}
     </div>
