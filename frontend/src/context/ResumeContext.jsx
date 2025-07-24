@@ -1,7 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import axios from "axios";
-import { BASE_URL } from "../axiosConfig.js"
-import { v4 as uuidv4 } from 'uuid';
+import { BASE_URL } from "../axiosConfig.js";
 
 const ResumeContext = createContext();
 
@@ -9,6 +8,29 @@ export const ResumeProvider = ({ children }) => {
   const [resumeData, setResumeData] = useState("");
   const [resumes, setResumes] = useState([]);
   const [currentResumeId, setCurrentResumeId] = useState(null);
+
+
+  // ✅ DELETE resume by ID
+  const deleteResume = async (resumeId) => {
+    const token = localStorage.getItem("token");
+    try {
+      await axios.delete(`${BASE_URL}/delete-resume/${resumeId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update local state after deletion
+      setResumes(prev => prev.filter(resume => resume._id !== resumeId));
+    } catch (error) {
+      console.error("Error deleting resume:", error);
+      throw error;
+    }
+  };
+
+
+
+
 
   //  Fetch all resumes (dashboard/list)
   const fetchResumes = async () => {
@@ -69,32 +91,32 @@ const loadResume = async (resumeId) => {
     const token = localStorage.getItem("token");
     if (!currentResumeId) return;
 
-  try {
-    const response = await axios.put(
-      `${BASE_URL}/update-resume/${currentResumeId}`,
-      updatedFields,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/update-resume/${currentResumeId}`,
+        updatedFields,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    // console.log("🔍 Raw response object:", response); // <== Add this
+      // console.log("🔍 Raw response object:", response); // <== Add this
 
-    setResumeData((prev) => ({ ...prev, ...updatedFields }));
-    return response.data; // <== This is where the data should come from
-  } catch (error) {
-    console.error("Error updating resume section:", error);
-    throw error;
-  }
-};
-
-
+      setResumeData((prev) => ({ ...prev, ...updatedFields }));
+      return response.data; // <== This is where the data should come from
+    } catch (error) {
+      console.error("Error updating resume section:", error);
+      throw error;
+    }
+  };
 
 
-    // ✅ Create new resume
+
+
+  // ✅ Create new resume
   const createResume = async (newResume = {}) => {
     const token = localStorage.getItem("token");
     console.log("Create Resume  funciton is running ", newResume);
@@ -146,50 +168,50 @@ const loadResume = async (resumeId) => {
   }
 };
 
-// ✅ Other section updates remain the same
-const updateExperience = async (data) => {
-  try {
-    const updated = await updateResumeSection({ experience: data });
-    return updated;
-  } catch (err) {
-    console.error("❌ Error updating experience:", err);
-    throw err;
-  }
-};
-
-
-const updateEducation = async (data) => {
-  try {
-    const updated = await updateResumeSection({ education: data });
-    return updated;
-  } catch (err) {
-    console.error("❌ Error updating education:", err);
-    throw err;
-  }
-};
-
-
-
-const updateSkills = async (data) =>{ 
-  try {
-    const updated = await updateResumeSection({ skills: data });
+  // ✅ Other section updates remain the same
+  const updateExperience = async (data) => {
+    try {
+      const updated = await updateResumeSection({ experience: data });
       return updated;
-  } catch (err) {
-    console.error("❌ Error updating education:", err);
-    throw err;
-  }
-};
+    } catch (err) {
+      console.error("❌ Error updating experience:", err);
+      throw err;
+    }
+  };
 
-const updateThemeColor = async (color) => {
-  try {
-    updateLocalResumeData({ themeColor: color }); // optional
-    const updated = await updateResumeSection({ themeColor: color });
-    return updated;
-  } catch (err) {
-    console.error("❌ Error updating theme color:", err);
-    throw err;
-  }
-};
+
+  const updateEducation = async (data) => {
+    try {
+      const updated = await updateResumeSection({ education: data });
+      return updated;
+    } catch (err) {
+      console.error("❌ Error updating education:", err);
+      throw err;
+    }
+  };
+
+
+
+  const updateSkills = async (data) => {
+    try {
+      const updated = await updateResumeSection({ skills: data });
+      return updated;
+    } catch (err) {
+      console.error("❌ Error updating education:", err);
+      throw err;
+    }
+  };
+
+  const updateThemeColor = async (color) => {
+    try {
+      updateLocalResumeData({ themeColor: color }); // optional
+      const updated = await updateResumeSection({ themeColor: color });
+      return updated;
+    } catch (err) {
+      console.error("❌ Error updating theme color:", err);
+      throw err;
+    }
+  };
 
 
 
@@ -210,6 +232,7 @@ const updateThemeColor = async (color) => {
         loadResume,
         saveResume,
         updateResumeSection,
+        deleteResume,
 
         // Section-specific helpers
         updateLocalResumeData,
@@ -218,7 +241,7 @@ const updateThemeColor = async (color) => {
         updateExperience,
         updateEducation,
         updateSkills,
-        updateThemeColor,       
+        updateThemeColor,
       }}
     >
       {children}
