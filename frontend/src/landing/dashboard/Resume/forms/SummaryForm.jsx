@@ -1,4 +1,3 @@
-// ✅ SummaryForm.jsx
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { CircularProgress } from "@mui/material";
@@ -9,17 +8,32 @@ import { AIChatSession } from "../../../../server/AIModel.js";
 
 export default function SummaryForm({ enableNext }) {
   const { resumeData, setResumeData, updateSummary, updateResumeSection } = useResume();
-  const [summary, setSummary] = useState(resumeData?.personalInfo?.summary || "");
+  const [summary, setSummary] = useState(""); // Initial empty
   const [loading, setLoading] = useState(false);
   const [wasValidated, setWasValidated] = useState(false);
 
   const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle}, based on my job title, give me a resume summary within 4-5 lines.`;
 
-  useEffect(() => {
-    enableNext(false);
-  }, [enableNext]);
+  // ✅ Sync state on mount (like PRG)
+useEffect(() => {
+  const contextSummary =
+    resumeData?.summary ||
+    resumeData?.personalInfo?.summary ||
+    "";
 
-  const handleAI = async () => {
+  const summaryStr = String(contextSummary || "");
+  setSummary(summaryStr);
+
+  if (summaryStr.trim()) {
+    enableNext(true);
+  } else {
+    enableNext(false);
+  }
+}, [resumeData?.personalInfo?.summary]);
+
+
+
+const handleAI = async () => {
     setLoading(true);
     try {
       const response = await AIChatSession.sendMessage(prompt);
@@ -29,13 +43,16 @@ export default function SummaryForm({ enableNext }) {
 
       setSummary(generatedSummary);
 
-      setResumeData((prev) => ({
-        ...prev,
+      const updatedData = {
+        ...resumeData,
         personalInfo: {
-          ...prev.personalInfo,
+          ...resumeData.personalInfo,
           summary: generatedSummary,
         },
-      }));
+      };
+
+      setResumeData(updatedData);
+      updateSummary(generatedSummary);
 
       toast.success("AI summary generated!");
     } catch (error) {
@@ -52,7 +69,8 @@ export default function SummaryForm({ enableNext }) {
     setLoading(true);
 
     try {
-      if (!summary.trim()) {
+      if (!String(summary).trim()) {
+
         enableNext(false);
         setLoading(false);
         return;
@@ -118,7 +136,7 @@ export default function SummaryForm({ enableNext }) {
             value={String(summary) || ""}
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Write your professional summary here..."
-            className={`form-control p-2 ${wasValidated && !summary.trim() ? "is-invalid" : ""}`}
+className={`form-control p-2 ${wasValidated && !String(summary).trim() ? "is-invalid" : ""}`}
             style={{ borderRadius: "4px", minHeight: "150px", border: "1px solid #ced4da" }}
           />
           {wasValidated && !summary.trim() && (

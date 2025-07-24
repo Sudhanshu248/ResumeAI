@@ -1,4 +1,4 @@
-// ✅ SkillForm.jsx (with validation UI)
+// ✅ Updated SkillForm.jsx for PRG
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,17 +17,19 @@ const initialSkill = () => ({
 });
 
 export default function SkillForm({ enableNext }) {
-  const { resumeData, setResumeData, updateSkills, updateResumeSection } = useResume();
+  const { resumeData, updateSkills, updateResumeSection } = useResume();
+  const [skills, setSkills] = useState([initialSkill()]);
   const [loading, setLoading] = useState(false);
   const [wasValidated, setWasValidated] = useState(false);
 
-  const [skills, setSkills] = useState(
-    resumeData?.skills?.length ? resumeData.skills : [initialSkill()]
-  );
-
   useEffect(() => {
-    enableNext(false);
-  }, []);
+    if (Array.isArray(resumeData?.skills) && resumeData.skills.length > 0) {
+      setSkills(resumeData.skills);
+      // enableNext(true);
+    } else {
+      enableNext(false);
+    }
+  }, [resumeData]);
 
   const handleChange = (e, id) => {
     const { name, value } = e.target;
@@ -35,7 +37,7 @@ export default function SkillForm({ enableNext }) {
       skill.id === id ? { ...skill, [name]: value } : skill
     );
     setSkills(updated);
-    setResumeData((prev) => ({ ...prev, skills: updated }));
+    updateSkills(updated);
   };
 
   const handleRatingChange = (rating, id) => {
@@ -43,20 +45,20 @@ export default function SkillForm({ enableNext }) {
       skill.id === id ? { ...skill, rating } : skill
     );
     setSkills(updated);
-    setResumeData((prev) => ({ ...prev, skills: updated }));
+    updateSkills(updated);
   };
 
   const handleAddSkill = () => {
     const updated = [...skills, initialSkill()];
     setSkills(updated);
-    setResumeData((prev) => ({ ...prev, skills: updated }));
+    updateSkills(updated);
   };
 
   const handleRemoveSkill = (id) => {
     if (skills.length === 1) return;
     const updated = skills.filter((skill) => skill.id !== id);
     setSkills(updated);
-    setResumeData((prev) => ({ ...prev, skills: updated }));
+    updateSkills(updated);
   };
 
   const renderStars = (rating, id) => {
@@ -67,7 +69,7 @@ export default function SkillForm({ enableNext }) {
           <StarIcon
             key={i}
             onClick={() => handleRatingChange(i, id)}
-            sx={{ color: "#0d6efd", fontSize: "2rem", cursor: "pointer" }}
+            sx={{ color: "#0d6efd", fontSize: "1.75rem", cursor: "pointer" }}
           />
         );
       } else if (i - 0.5 <= rating) {
@@ -75,7 +77,7 @@ export default function SkillForm({ enableNext }) {
           <StarHalfIcon
             key={i}
             onClick={() => handleRatingChange(i - 0.5, id)}
-            sx={{ color: "#0d6efd", fontSize: "2rem", cursor: "pointer" }}
+            sx={{ color: "#0d6efd", fontSize: "1.75rem", cursor: "pointer" }}
           />
         );
       } else {
@@ -83,7 +85,7 @@ export default function SkillForm({ enableNext }) {
           <StarBorderIcon
             key={i}
             onClick={() => handleRatingChange(i, id)}
-            sx={{ color: "#ccc", fontSize: "2rem", cursor: "pointer" }}
+            sx={{ color: "#ccc", fontSize: "1.75rem", cursor: "pointer" }}
           />
         );
       }
@@ -96,23 +98,22 @@ export default function SkillForm({ enableNext }) {
     setWasValidated(true);
     setLoading(true);
 
+    const isValid = skills.every((skill) => skill.name.trim() !== "");
+    if (!isValid) {
+      toast.error("Please fill all skill names");
+      enableNext(false);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const isValid = skills.every((skill) => skill.name.trim() !== "");
-
-      if (!isValid) {
-        toast.error("Please fill in all skill names");
-        enableNext(false);
-        setLoading(false);
-        return;
-      }
-
       updateSkills(skills);
-      await updateResumeSection({ skills });
-
+      const response = await updateResumeSection({ skills });
+      console.log("Skills saved successfully:", response);
       toast.success("Skills saved successfully!");
       enableNext(true);
     } catch (err) {
-      console.error(" Error updating skills:", err);
+      console.error("Error updating skills:", err);
       toast.error("Failed to save skills");
       enableNext(false);
     } finally {
@@ -135,7 +136,7 @@ export default function SkillForm({ enableNext }) {
 
       <form className="needs-validation" noValidate onSubmit={handleSubmit}>
         {skills.map((skill, index) => (
-          <div key={skill.id} className="mb-3 p-3 border rounded-3">
+          <div key={skill.id} className="mb-4 p-3 border rounded-3">
             <div className="d-flex justify-content-between align-items-center mb-2">
               <h6 className="fw-semibold">Skill {index + 1}</h6>
               <Button
@@ -149,7 +150,8 @@ export default function SkillForm({ enableNext }) {
               </Button>
             </div>
 
-            <div className="row g-3 align-items-center">
+            <div className="row g-3">
+              {/* Skill Name */}
               <div className="col-md-6">
                 <label className="mb-1 fw-medium">Skill Name</label>
                 <input
@@ -157,21 +159,18 @@ export default function SkillForm({ enableNext }) {
                   name="name"
                   required
                   className={`form-control ${wasValidated && !skill.name.trim() ? "is-invalid" : ""}`}
-                  value={skill.name || ""}
+                  value={skill.name}
                   onChange={(e) => handleChange(e, skill.id)}
                 />
                 {wasValidated && !skill.name.trim() && (
-                  <div className="invalid-feedback d-block">
-                    Skill name is required.
-                  </div>
+                  <div className="invalid-feedback d-block">Skill name is required.</div>
                 )}
               </div>
 
+              {/* Rating */}
               <div className="col-md-6">
                 <label className="mb-1 fw-medium">Rating</label>
-                <div className="d-flex align-items-center">
-                  {renderStars(skill.rating, skill.id)}
-                </div>
+                <div className="d-flex align-items-center">{renderStars(skill.rating, skill.id)}</div>
               </div>
             </div>
           </div>
