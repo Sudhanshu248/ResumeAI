@@ -69,7 +69,7 @@ const handleThemeChange = async (newColor) => {
             </Button>
           )}
 
-          {activeForm < 6 && (
+          {activeForm < 6 && enableNext && (
             <Button
               variant="contained"
               color="info"

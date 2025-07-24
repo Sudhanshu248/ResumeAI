@@ -24,7 +24,7 @@ export default function Personal({ resumes }) {
       <div
         className="m-0"
         style={{
-          border: `1px solid ${themeColor}`,
+          border: "0.2px solid rgba(0, 0, 0, 0.2)",
         }}
       ></div>
     </div>
