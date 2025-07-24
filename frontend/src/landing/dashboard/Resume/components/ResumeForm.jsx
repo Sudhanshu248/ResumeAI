@@ -39,13 +39,13 @@ const handleThemeChange = async (newColor) => {
     switch (activeForm) {
       case 1:
         return <PersonalForm enableNext={setEnableNext} />;
-      case 5:
-        return <SummaryForm enableNext={setEnableNext} />;
       case 2:
-        return <ExperienceForm enableNext={setEnableNext} />;
+        return <SummaryForm enableNext={setEnableNext} />;
       case 3:
-        return <EducationForm enableNext={setEnableNext} />;
+        return <ExperienceForm enableNext={setEnableNext} />;
       case 4:
+        return <EducationForm enableNext={setEnableNext} />;
+      case 5:
         return <SkillForm enableNext={setEnableNext} />;
       case 6:
         return <Navigate to={`/resume/${id}/view`} />;
@@ -69,7 +69,7 @@ const handleThemeChange = async (newColor) => {
             </Button>
           )}
 
-          {activeForm < 6 && (
+          {activeForm < 6 && enableNext && (
             <Button
               variant="contained"
               color="info"

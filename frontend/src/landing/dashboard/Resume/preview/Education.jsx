@@ -1,25 +1,26 @@
 export default function Education({ resumes }) {
   const educationList = resumes?.education || [];
+  const themeColor = resumes?.themeColor || "#0d6efd";
 
-  if (educationList.length === 0) return null;
+  // if (educationList.length === 0) return null;
 
   return (
     <div className="ps-3 pe-3 pt-3">
-      <h5 className="text-start" style={{ color: resumes.themeColor }}>
+      <h5 className="text-start" style={{ color: themeColor }}>
         Education
       </h5>
-      <div style={{ border: `0.5px solid ${resumes.themeColor}` }} className="mb-2"></div>
+      <div style={{ border: `0.5px solid ${themeColor}` }} className="mb-2"></div>
 
       {educationList.map((education) => (
         <div key={education.id} className="mb-3">
-          <h6 className="text-start fw-bold">{education.universityName}</h6>
+          <h6 className="text-start fw-bold">{education.institution}</h6>
 
           <div className="d-flex justify-content-between flex-wrap">
             <p className="text-start m-0">
-              {education.fieldofstudy} — {education.degree}
+              {education.field} — {education.degree}
             </p>
             <p className="text-end m-0">
-              {education.startDate} - {education.endDate}
+              {education.startDate} - {education.currentlyStudying ? "Present" : education.endDate}
             </p>
           </div>
 

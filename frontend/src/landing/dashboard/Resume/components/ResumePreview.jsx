@@ -8,16 +8,21 @@ import "../resume.css";
 
 export default function ResumePreview() {
   const { resumeData } = useResume();
-
-  if (!resumeData) return <p className="text-center mt-5">Loading resume...</p>;
-
   const borderColor = resumeData.themeColor || "#0d6efd";
+  if (!resumeData) return <div className="resume-preview border-bottom-0 border-start-0 border-end-0 mb-0 mt-0 pb-3 text-center rounded-4" style={{ border: `20px solid ${borderColor}` }}>
+      <Personal resumes={resumeData} />
+      <Summary resumes={resumeData} />
+      <Experience resumes={resumeData} />
+      <Education resumes={resumeData} />
+      <Skills resumes={resumeData} />
+  </div>;
+
 
   return (
     <div
       className="resume-preview border-bottom-0 border-start-0 border-end-0 mb-0 mt-0 pb-3 text-center rounded-4"
       style={{
-        border: `20px solid ${borderColor}`, 
+        border: `20px solid ${borderColor}`,
       }}
     >
       <Personal resumes={resumeData} />

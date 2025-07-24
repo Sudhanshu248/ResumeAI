@@ -1,6 +1,6 @@
 export default function Personal({ resumes }) {
   const personal = resumes?.personalInfo || {};
-  const themeColor = resumes?.themeColor || "#ccc";
+  const themeColor = resumes?.themeColor || "#0d6efd";
 
   return (
     <div className="pe-3 ps-3 pt-3 m-0">
@@ -24,7 +24,7 @@ export default function Personal({ resumes }) {
       <div
         className="m-0"
         style={{
-          border: `1px solid ${themeColor}`,
+          border: "0.2px solid rgba(0, 0, 0, 0.2)",
         }}
       ></div>
     </div>
