@@ -14,12 +14,21 @@ import { useResume } from '../../../context/ResumeContext';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Dashboard() {
-  const { resumes, createResume, fetchResumes } = useResume();
+  const { resumes, createResume, fetchResumes, deleteResume } = useResume();
   const [open, setOpen] = useState(false);
   const [newResumeTitle, setNewResumeTitle] = useState('');
   const [loader, setLoader] = useState(false);
 
   const navigate = useNavigate();
+
+  const handleDeleteResume = async (resumeId) => {
+    try {
+      await deleteResume(resumeId);
+    } catch (error) {
+      console.error("Error deleting resume:", error);
+    }
+  };
+
 
   const onCreateResume = async () => {
     try {
@@ -89,7 +98,8 @@ export default function Dashboard() {
                   key={resume._id}
                   onClick={() => navigate(`/resume/${resume._id}/view`)}
                 >
-                  <ResumeCard resume={resume} />
+                  <ResumeCard resume={resume} onDelete={handleDeleteResume} />
+
                 </div>
               ))
             )}
