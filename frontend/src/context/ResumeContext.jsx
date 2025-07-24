@@ -53,21 +53,20 @@ export const ResumeProvider = ({ children }) => {
 
 
   //  Load resume by ID
-  const loadResume = async (resumeId) => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(`${BASE_URL}/resume-by-id/${resumeId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      });
-      const resume = response.data.resume;
-      setResumeData(resume);
-      setCurrentResumeId(resume._id);
-    } catch (error) {
-      console.error("Error loading resume:", error);
-    }
-  };
+const loadResume = async (resumeId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(`${BASE_URL}/resume-by-id/${resumeId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const resume = response.data.resume;
+    setResumeData(resume);
+    setCurrentResumeId(resume._id);
+  } catch (error) {
+    console.error("Error loading resume:", error);
+  }
+};
+
 
   //  Save current resume to backend
   const saveResume = async (resumeId) => {
@@ -147,16 +146,7 @@ export const ResumeProvider = ({ children }) => {
     }));
   };
 
-  //  Update entire personalInfo block (name, jobTitle, email, etc.)
-  const updatePersonalInfo = (data) => {
-    updateLocalResumeData({
-      personalInfo: {
-        ...resumeData?.personalInfo,
-        ...data,
-      },
-    });
-  };
-
+  
   //  Update only the summary inside personalInfo
   const updateSummary = (summary) => {
     updateLocalResumeData({
@@ -166,6 +156,17 @@ export const ResumeProvider = ({ children }) => {
       },
     });
   };
+  
+  //  Update entire personalInfo block (name, jobTitle, email, etc.)
+  const updatePersonalInfo = async (data) => {
+  try {
+    const updated = await  updateResumeSection({ personalInfo: data });
+   return updated;
+  } catch (err) {
+    console.error("❌ Error updating experience:", err);
+    throw err;
+  }
+};
 
   // ✅ Other section updates remain the same
   const updateExperience = async (data) => {

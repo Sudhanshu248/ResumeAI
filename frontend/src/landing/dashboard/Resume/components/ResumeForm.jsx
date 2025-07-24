@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { ArrowRight, ArrowLeft } from "lucide-react";
+
 import PersonalForm from "../forms/PersonalForm.jsx";
 import SummaryForm from "../forms/SummaryForm.jsx";
 import SkillForm from "../forms/SkillForm.jsx";
@@ -9,34 +10,37 @@ import ExperienceForm from "../forms/ExperienceForm.jsx";
 import EducationForm from "../forms/EducationForm.jsx";
 import ThemeSelector from "./ThemeSelector.jsx";
 import { useResume } from "../../../../context/ResumeContext.jsx";
-import { useEffect } from "react";
 
 export default function ResumeForm() {
-  const [activeForm, setActiveForm] = useState(4);
-  const [enableNext, setEnableNext] = useState(false);
   const { id } = useParams();
-const { resumeData, updateThemeColor } = useResume();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const step = parseInt(searchParams.get("step")) || 1;
 
-  useEffect(()=>{
- console.log(enableNext);
-  }, [])
+  const [enableNext, setEnableNext] = useState(false);
+  const { resumeData, updateThemeColor, loadResume } = useResume();
 
-const handleThemeChange = async (newColor) => {
-  await updateThemeColor(newColor); // ✅ this saves to backend too
-};
+  useEffect(() => {
+    if (id) {
+      loadResume(id); // Load resume from backend on mount
+    }
+  }, [id]);
 
+  const handleThemeChange = async (newColor) => {
+    await updateThemeColor(newColor); // Saves to backend too
+  };
 
   const handleNext = () => {
-    setActiveForm((prev) => prev + 1);
-    setEnableNext(false); // Reset on new form
+    setSearchParams({ step: step + 1 });
+    setEnableNext(false);
   };
 
   const handleBack = () => {
-    setActiveForm((prev) => prev - 1);
+    setSearchParams({ step: step - 1 });
   };
 
   const renderForm = () => {
-    switch (activeForm) {
+    switch (step) {
       case 1:
         return <PersonalForm enableNext={setEnableNext} />;
       case 2:
@@ -63,13 +67,13 @@ const handleThemeChange = async (newColor) => {
         />
 
         <div className="d-flex gap-2">
-          {activeForm > 1 && (
+          {step > 1 && (
             <Button variant="contained" color="info" onClick={handleBack}>
               <ArrowLeft className="me-1" /> Back
             </Button>
           )}
 
-          {activeForm < 6 && enableNext && (
+          {step < 6 && enableNext && (
             <Button
               variant="contained"
               color="info"

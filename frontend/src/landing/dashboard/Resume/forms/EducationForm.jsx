@@ -21,27 +21,52 @@ const defaultEducation = {
 };
 
 export default function EducationForm({ enableNext }) {
-  const { resumeData, updateEducation, setResumeData, updateResumeSection } = useResume();
+  const { resumeData, updateEducation, updateResumeSection } = useResume();
   const [loading, setLoading] = useState(false);
   const [wasValidated, setWasValidated] = useState(false);
 
-  const [education, setEducation] = useState(
-    resumeData?.education?.length ? resumeData.education : [{ ...defaultEducation }]
-  );
+  const [education, setEducation] = useState([{ ...defaultEducation }]);
+// const [hasInitialized, setHasInitialized] = useState(false);
+
+useEffect(() => {
+  if (
+    Array.isArray(resumeData?.education) &&
+    resumeData.education.length > 0 &&
+    JSON.stringify(resumeData.education) !== JSON.stringify(education)
+  ) {
+    setEducation(resumeData.education);
+    // setHasInitialized(true);
+    enableNext(true);
+  }
+}, [resumeData]);
+
+//   // ✅ Sync from resumeData after load (run only once or when resumeData.education changes)
+//   useEffect(() => {
+//     if (Array.isArray(resumeData?.education) && resumeData.education.length > 0) {
+//       setEducation(resumeData.education);
+//     }
+//   }, [resumeData?.education]); // <--- Only depend on resumeData.education
+
+//   // ✅ Sync local -> context on changes
+//   useEffect(() => {
+//     updateEducation(education);
+//     setResumeData(prev => ({ ...prev, education }));
+//     enableNext(false);
+//   }, [education]);
+// // ...existing code...
 
   const handleChange = (e, index) => {
     const { name, value, type, checked } = e.target;
     const updated = education.map((item, i) =>
       i === index
         ? {
-          ...item,
-          [name]: type === "checkbox" ? checked : value,
-          ...(name === "currentlyStudying" && checked ? { endDate: "" } : {}),
-        }
+            ...item,
+            [name]: type === "checkbox" ? checked : value,
+            ...(name === "currentlyStudying" && checked ? { endDate: "" } : {}),
+          }
         : item
     );
     setEducation(updated);
-    setResumeData((prev) => ({ ...prev, education: updated }));
     updateEducation(updated);
   };
 
@@ -49,21 +74,18 @@ export default function EducationForm({ enableNext }) {
     const updated = [...education];
     updated[index].description = typeof value === "string" ? value : "";
     setEducation(updated);
-    setResumeData((prev) => ({ ...prev, education: updated }));
     updateEducation(updated);
   };
 
   const addEducation = () => {
     const newEdu = [...education, { ...defaultEducation, id: uuidv4() }];
     setEducation(newEdu);
-    setResumeData((prev) => ({ ...prev, education: newEdu }));
     updateEducation(newEdu);
   };
 
   const removeEducation = (index) => {
     const updated = education.filter((_, i) => i !== index);
     setEducation(updated);
-    setResumeData((prev) => ({ ...prev, education: updated }));
     updateEducation(updated);
   };
 
@@ -72,13 +94,15 @@ export default function EducationForm({ enableNext }) {
     setWasValidated(true);
     setLoading(true);
 
+    try {
     const isValid = education.every(
       (item) =>
         item.institution.trim() !== "" &&
         item.degree.trim() !== "" &&
         item.field.trim() !== "" &&
         item.startDate !== "" &&
-        (item.currentlyStudying || item.endDate !== "")
+        (item.currentlyStudying || item.endDate !== "") &&
+        item.description.trim() !== ""
     );
 
     if (!isValid) {
@@ -88,11 +112,11 @@ export default function EducationForm({ enableNext }) {
       return;
     }
 
-    try {
       updateEducation(education);
-      const response = await updateResumeSection({ education });
+
+      await updateResumeSection({ education }); // ✅ Save to backend
       toast.success("Education information saved");
-      enableNext(true);
+      enableNext(true); // ✅ Enable next only after successful save
     } catch (error) {
       console.error("Error saving education:", error);
       toast.error("Failed to save education to server");
@@ -101,10 +125,6 @@ export default function EducationForm({ enableNext }) {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    enableNext(false);
-  }, [education]);
 
   return (
     <div
@@ -155,7 +175,7 @@ export default function EducationForm({ enableNext }) {
                 )}
               </div>
 
-              {/* Field of Study */}
+              {/* Field */}
               <div className="col-md-4 d-flex flex-column">
                 <label className="fw-medium">Field of Study</label>
                 <input
@@ -171,51 +191,42 @@ export default function EducationForm({ enableNext }) {
                 )}
               </div>
 
-                {/* Start Date */}
-                <div className="col-md-4 d-flex flex-column">
-                  <label className="fw-medium">Start Date</label>
-                  <input
-                    type="date"
-                    name="startDate"
-                    value={item.startDate}
-                    onChange={(e) => handleChange(e, index)}
-                    className={`form-control p-1 ${wasValidated && !item.startDate ? "is-invalid" : ""}`}
-                    required
-                  />
-                  {wasValidated && !item.startDate && (
-                    <div className="invalid-feedback">Start date is required.</div>
-                  )}
-                </div>
+              {/* Start Date */}
+              <div className="col-md-4 d-flex flex-column">
+                <label className="fw-medium">Start Date</label>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={item.startDate}
+                  onChange={(e) => handleChange(e, index)}
+                  className={`form-control p-1 ${wasValidated && !item.startDate ? "is-invalid" : ""}`}
+                  required
+                />
+              </div>
 
-                {/* End Date */}
-                <div className="col-md-4 d-flex flex-column">
-                  <label className="fw-medium">End Date</label>
-                  <input
-                    type="date"
-                    name="endDate"
-                    value={item.endDate}
-                    onChange={(e) => handleChange(e, index)}
-                    className={`form-control p-1 ${wasValidated && !item.currentlyStudying && !item.endDate ? "is-invalid" : ""
-                      }`}
-                    required={!item.currentlyStudying}
-                    disabled={item.currentlyStudying}
-                  />
-                  {wasValidated && !item.currentlyStudying && !item.endDate && (
-                    <div className="invalid-feedback">End date is required.</div>
-                  )}
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={item.currentlyStudying}
-                        onChange={(e) => handleChange(e, index)}
-                        name="currentlyStudying"
-                      />
-                    }
-                    label="Currently studying here"
-                  />
-                </div>
-              
-
+              {/* End Date */}
+              <div className="col-md-4 d-flex flex-column">
+                <label className="fw-medium">End Date</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={item.endDate}
+                  onChange={(e) => handleChange(e, index)}
+                  className={`form-control p-1 ${wasValidated && !item.currentlyStudying && !item.endDate ? "is-invalid" : ""}`}
+                  required={!item.currentlyStudying}
+                  disabled={item.currentlyStudying}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={item.currentlyStudying}
+                      onChange={(e) => handleChange(e, index)}
+                      name="currentlyStudying"
+                    />
+                  }
+                  label="Currently studying here"
+                />
+              </div>
 
               {/* Description */}
               <div className="col-12 d-flex flex-column mt-2">
@@ -236,7 +247,7 @@ export default function EducationForm({ enableNext }) {
                 )}
               </div>
 
-              {/* Add/Remove buttons */}
+              {/* Buttons */}
               <div className="col-12 d-flex justify-content-between align-items-center mt-3">
                 <Button
                   variant="contained"
@@ -271,4 +282,3 @@ export default function EducationForm({ enableNext }) {
     </div>
   );
 }
-

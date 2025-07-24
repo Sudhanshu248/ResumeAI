@@ -27,11 +27,17 @@ export default function ExperienceForm({ enableNext }) {
     const [wasValidated, setWasValidated] = useState(false);
 
 
-    useEffect(() => {
-        if (Array.isArray(resumeData?.experience) && resumeData.experience.length) {
-            setExperience(resumeData.experience);
-        }
-    }, []);
+useEffect(() => {
+  if (
+    Array.isArray(resumeData?.experience) &&
+    resumeData.experience.length > 0 &&
+    JSON.stringify(resumeData.experience) !== JSON.stringify(experience)
+  ) {
+    setExperience(resumeData.experience);
+    enableNext(true);
+      } 
+}, [resumeData]);
+
 
     const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
@@ -72,6 +78,7 @@ export default function ExperienceForm({ enableNext }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Save button clicked!");
+        setWasValidated(true);
         setLoading(true);
 
         try {

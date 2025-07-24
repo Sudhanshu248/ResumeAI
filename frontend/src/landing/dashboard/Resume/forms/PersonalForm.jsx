@@ -18,18 +18,24 @@ export default function PersonalForm({ enableNext }) {
     });
 
     //  Sync form state when resumeData is loaded
-    useEffect(() => {
-        if (resumeData?.personalInfo) {
-            setPersonalInfo(resumeData.personalInfo);
-        }
-    }, []);
+useEffect(() => {
+  if (
+    resumeData?.personalInfo &&
+    Object.keys(resumeData.personalInfo).length > 0 &&
+    JSON.stringify(resumeData.personalInfo) !== JSON.stringify(personalInfo)
+  ) {
+    setPersonalInfo(resumeData.personalInfo); // ✅ Correct: set object
+    enableNext(true);
+  }
+}, [resumeData]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        const updated = { ...personalInfo, [name]: value };
-        setPersonalInfo(updated);
-        updatePersonalInfo(updated); //  Use context-safe updater
-    };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  const updated = { ...personalInfo, [name]: value };
+  setPersonalInfo(updated);
+  updatePersonalInfo(updated); // updates context
+};
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,19 +52,8 @@ export default function PersonalForm({ enableNext }) {
                 return;
             }
 
-            // 1. Update local context
             updatePersonalInfo(personalInfo);
 
-            // 2. Check if resume ID is loaded before backend call
-            console.log("🪪 Resume ID in context:", resumeData?._id);
-
-            if (!resumeData?._id) {
-                toast.error("Resume ID not loaded yet. Try again in a moment.");
-                setLoading(false);
-                return;
-            }
-
-            // 3. Send to backend
             const response = await updateResumeSection({ personalInfo });
             console.log(" Server response after update:", response);
             toast.success("Personal details saved");
@@ -89,8 +84,8 @@ export default function PersonalForm({ enableNext }) {
             <p className="pb-4">Get started with the basic information about yourself</p>
 
             <form className="needs-validation" noValidate onSubmit={handleSubmit}>
-                <div className="row g-3 justify-content-between">
 
+                            <div className="row g-3 justify-content-between">
                     <div className="col d-flex flex-column">
                         <label htmlFor="firstName" className="mb-1 fw-medium">First Name</label>
                         <input
@@ -99,7 +94,7 @@ export default function PersonalForm({ enableNext }) {
                             id="firstName"
                             className={`p-1 form-control ${wasValidated && !personalInfo.firstName ? "is-invalid" : ""}`}
                             value={personalInfo.firstName || ""}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange (e)}
                             required
                         />
                         {wasValidated && !personalInfo.firstName && (
@@ -115,7 +110,7 @@ export default function PersonalForm({ enableNext }) {
                             id="lastName"
                             className={`p-1 form-control ${wasValidated && !personalInfo.lastName ? "is-invalid" : ""}`}
                             value={personalInfo.lastName || ""}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e)}
                             required
                         />
                         {wasValidated && !personalInfo.lastName && (
@@ -131,7 +126,7 @@ export default function PersonalForm({ enableNext }) {
                             id="jobTitle"
                             className={`p-1 form-control ${wasValidated && !personalInfo.jobTitle ? "is-invalid" : ""}`}
                             value={personalInfo.jobTitle || ""}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e)}
                             required
                         />
                         {wasValidated && !personalInfo.jobTitle && (
@@ -147,7 +142,7 @@ export default function PersonalForm({ enableNext }) {
                             id="address"
                             className={`p-1 form-control ${wasValidated && !personalInfo.address ? "is-invalid" : ""}`}
                             value={personalInfo.address || ""}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e)}
                             required
                         />
                         {wasValidated && !personalInfo.address && (
@@ -163,7 +158,7 @@ export default function PersonalForm({ enableNext }) {
                             id="phone"
                             className={`edit-phone p-1 form-control ${wasValidated && !personalInfo.phone ? "is-invalid" : ""}`}
                             value={personalInfo.phone || ""}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e)}
                             required
                         />
                         {wasValidated && !personalInfo.phone && (
@@ -172,14 +167,15 @@ export default function PersonalForm({ enableNext }) {
                     </div>
 
                     <div className="col d-flex flex-column">
-                        <label htmlFor="email" className="mb-1 fw-medium">Email</label>
+                        <label htmlFor="email" className=" fw-medium">Email</label>
                         <input
                             type="email"
                             name="email"
                             id="email"
+                            style={{marginBottom: "0px !important"}}
                             className={`p-1 form-control ${wasValidated && !personalInfo.email ? "is-invalid" : ""}`}
                             value={personalInfo.email || ""}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e)}
                             required
                         />
                         {wasValidated && !personalInfo.email && (
