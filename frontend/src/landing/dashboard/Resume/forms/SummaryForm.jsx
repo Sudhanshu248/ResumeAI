@@ -1,3 +1,4 @@
+// ✅ SummaryForm.jsx
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { CircularProgress } from "@mui/material";
@@ -10,8 +11,9 @@ export default function SummaryForm({ enableNext }) {
   const { resumeData, setResumeData, updateSummary, updateResumeSection } = useResume();
   const [summary, setSummary] = useState(resumeData?.personalInfo?.summary || "");
   const [loading, setLoading] = useState(false);
+  const [wasValidated, setWasValidated] = useState(false);
 
-  const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle}, based on my job title, give me a resume summary within 4–5 lines.`;
+  const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle}, based on my job title, give me a resume summary within 4-5 lines.`;
 
   useEffect(() => {
     enableNext(false);
@@ -27,7 +29,6 @@ export default function SummaryForm({ enableNext }) {
 
       setSummary(generatedSummary);
 
-      // Update local resume data
       setResumeData((prev) => ({
         ...prev,
         personalInfo: {
@@ -47,33 +48,27 @@ export default function SummaryForm({ enableNext }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setWasValidated(true);
     setLoading(true);
 
     try {
+      if (!summary.trim()) {
+        enableNext(false);
+        setLoading(false);
+        return;
+      }
 
-    if (!summary.trim()) {
-      toast.error("Please enter a summary");
-      enableNext(false);
-      setLoading(false);
-      return;
-    }
-
-      // Update local state
       const updatedData = {
         ...resumeData,
         personalInfo: {
           ...resumeData.personalInfo,
-          summary: summary,
+          summary,
         },
       };
+
       setResumeData(updatedData);
-
-      // Save to backend via context
-      updateSummary( summary );
-    console.log("Summary data to be saved:", summary);
-
-          const response = await updateResumeSection({ summary });
-    console.log("✅ Server response after update:", response);
+      updateSummary(summary);
+      await updateResumeSection({ summary });
 
       toast.success("Summary saved successfully!");
       enableNext(true);
@@ -98,11 +93,9 @@ export default function SummaryForm({ enableNext }) {
       <h4 className="fw-bold pb-1 m-0 mt-2">Summary</h4>
       <p className="pb-4">Add a summary of your career and skills</p>
 
-      <form onSubmit={handleSubmit}>
+      <form className="needs-validation" noValidate onSubmit={handleSubmit}>
         <div className="d-flex justify-content-between align-items-center mb-3 px-2">
-          <label htmlFor="summary" className="fw-medium m-0">
-            Summary
-          </label>
+          <label htmlFor="summary" className="fw-medium m-0">Summary</label>
           <Button
             variant="outlined"
             color="info"
@@ -120,12 +113,18 @@ export default function SummaryForm({ enableNext }) {
           </Button>
         </div>
 
-        <TextEditor
-          value={String(summary)}
-          onChange={(e) => setSummary(e.target.value)}
-          placeholder="Write your professional summary here..."
-          className="form-control p-2"
-        />
+        <div className="mb-3">
+          <TextEditor
+            value={String(summary) || ""}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="Write your professional summary here..."
+            className={`form-control p-2 ${wasValidated && !summary.trim() ? "is-invalid" : ""}`}
+            style={{ borderRadius: "4px", minHeight: "150px", border: "1px solid #ced4da" }}
+          />
+          {wasValidated && !summary.trim() && (
+            <div className="invalid-feedback d-block mt-1">Summary is required.</div>
+          )}
+        </div>
 
         <div className="d-flex justify-content-center mt-4">
           <Button

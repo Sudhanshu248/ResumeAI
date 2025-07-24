@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const resumeSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -53,4 +52,4 @@ experience: [{
 
 const Resume = mongoose.model('Resume', resumeSchema);
 
-export default Resume; 
+export default Resume;

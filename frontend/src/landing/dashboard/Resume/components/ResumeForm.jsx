@@ -12,7 +12,7 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 import { useEffect } from "react";
 
 export default function ResumeForm() {
-  const [activeForm, setActiveForm] = useState(1);
+  const [activeForm, setActiveForm] = useState(4);
   const [enableNext, setEnableNext] = useState(false);
   const { id } = useParams();
 const { resumeData, updateThemeColor } = useResume();

@@ -1,3 +1,4 @@
+// ✅ SkillForm.jsx (with validation UI)
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,6 +19,8 @@ const initialSkill = () => ({
 export default function SkillForm({ enableNext }) {
   const { resumeData, setResumeData, updateSkills, updateResumeSection } = useResume();
   const [loading, setLoading] = useState(false);
+  const [wasValidated, setWasValidated] = useState(false);
+
   const [skills, setSkills] = useState(
     resumeData?.skills?.length ? resumeData.skills : [initialSkill()]
   );
@@ -90,30 +93,26 @@ export default function SkillForm({ enableNext }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setWasValidated(true);
     setLoading(true);
 
     try {
-    const isValid = skills.every(
-        (skill) => skill.name.trim() !== "");
+      const isValid = skills.every((skill) => skill.name.trim() !== "");
 
-    if (!isValid) {
-      toast.error("Please fill in all skill names");
-      setLoading(false);
-      enableNext(false);
-      return;
-    }
+      if (!isValid) {
+        toast.error("Please fill in all skill names");
+        enableNext(false);
+        setLoading(false);
+        return;
+      }
 
-      updateSkills(skills); // Local update
-    console.log("Skills data to be saved:", skills);
-
-
-      const response = await updateResumeSection({ skills }); // Backend update
-      console.log("✅ Server response after skill update:", response);
+      updateSkills(skills);
+      await updateResumeSection({ skills });
 
       toast.success("Skills saved successfully!");
       enableNext(true);
     } catch (err) {
-      console.error("❌ Error updating skills:", err);
+      console.error(" Error updating skills:", err);
       toast.error("Failed to save skills");
       enableNext(false);
     } finally {
@@ -134,7 +133,7 @@ export default function SkillForm({ enableNext }) {
       <h4 className="fw-bold pb-1 m-0 mt-2">Skills</h4>
       <p className="pb-4">Add your technical or soft skills</p>
 
-      <form onSubmit={handleSubmit}>
+      <form className="needs-validation" noValidate onSubmit={handleSubmit}>
         {skills.map((skill, index) => (
           <div key={skill.id} className="mb-3 p-3 border rounded-3">
             <div className="d-flex justify-content-between align-items-center mb-2">
@@ -157,10 +156,15 @@ export default function SkillForm({ enableNext }) {
                   type="text"
                   name="name"
                   required
-                  className="form-control"
-                  value={skill.name}
+                  className={`form-control ${wasValidated && !skill.name.trim() ? "is-invalid" : ""}`}
+                  value={skill.name || ""}
                   onChange={(e) => handleChange(e, skill.id)}
                 />
+                {wasValidated && !skill.name.trim() && (
+                  <div className="invalid-feedback d-block">
+                    Skill name is required.
+                  </div>
+                )}
               </div>
 
               <div className="col-md-6">

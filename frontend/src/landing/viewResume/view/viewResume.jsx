@@ -8,7 +8,6 @@ export default function ViewResume() {
 
     const handleDownloadPDF = () => {
         window.print();
-        localStorage.removeItem('ResumeData');
     }
 
     return (

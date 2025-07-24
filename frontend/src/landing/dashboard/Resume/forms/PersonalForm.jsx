@@ -5,9 +5,9 @@ import { toast } from "react-toastify";
 import "../resume.css";
 
 export default function PersonalForm({ enableNext }) {
-    const { resumeData, updatePersonalInfo, updateResumeSection } = useResume(); // ✅ Use updatePersonalInfo, not updateLocalResumeData
+    const { resumeData, updatePersonalInfo, updateResumeSection } = useResume(); //  Use updatePersonalInfo, not updateLocalResumeData
     const [loading, setLoading] = useState(false);
-
+    const [wasValidated, setWasValidated] = useState(false);
     const [personalInfo, setPersonalInfo] = useState({
         firstName: "",
         lastName: "",
@@ -17,7 +17,7 @@ export default function PersonalForm({ enableNext }) {
         email: "",
     });
 
-    // ✅ Sync form state when resumeData is loaded
+    //  Sync form state when resumeData is loaded
     useEffect(() => {
         if (resumeData?.personalInfo) {
             setPersonalInfo(resumeData.personalInfo);
@@ -28,48 +28,48 @@ export default function PersonalForm({ enableNext }) {
         const { name, value } = e.target;
         const updated = { ...personalInfo, [name]: value };
         setPersonalInfo(updated);
-        updatePersonalInfo(updated); // ✅ Use context-safe updater
+        updatePersonalInfo(updated); //  Use context-safe updater
     };
 
-   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setWasValidated(true); // <- trigger validation on submit
+        setLoading(true);
 
-    try {
-        const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
+        try {
+            const { firstName, lastName, jobTitle, address, phone, email } = personalInfo;
 
-        if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
-            toast.error("Please fill out all fields.");
-            enableNext(false);
+            if (!firstName || !lastName || !jobTitle || !address || !phone || !email) {
+                toast.error("Please fill out all fields.");
+                enableNext(false);
+                setLoading(false);
+                return;
+            }
+
+            // 1. Update local context
+            updatePersonalInfo(personalInfo);
+
+            // 2. Check if resume ID is loaded before backend call
+            console.log("🪪 Resume ID in context:", resumeData?._id);
+
+            if (!resumeData?._id) {
+                toast.error("Resume ID not loaded yet. Try again in a moment.");
+                setLoading(false);
+                return;
+            }
+
+            // 3. Send to backend
+            const response = await updateResumeSection({ personalInfo });
+            console.log(" Server response after update:", response);
+            toast.success("Personal details saved");
+            enableNext(true);
+        } catch (error) {
+            toast.error("Failed to save personal details to server");
+            console.error("Error updating personal info:", error);
+        } finally {
             setLoading(false);
-            return;
         }
-
-        // 1. Update local context
-        updatePersonalInfo(personalInfo);
-
-        // 2. Check if resume ID is loaded before backend call
-        console.log("🪪 Resume ID in context:", resumeData?._id);
-
-        if (!resumeData?._id) {
-            toast.error("Resume ID not loaded yet. Try again in a moment.");
-            setLoading(false);
-            return;
-        }
-
-        // 3. Send to backend
-        const response = await updateResumeSection({ personalInfo });
-        console.log("✅ Server response after update:", response);
-
-        toast.success("Personal details saved");
-        enableNext(true);
-    } catch (error) {
-        toast.error("Failed to save personal details to server");
-        console.error("Error updating personal info:", error);
-    } finally {
-        setLoading(false);
-    }
-};
+    };
 
 
 
@@ -88,19 +88,23 @@ export default function PersonalForm({ enableNext }) {
             <h4 className="fw-bold pb-1 m-0 mt-2">Personal Detail</h4>
             <p className="pb-4">Get started with the basic information about yourself</p>
 
-            <form onSubmit={handleSubmit}>
+            <form className="needs-validation" noValidate onSubmit={handleSubmit}>
                 <div className="row g-3 justify-content-between">
+
                     <div className="col d-flex flex-column">
                         <label htmlFor="firstName" className="mb-1 fw-medium">First Name</label>
                         <input
                             type="text"
                             name="firstName"
                             id="firstName"
-                            className="p-1"
-                            value={personalInfo.firstName}
+                            className={`p-1 form-control ${wasValidated && !personalInfo.firstName ? "is-invalid" : ""}`}
+                            value={personalInfo.firstName || ""}
                             onChange={handleChange}
                             required
                         />
+                        {wasValidated && !personalInfo.firstName && (
+                            <div className="invalid-feedback d-block">First name is required.</div>
+                        )}
                     </div>
 
                     <div className="col d-flex flex-column">
@@ -109,37 +113,46 @@ export default function PersonalForm({ enableNext }) {
                             type="text"
                             name="lastName"
                             id="lastName"
-                            className="p-1"
-                            value={personalInfo.lastName}
+                            className={`p-1 form-control ${wasValidated && !personalInfo.lastName ? "is-invalid" : ""}`}
+                            value={personalInfo.lastName || ""}
                             onChange={handleChange}
                             required
                         />
+                        {wasValidated && !personalInfo.lastName && (
+                            <div className="invalid-feedback d-block">Last name is required.</div>
+                        )}
                     </div>
 
-                    <div className="d-flex flex-column">
+                    <div className=" d-flex flex-column">
                         <label htmlFor="jobTitle" className="mb-1 fw-medium">Job Title</label>
                         <input
                             type="text"
                             name="jobTitle"
                             id="jobTitle"
-                            className="p-1"
-                            value={personalInfo.jobTitle}
+                            className={`p-1 form-control ${wasValidated && !personalInfo.jobTitle ? "is-invalid" : ""}`}
+                            value={personalInfo.jobTitle || ""}
                             onChange={handleChange}
                             required
                         />
+                        {wasValidated && !personalInfo.jobTitle && (
+                            <div className="invalid-feedback d-block">Job title is required.</div>
+                        )}
                     </div>
 
-                    <div className="d-flex flex-column">
+                    <div className=" d-flex flex-column">
                         <label htmlFor="address" className="mb-1 fw-medium">Address</label>
                         <input
                             type="text"
                             name="address"
                             id="address"
-                            className="p-1"
-                            value={personalInfo.address}
+                            className={`p-1 form-control ${wasValidated && !personalInfo.address ? "is-invalid" : ""}`}
+                            value={personalInfo.address || ""}
                             onChange={handleChange}
                             required
                         />
+                        {wasValidated && !personalInfo.address && (
+                            <div className="invalid-feedback d-block">Address is required.</div>
+                        )}
                     </div>
 
                     <div className="col d-flex flex-column">
@@ -148,11 +161,14 @@ export default function PersonalForm({ enableNext }) {
                             type="number"
                             name="phone"
                             id="phone"
-                            className="edit-phone p-1"
-                            value={personalInfo.phone}
+                            className={`edit-phone p-1 form-control ${wasValidated && !personalInfo.phone ? "is-invalid" : ""}`}
+                            value={personalInfo.phone || ""}
                             onChange={handleChange}
                             required
                         />
+                        {wasValidated && !personalInfo.phone && (
+                            <div className="invalid-feedback d-block">Phone number is required.</div>
+                        )}
                     </div>
 
                     <div className="col d-flex flex-column">
@@ -161,19 +177,22 @@ export default function PersonalForm({ enableNext }) {
                             type="email"
                             name="email"
                             id="email"
-                            className="p-1 border border-1 border-dark"
-                            value={personalInfo.email}
+                            className={`p-1 form-control ${wasValidated && !personalInfo.email ? "is-invalid" : ""}`}
+                            value={personalInfo.email || ""}
                             onChange={handleChange}
                             required
                         />
+                        {wasValidated && !personalInfo.email && (
+                            <div className="invalid-feedback d-block">Email is required.</div>
+                        )}
                     </div>
+
 
                     <div className="d-flex justify-content-center align-items-center text-end mt-3">
                         <button
                             className="btn btn-primary text-white fw-semibold fs-5 mx-auto px-4 py-2"
                             style={{ width: "7rem" }}
-                             type="submit"
-                        // disabled={loading}
+                            type="submit"
                         >
                             {loading ? <CircularProgress size={20} /> : "Save"}
                         </button>
