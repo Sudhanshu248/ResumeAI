@@ -193,7 +193,7 @@ export default function ExperienceForm({ enableNext }) {
             <p className="pb-4">Add your work experience</p>
 
             <form className="needs-validation  " noValidate onSubmit={handleSubmit}>
-                <div className="container g-2 justify-content-between border border-1 border-dark rounded-3 p-1 p-sm-3 w-full">
+                <div className="container gap-2 justify-content-between border border-1 border-dark rounded-3 p-3 p-sm-3 w-full">
 
                     {Array.isArray(experience) &&
                         experience.map((item, index) => (
@@ -247,7 +247,7 @@ export default function ExperienceForm({ enableNext }) {
                                 </div>
 
 
-                                <div className="form-experience d-flex flex-row justify-content-between align-content-center ">
+                                <div className="form-experience d-flex flex-row gap-2 justify-content-between align-content-center ">
                                     {/* Start Date */}
                                     <div className=" d-flex flex-column" style={{ width: "100%" }}>
                                         <label className="fw-medium">Start Date</label>
@@ -293,8 +293,7 @@ export default function ExperienceForm({ enableNext }) {
                                             label="Currently working here"
                                         />
                                     </div>
-
-                                    {/* Generative AI Button */}
+{/* 
                                     <div className=" d-flex flex-column justify-content-center align-items-center" style={{ width: "100%" }}>
                                         <Button
                                             variant="outlined"
@@ -314,11 +313,11 @@ export default function ExperienceForm({ enableNext }) {
                                         >
                                             {loading ? <CircularProgress size={18} /> : "Generate from AI"}
                                         </Button>
-                                    </div>
+                                    </div> */}
                                 </div>
 
 
-                                {/* Description */}
+                                    {/* Generative AI Button */}
                                 <div className="d-flex justify-content-between align-items-center px-2 mt-4">
           <div></div>
           <Button
@@ -328,19 +327,20 @@ export default function ExperienceForm({ enableNext }) {
             disabled={loading}
             type="button"
             sx={{
-              borderColor: "rgba(193, 87, 246, 0.95)",
+                borderColor: "rgba(193, 87, 246, 0.95)",
               backgroundColor: "rgba(255, 255, 255, 0.95)",
               color: "rgba(168, 36, 220, 0.95)",
               fontWeight: 400,
             }}
-          >
+            >
             {loading ? <CircularProgress size={18} /> : "Generate From AI"}
           </Button>
         </div>
 
 
+              {/* Description */}
 
-                                <div className="col-12 d-flex flex-column mt-2">
+                                <div className="col-12 d-flex flex-column">
                                     <label className="fw-medium">Description</label>
                                     <TextEditor
                                         value={typeof item.description === "string" ? item.description : ""}
@@ -357,14 +357,17 @@ export default function ExperienceForm({ enableNext }) {
                                     )}
                                 </div>
 
+
+                                
+
                                 {/* Add/Remove buttons */}
-                                <div className="col-12 d-flex justify-content-between align-items-center mt-3">
+                                <div className="education-addbtn col-12 gap-4 d-flex justify-content-between align-items-center mt-3">
                                     {(experience.length > 1 && <Button
                                         variant="contained"
                                         color="error"
                                         startIcon={<DeleteIcon />}
                                         onClick={() => removeExperience(index)}
-                                        disabled={education.length === 1}
+                                        disabled={experience.length === 1}
                                     >
                                         Remove Experience
                                     </Button>)}

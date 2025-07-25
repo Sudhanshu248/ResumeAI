@@ -77,7 +77,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="p-5 ms-3 mt-3">
+      <div className="dashboard-page p-5 ms-3 mt-3">
         <h1 className="fs-3 fw-bold">My Resume </h1>
         <p className="fs-5 opacity-75">Start creating your resume for your next job</p>
 

@@ -2,10 +2,17 @@
     box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 1px 1px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 768px) {
     .card-flex {
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .dashboard-page{
+        padding-inline: 10px !important;
     }
 }

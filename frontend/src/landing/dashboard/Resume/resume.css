@@ -17,6 +17,9 @@
         display: flex;
         flex-direction: column;
     }
+    .preview-column{
+        margin-top: 1.2rem;
+    }
  
 }
 
@@ -34,6 +37,9 @@
 @media screen and (max-width: 500px) {
     .preview-personal {
      flex-wrap: wrap;
+    }
+    .navigation-btn{
+        padding-inline: 5px !important;
     }
 }
 

@@ -189,7 +189,7 @@ export default function EducationForm({ enableNext }) {
       <p className="pb-4">Add your education details</p>
 
       <form className="needs-validation" noValidate onSubmit={handleSubmit}>
-        <div className="container g-2  justify-content-between border border-1 border-dark rounded-3 p-1 p-sm-3 m-0">
+        <div className="container g-2  justify-content-between border border-1 border-dark rounded-3 p-3 p-sm-3 w-full">
           {education.map((item, index) => (
             <div key={item.id} className="row g-2 justify-content-between mb-4">
               {/* Institution */}
@@ -242,7 +242,7 @@ export default function EducationForm({ enableNext }) {
 
 
 
-              <div className="form-education  d-flex flex-row justify-content-between align-content-center ">
+              <div className="form-education  d-flex flex-row gap-2 justify-content-between align-content-center ">
                 {/* Start Date */}
                 <div className=" d-flex flex-column" style={{ width: "100%" }}>
                   <label className="fw-medium">Start Date</label>
@@ -285,29 +285,27 @@ export default function EducationForm({ enableNext }) {
                     label="Currently studying here"
                   />
                 </div>
-
-                {/* Generative AI Button */}
-                <div className="col-md-4 d-flex flex-column justify-content-center align-items-center">
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    onClick={() => handleAI(index)}
-                    disabled={loading}
-                    type="button"
-                    sx={{
-                      borderColor: "rgba(193, 87, 246, 0.95)",
-                      backgroundColor: "rgba(255, 255, 255, 0.95)",
-                      color: "rgba(168, 36, 220, 0.95)",
-                      fontWeight: 400,
-                      height: "50px",
-                      width: "fit-content",
-                    }}
-
-                  >
-                    {loading ? <CircularProgress size={18} /> : "Generate from AI"}
-                  </Button>
-                </div>
               </div>
+
+             {/* Generative AI Button */}
+                                <div className="d-flex justify-content-between align-items-center px-2 ">
+          <div></div>
+          <Button
+            variant="outlined"
+            color="info"
+            onClick={handleAI}
+            disabled={loading}
+            type="button"
+            sx={{
+                borderColor: "rgba(193, 87, 246, 0.95)",
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              color: "rgba(168, 36, 220, 0.95)",
+              fontWeight: 400,
+            }}
+            >
+            {loading ? <CircularProgress size={18} /> : "Generate From AI"}
+          </Button>
+        </div>
 
 
               {/* Description */}
@@ -330,7 +328,7 @@ export default function EducationForm({ enableNext }) {
               </div>
 
               {/* Buttons */}
-              <div className="education-addbtn col-12 d-flex gap-2 justify-content-between align-items-center mt-3">
+              <div className="education-addbtn col-12 d-flex gap-4 justify-content-between align-items-center mt-3">
                 {(education.length > 1 && <Button
                   variant="contained"
                   color="error"

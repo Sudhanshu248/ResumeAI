@@ -68,7 +68,7 @@ export default function ResumeForm() {
 
         <div className="d-flex gap-2">
           {step > 1 && (
-            <Button variant="contained" color="info" onClick={handleBack}>
+            <Button variant="contained" className="navigation-btn" color="info" onClick={handleBack}>
               <ArrowLeft className="me-1" /> Back
             </Button>
           )}
@@ -76,6 +76,7 @@ export default function ResumeForm() {
           {step < 6 && step>0 && enableNext && (
             <Button
               variant="contained"
+              className="navigation-btn"
               color="info"
               disabled={!enableNext}
               onClick={handleNext}
