@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function ResumeCard({ resume, onDelete }) {
   return (
     <div
-      className="card-logo-1 add-icon position-relative bg-body-secondary p-8 rounded-3 d-flex align-items-center justify-content-center"
+      className="card-logo-1 add-icon mt-4 position-relative bg-body-secondary p-8 rounded-3 d-flex align-items-center justify-content-center"
       style={{ width: "18rem", height: "18rem", cursor: "pointer", position: 'relative' }}
     >
       {/* Trash icon at top-right in red */}

@@ -2,11 +2,19 @@ import { Button } from "@mui/material";
 import ResumePreview from "../../dashboard/Resume/components/ResumePreview";
 import { useResume } from "../../../context/ResumeContext.jsx";
 import "./ViewResume.css";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function ViewResume() {
-    const { resumeData, setResumeData } = useResume();
-    const navigate = useNavigate();
+    const { id } = useParams();
+    const { resumeData, setResumeData, loadResume } = useResume();
+
+    useEffect(() => {
+        if (id) {
+            loadResume(id);
+        }
+    }, [id]); 
+
     const handleDownloadPDF = () => {
         window.print();
     }

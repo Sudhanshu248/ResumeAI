@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import TextEditor from "react-simple-wysiwyg";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import { AIChatSession } from "../../../../server/AIModel.js";
+import { BASE_URL } from "../../../../axiosConfig.js";
 
 export default function SummaryForm({ enableNext }) {
   const { resumeData, setResumeData, updateSummary, updateResumeSection } = useResume();
@@ -12,56 +13,96 @@ export default function SummaryForm({ enableNext }) {
   const [loading, setLoading] = useState(false);
   const [wasValidated, setWasValidated] = useState(false);
 
-  const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle}, based on my job title, give me a resume summary within 4-5 lines.`;
-
-  //  Sync state on mount (like PRG)
-  useEffect(() => {
-    const contextSummary =
-      resumeData?.summary ||
-      resumeData?.personalInfo?.summary ||
-      "";
+  const prompt = `Job Title: cloud engineer, based on my job title, Write a professional resume summary in 3-4 lines, plain text only — no formatting, markdown, or bullet points.`;
+  console.log(`Job title = ${resumeData?.personalInfo?.jobTitle}`);
+  
+  // ✅ Sync state on mount (like PRG)
+useEffect(() => {
+  const contextSummary =
+    resumeData?.summary ||
+    resumeData?.personalInfo?.summary ||
+    "";
 
     const summaryStr = String(contextSummary || "");
     setSummary(summaryStr);
 
-    if (summaryStr.trim()) {
-      enableNext(true);
-    } else {
-      enableNext(false);
-    }
-  }, [resumeData?.personalInfo?.summary]);
+  if(resumeData?.summary){
+    enableNext(true);
+  }
+
+  // ❌ DO NOT enableNext here — only update UI
+}, [resumeData]);
 
 
 
-  const handleAI = async () => {
-    setLoading(true);
-    try {
-      const response = await AIChatSession.sendMessage(prompt);
-      const responseText = await response.response.text();
-      const parsed = JSON.parse(responseText);
-      const generatedSummary = parsed.summary.join("\n\n");
 
-      setSummary(generatedSummary);
 
-      const updatedData = {
-        ...resumeData,
-        personalInfo: {
-          ...resumeData.personalInfo,
-          summary: generatedSummary,
-        },
-      };
 
-      setResumeData(updatedData);
-      updateSummary(generatedSummary);
 
-      toast.success("AI summary generated!");
-    } catch (error) {
-      console.error("AI Summary Error:", error);
-      toast.error("Failed to generate summary.");
-    } finally {
+
+const handleAI = async () => {
+  setLoading(true);
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("User not authenticated");
       setLoading(false);
+      return;
     }
-  };
+
+    const response = await fetch(`${BASE_URL}/generate-summary`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        section: "summary",
+        customPrompt: prompt,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || "AI generation failed");
+
+    const rawSummary = data.responseText;
+    const firstOptionMatch = rawSummary.match(/Option 1.*?(?=Option 2|$)/s);
+    const firstOption = firstOptionMatch ? firstOptionMatch[0].trim() : rawSummary.trim();
+
+    // ✅ Update form input
+    setSummary(firstOption);
+
+    // ✅ Update preview only — don't enableNext
+    setResumeData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        summary: firstOption,
+      },
+      summary: firstOption, // if you show summary in root-level preview
+    }));
+
+    toast.success("AI summary generated! Please review and save.");
+  } catch (err) {
+    console.error("❌ AI Error:", err);
+    toast.error("Failed to generate summary.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,21 +165,35 @@ export default function SummaryForm({ enableNext }) {
               borderColor: "rgba(193, 87, 246, 0.95)",
               backgroundColor: "rgba(255, 255, 255, 0.95)",
               color: "rgba(168, 36, 220, 0.95)",
-              fontWeight: 600,
+              fontWeight: 400,
             }}
           >
-            {loading ? <CircularProgress size={20} /> : "Generate From AI"}
+            {loading ? <CircularProgress size={18} /> : "Generate From AI"}
           </Button>
         </div>
 
         <div className="mb-3">
-          <TextEditor
-            value={String(summary) || ""}
-            onChange={(e) => setSummary(e.target.value)}
-            placeholder="Write your professional summary here..."
-            className={`form-control p-2 ${wasValidated && !String(summary).trim() ? "is-invalid" : ""}`}
-            style={{ borderRadius: "4px", minHeight: "150px", border: "1px solid #ced4da" }}
-          />
+
+<TextEditor
+ key={summary}
+  value={summary} // not String(summary) || ""
+  onChange={(e) => {
+    const value = e.target.value;
+    setSummary(value);
+    setResumeData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        summary: value,
+      },
+      summary: value,
+    }));
+  }}
+  placeholder="Write your professional summary here..."
+  className={`form-control p-2 ${wasValidated && !summary.trim() ? "is-invalid" : ""}`}
+  style={{ borderRadius: "4px", minHeight: "150px", border: "1px solid #ced4da" }}
+/>
+
           {wasValidated && !summary.trim() && (
             <div className="invalid-feedback d-block mt-1">Summary is required.</div>
           )}

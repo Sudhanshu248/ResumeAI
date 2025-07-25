@@ -5,7 +5,7 @@ import userRoutes from "./routes/user.route.js";
 import resumeRoutes from "./routes/resume.route.js"
 import dotenv from "dotenv";
 import cors from "cors";
-
+import genAIRoutes from "./routes/genAI.route.js";
 
 const app = express();
 dotenv.config();
@@ -48,6 +48,7 @@ app.use((err, req, res, next) => {
 
 app.use("/", resumeRoutes); //  Mount the router
 app.use('/', userRoutes);  // This will handle /signup and /login directly
+app.use("/", genAIRoutes); // Mount the AI routes
 
 app.get('/', (req, res) => {
     res.send('Welcome to ResumeAI Backend!');

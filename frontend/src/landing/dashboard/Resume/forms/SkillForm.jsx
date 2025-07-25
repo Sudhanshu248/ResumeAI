@@ -135,6 +135,8 @@ export default function SkillForm({ enableNext }) {
       <p className="pb-4">Add your technical or soft skills</p>
 
       <form className="needs-validation" noValidate onSubmit={handleSubmit}>
+                <div className="container g-2 justify-content-between border border-1 border-dark rounded-3 p-3 py-4">
+
         {skills.map((skill, index) => (
           <div key={skill.id} className="mb-4 p-3 border rounded-3">
             <div className="d-flex justify-content-between align-items-center mb-2">
@@ -180,10 +182,20 @@ export default function SkillForm({ enableNext }) {
           <Button variant="outlined" onClick={handleAddSkill}>
             Add Skill
           </Button>
-          <Button variant="contained" color="primary" type="submit" disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : "Save"}
-          </Button>
         </div>
+        </div>
+          <div className="d-flex justify-content-center mt-4">
+
+                         <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={loading}
+            sx={{ width: "7rem", fontWeight: 600, fontSize: "1rem" }}
+          >
+            {loading ? <CircularProgress size={20} /> : "Save"}
+          </Button>
+                    </div>
       </form>
     </div>
   );
