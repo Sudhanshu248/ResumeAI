@@ -10,7 +10,7 @@ export const ResumeProvider = ({ children }) => {
   const [currentResumeId, setCurrentResumeId] = useState(null);
 
 
-  // ✅ DELETE resume by ID
+  //  DELETE resume by ID
   const deleteResume = async (resumeId) => {
     const token = localStorage.getItem("token");
     try {
@@ -27,9 +27,6 @@ export const ResumeProvider = ({ children }) => {
       throw error;
     }
   };
-
-
-
 
 
   //  Fetch all resumes (dashboard/list)
@@ -116,7 +113,7 @@ const loadResume = async (resumeId) => {
 
 
 
-  // ✅ Create new resume
+  //  Create new resume
   const createResume = async (newResume = {}) => {
     const token = localStorage.getItem("token");
     console.log("Create Resume  funciton is running ", newResume);
@@ -163,18 +160,18 @@ const loadResume = async (resumeId) => {
     const updated = await  updateResumeSection({ personalInfo: data });
    return updated;
   } catch (err) {
-    console.error("❌ Error updating experience:", err);
+    console.error(" Error updating experience:", err);
     throw err;
   }
 };
 
-  // ✅ Other section updates remain the same
+  //  Other section updates remain the same
   const updateExperience = async (data) => {
     try {
       const updated = await updateResumeSection({ experience: data });
       return updated;
     } catch (err) {
-      console.error("❌ Error updating experience:", err);
+      console.error(" Error updating experience:", err);
       throw err;
     }
   };
@@ -185,7 +182,7 @@ const loadResume = async (resumeId) => {
       const updated = await updateResumeSection({ education: data });
       return updated;
     } catch (err) {
-      console.error("❌ Error updating education:", err);
+      console.error(" Error updating education:", err);
       throw err;
     }
   };
@@ -197,7 +194,7 @@ const loadResume = async (resumeId) => {
       const updated = await updateResumeSection({ skills: data });
       return updated;
     } catch (err) {
-      console.error("❌ Error updating education:", err);
+      console.error(" Error updating education:", err);
       throw err;
     }
   };
@@ -208,7 +205,7 @@ const loadResume = async (resumeId) => {
       const updated = await updateResumeSection({ themeColor: color });
       return updated;
     } catch (err) {
-      console.error("❌ Error updating theme color:", err);
+      console.error(" Error updating theme color:", err);
       throw err;
     }
   };

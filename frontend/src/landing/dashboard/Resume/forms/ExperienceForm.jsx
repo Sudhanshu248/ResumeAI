@@ -11,14 +11,14 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 import { BASE_URL } from "../../../../axiosConfig.js";
 
 const createNewExperience = () => ({
-  id: uuidv4(),
-  jobTitle: "",
-  companyName: "",
-  location: "",
-  startDate: "",
-  endDate: "",
-  description: "",
-  currentlyWorking: false,
+    id: uuidv4(),
+    jobTitle: "",
+    companyName: "",
+    location: "",
+    startDate: "",
+    endDate: "",
+    description: "",
+    currentlyWorking: false,
 });
 
 export default function ExperienceForm({ enableNext }) {
@@ -28,16 +28,16 @@ export default function ExperienceForm({ enableNext }) {
     const [wasValidated, setWasValidated] = useState(false);
 
 
-useEffect(() => {
-  if (
-    Array.isArray(resumeData?.experience) &&
-    resumeData.experience.length > 0 &&
-    JSON.stringify(resumeData.experience) !== JSON.stringify(experience)
-  ) {
-    setExperience(resumeData.experience);
-    enableNext(true);
-      } 
-}, [resumeData]);
+    useEffect(() => {
+        if (
+            Array.isArray(resumeData?.experience) &&
+            resumeData.experience.length > 0 &&
+            JSON.stringify(resumeData.experience) !== JSON.stringify(experience)
+        ) {
+            setExperience(resumeData.experience);
+            enableNext(true);
+        }
+    }, [resumeData]);
 
 
 const handleAI = async (index) => {
@@ -147,7 +147,7 @@ const response = await fetch(`${BASE_URL}/generate-summary`, {
                     item.startDate &&
                     (item.currentlyWorking || item.endDate)
             );
-
+            
             if (!isValid) {
                 toast.error("Please fill all required fields");
                 enableNext(false);
@@ -155,10 +155,18 @@ const response = await fetch(`${BASE_URL}/generate-summary`, {
                 return;
             }
 
-            updateExperience(experience); //  correct flat array
-            console.log("Experience data to be saved:", experience);
+            // Trim ISO date strings to "YYYY-MM-DD"
+            const trimmedExperience = experience.map(item => ({
+                ...item,
+                startDate: item.startDate?.slice(0, 10),
+                endDate: item.currentlyWorking ? null : item.endDate?.slice(0, 10),
+            }));
 
-            const response = await updateResumeSection({ experience });
+            updateExperience(trimmedExperience); // Correct flat array
+            console.log("Experience data to be saved:", trimmedExperience);
+
+
+            const response = await updateResumeSection({  experience: trimmedExperience });
             console.log(" Server response after update:", response);
 
             toast.success("Experience information saved");
@@ -262,8 +270,8 @@ const response = await fetch(`${BASE_URL}/generate-summary`, {
                                         value={item.endDate || ""}
                                         onChange={(e) => handleChange(e, index)}
                                         className={`p-1 form-control ${wasValidated && !item.currentlyWorking && !item.endDate
-                                                ? "is-invalid"
-                                                : ""
+                                            ? "is-invalid"
+                                            : ""
                                             }`}
                                         required={!item.currentlyWorking}
                                         disabled={item.currentlyWorking}
@@ -312,6 +320,9 @@ const response = await fetch(`${BASE_URL}/generate-summary`, {
                                             padding: "10px",
                                         }}
                                     />
+                                    {wasValidated && !item.description && (
+                                        <div className="invalid-feedback d-block">Description  is required.</div>
+                                    )}
                                 </div>
 
                                 {/* Add/Remove buttons */}

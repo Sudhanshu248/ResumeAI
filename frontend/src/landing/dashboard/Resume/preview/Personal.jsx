@@ -5,7 +5,7 @@ export default function Personal({ resumes }) {
   return (
     <div className="pe-3 ps-3 pt-3 m-0">
       <h2 className="text-center fs-4 fw-bold">
-        {personal.firstName || ""} {personal.lastName || ""}
+        {personal.firstName} {personal.lastName}
       </h2>
 
       {personal.jobTitle && (

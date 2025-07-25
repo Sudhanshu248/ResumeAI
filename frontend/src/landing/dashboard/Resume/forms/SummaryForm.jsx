@@ -23,8 +23,8 @@ useEffect(() => {
     resumeData?.personalInfo?.summary ||
     "";
 
-  const summaryStr = String(contextSummary || "");
-  setSummary(summaryStr);
+    const summaryStr = String(contextSummary || "");
+    setSummary(summaryStr);
 
   if(resumeData?.summary){
     enableNext(true);

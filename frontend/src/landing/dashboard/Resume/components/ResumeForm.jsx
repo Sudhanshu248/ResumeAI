@@ -15,7 +15,7 @@ export default function ResumeForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const step = parseInt(searchParams.get("step")) || 1;
+  const step = parseInt(searchParams.get("step")) || 2;
 
   const [enableNext, setEnableNext] = useState(false);
   const { resumeData, updateThemeColor, loadResume } = useResume();

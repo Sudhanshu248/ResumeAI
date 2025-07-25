@@ -33,13 +33,22 @@ useEffect(() => {
 }, [resumeData]);
 
 
+    useEffect(() => {
+        if (
+            resumeData &&
+            resumeData.personalInfo &&
+            Object.keys(resumeData.personalInfo).some(key => resumeData.personalInfo[key])
+        ) {
+            setPersonalInfo(resumeData.personalInfo);
+        }
+    }, [resumeData?.personalInfo]);
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  const updated = { ...personalInfo, [name]: value };
-  setPersonalInfo(updated);
-  updatePersonalInfo(updated); // updates context
-};
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        const updated = { ...personalInfo, [name]: value };
+        setPersonalInfo(updated);
+        updatePersonalInfo(updated); // updates context
+    };
 
 
     const handleSubmit = async (e) => {
@@ -99,7 +108,7 @@ const handleChange = (e) => {
                             id="firstName"
                             className={`p-1 form-control ${wasValidated && !personalInfo.firstName ? "is-invalid" : ""}`}
                             value={personalInfo.firstName || ""}
-                            onChange={(e) => handleChange (e)}
+                            onChange={(e) => handleChange(e)}
                             required
                         />
                         {wasValidated && !personalInfo.firstName && (
@@ -176,7 +185,6 @@ const handleChange = (e) => {
                         <input
                             type="email"
                             name="email"
-                            style={{marginBottom: "0px !important"}}
                             className={`p-1 form-control ${wasValidated && !personalInfo.email ? "is-invalid" : ""}`}
                             value={personalInfo.email || ""}
                             onChange={(e) => handleChange(e)}
