@@ -96,3 +96,31 @@ export const login = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+
+// Get Username Function
+export const getUsername = async (req, res) => {
+    const authHeader = req.headers.authorization;
+  
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRETS);
+
+        const user = await User.findById(decoded.id).select("username");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.json({ username: user.username });
+
+    } catch (error) {
+        return res.status(401).json({ message: "Invalid or expired token" });
+    }
+};
+

@@ -15,6 +15,7 @@ export default function Signup() {
     const [name, setName] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+  
     const navigate = useNavigate();
 
     const handleSignUp = async () => {
@@ -22,8 +23,6 @@ export default function Signup() {
             setLoading(true);
             setError("");
 
-            // Validate inputs
-            console.log(name , username, email, password);
             if (!name || !username || !email || !password) {
                 setError("All fields are required.");
                 setLoading(false);
@@ -52,6 +51,7 @@ export default function Signup() {
                 localStorage.setItem('token', token);
                 toast.success("Account created successfully!");
                 navigate('/dashboard');
+          
             }
 
         } catch (error) {
@@ -96,9 +96,13 @@ export default function Signup() {
                 </div>
 
                 <div className="login-btn mt-2 mb-3">
-                    <Button variant="contained" color="primary" onClick={handleSignUp} disabled={loading}>
+
+           
+                       <Button variant="contained" color="primary" onClick={handleSignUp} disabled={loading}>
                         Sign Up
                     </Button>
+            
+
                 </div>
 
                 <div className='d-flex justify-content-center ' style={{ marginBottom: "10px" }}>

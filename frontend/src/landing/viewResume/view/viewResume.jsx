@@ -5,9 +5,9 @@ import "./ViewResume.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-export default function ViewResume() {
 
     
+export default function ViewResume() { 
     const { id } = useParams();
     const { resumeData, setResumeData, loadResume } = useResume();
     const navigate = useNavigate();
