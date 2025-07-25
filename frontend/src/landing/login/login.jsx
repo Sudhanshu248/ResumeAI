@@ -69,7 +69,7 @@ export default function Login() {
 
   return (
     <>
-        <div className="box-form  pe-4 ps-4 pt-5 pb-5" style={{ height: "fit-content" }}>
+        <div className="resume-cards box-form  pe-4 ps-4 pt-5 pb-5" style={{ height: "fit-content" }}>
           <div className='box-form-h3 d-flex justify-content-center mb-3  border-top-0 border-start-0 border-end-0 border-dark'>
             <h3 style={{ fontFamily: "'Poppins', sans-serif" }}>Log In </h3>
           </div>

@@ -180,12 +180,12 @@ const response = await fetch(`${BASE_URL}/generate-summary`, {
 
     return (
         <div
-            className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
+            className="forms-cards pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
             style={{
                 height: "fit-content",
                 borderTop: "5px solid #0d6ff2f2",
-                boxShadow:
-                    "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px",
+                                   boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
+
             }}
         >
             <h4 className="fw-bold pb-1 m-0 mt-2">Experience</h4>
@@ -292,23 +292,28 @@ const response = await fetch(`${BASE_URL}/generate-summary`, {
                                 </div>
 
                                 {/* Description */}
-                                <Button
-  variant="outlined"
-  color="info"
-  onClick={() => handleAI(index)}
-  disabled={loading}
-  type="button"
+                                <div className="d-flex justify-content-between align-items-center px-2 mt-4">
+          <div></div>
+          <Button
+            variant="outlined"
+            color="info"
+            onClick={handleAI}
+            disabled={loading}
+            type="button"
             sx={{
               borderColor: "rgba(193, 87, 246, 0.95)",
               backgroundColor: "rgba(255, 255, 255, 0.95)",
               color: "rgba(168, 36, 220, 0.95)",
               fontWeight: 400,
-              width: "fit-content",
             }}
           >
-  {loading ? <CircularProgress size={18} /> : "Generate from AI"}
-</Button>
-                                <div className="col-12 d-flex flex-column mt-2">
+            {loading ? <CircularProgress size={18} /> : "Generate From AI"}
+          </Button>
+        </div>
+
+
+
+                                <div className="col-12 d-flex flex-column">
                                     <label className="fw-medium">Description</label>
                                     <TextEditor
                                         value={typeof item.description === "string" ? item.description : ""}
@@ -327,15 +332,15 @@ const response = await fetch(`${BASE_URL}/generate-summary`, {
 
                                 {/* Add/Remove buttons */}
                                 <div className="col-12 d-flex justify-content-between align-items-center mt-3">
-                                    <Button
+                                    {(experience.length > 1 && <Button
                                         variant="contained"
                                         color="error"
                                         startIcon={<DeleteIcon />}
                                         onClick={() => removeExperience(index)}
-                                        disabled={experience.length === 1}
+                                        disabled={education.length === 1}
                                     >
                                         Remove Experience
-                                    </Button>
+                                    </Button>)}
 
                                     {index === experience.length - 1 && (
                                         <Button variant="contained" onClick={addExperience}>

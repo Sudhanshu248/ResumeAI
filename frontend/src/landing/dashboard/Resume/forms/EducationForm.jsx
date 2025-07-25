@@ -181,12 +181,12 @@ const prompt = `Generate exactly 2 short lines summarizing the academic experien
 
   return (
     <div
-      className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
+      className="forms-cards pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
       style={{
         height: "fit-content",
         borderTop: "5px solid #0d6ff2f2",
-        boxShadow:
-          "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px",
+                    boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
+
       }}
     >
       <h4 className="fw-bold pb-1 m-0 mt-2">Education</h4>
@@ -256,12 +256,12 @@ const prompt = `Generate exactly 2 short lines summarizing the academic experien
                   required
                 />
                 {wasValidated && !item.startDate.trim() && (
-                  <div className="invalid-feedback">startDate is required.</div>
+                  <div className="invalid-feedback">Start Date is required.</div>
                 )}
               </div>
 
               {/* End Date */}
-              <div className="col-md-4 mb-4 d-flex flex-column">
+              <div className="col-md-4 d-flex flex-column">
                 <label className="fw-medium">End Date</label>
                 <input
                   type="date"
@@ -273,7 +273,7 @@ const prompt = `Generate exactly 2 short lines summarizing the academic experien
                   disabled={item.currentlyStudying}
                 />
                 {wasValidated && !item.endDate.trim() && (
-                  <div className="invalid-feedback">endDate is required.</div>
+                  <div className="invalid-feedback">End Date is required.</div>
                 )}
                 <FormControlLabel
                   control={
@@ -287,27 +287,29 @@ const prompt = `Generate exactly 2 short lines summarizing the academic experien
                 />
               </div>
               
-              {/* Description */}
-<Button
-  variant="outlined"
-  color="info"
-  onClick={() => handleAI(index)}
-  disabled={loading}
-  type="button"
+               {/* Description */}
+                                <div className="d-flex justify-content-between align-items-center px-2 mt-4">
+          <div></div>
+          <Button
+            variant="outlined"
+            color="info"
+            onClick={handleAI}
+            disabled={loading}
+            type="button"
             sx={{
               borderColor: "rgba(193, 87, 246, 0.95)",
               backgroundColor: "rgba(255, 255, 255, 0.95)",
               color: "rgba(168, 36, 220, 0.95)",
               fontWeight: 400,
-              width: "fit-content",
             }}
-          
           >
-  {loading ? <CircularProgress size={18} /> : "Generate from AI"}
-</Button>
+            {loading ? <CircularProgress size={18} /> : "Generate From AI"}
+          </Button>
+        </div>
 
 
-              <div className="col-12 d-flex flex-column mt-2">
+
+                                <div className="col-12 d-flex flex-column">
                 <label className="fw-medium">Description</label>
                 <TextEditor
                   value={item.description}
@@ -327,7 +329,7 @@ const prompt = `Generate exactly 2 short lines summarizing the academic experien
 
               {/* Buttons */}
               <div className="col-12 d-flex justify-content-between align-items-center mt-3">
-                <Button
+                {(education.length > 1 && <Button
                   variant="contained"
                   color="error"
                   startIcon={<DeleteIcon />}
@@ -335,7 +337,7 @@ const prompt = `Generate exactly 2 short lines summarizing the academic experien
                   disabled={education.length === 1}
                 >
                   Remove Education
-                </Button>
+                </Button>)}
 
                 {index === education.length - 1 && (
                   <Button variant="contained" onClick={addEducation}>
