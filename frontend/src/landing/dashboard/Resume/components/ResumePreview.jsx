@@ -20,7 +20,7 @@ export default function ResumePreview() {
 
   return (
     <div
-      className="resume-preview border-bottom-0 border-start-0 border-end-0 mb-0 mt-0 pb-3 text-center rounded-4"
+      className="resume-preview forms-cards border-bottom-0 border-start-0 border-end-0 mb-0 mt-0 pb-3 text-center rounded-4"
       style={{
         border: `20px solid ${borderColor}`,
       }}

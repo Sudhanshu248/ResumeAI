@@ -141,12 +141,12 @@ const handleAI = async () => {
 
   return (
     <div
-      className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
+      className="forms-cards pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
       style={{
         height: "fit-content",
         borderTop: "5px solid #0d6ff2f2",
-        boxShadow:
-          "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px",
+                     boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
+
       }}
     >
       <h4 className="fw-bold pb-1 m-0 mt-2">Summary</h4>
@@ -154,7 +154,7 @@ const handleAI = async () => {
 
       <form className="needs-validation" noValidate onSubmit={handleSubmit}>
         <div className="d-flex justify-content-between align-items-center mb-3 px-2">
-          <label htmlFor="summary" className="fw-medium m-0">Summary</label>
+          <div></div>
           <Button
             variant="outlined"
             color="info"

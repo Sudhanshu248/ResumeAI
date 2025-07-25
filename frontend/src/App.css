@@ -5,6 +5,8 @@
     --text-clr: black;
     --arr-bg-clr: rgb(2, 2, 45);
     --arr-clr: white;
+    --rsm-clr: rgb(242, 245, 248);
+    --frm-clr: white;
 }
 
 .dark-theme{
@@ -14,6 +16,18 @@
     --text-clr: black;
     --arr-bg-clr: white;
     --arr-clr: rgb(2, 2, 45);
+    --rsm-clr: rgba(25, 58, 94, 0.785);
+    --frm-clr: rgba(25, 58, 94, 0.785); 
+}
+
+.resume-cards{
+    background-color: var(--rsm-clr);
+    border: var(--rsm-clr);
+}
+
+.forms-cards{
+    background-color: var(--frm-clr);
+    border: var(--frm-clr);
 }
 
 .footer{
