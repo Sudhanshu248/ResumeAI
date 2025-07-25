@@ -4,7 +4,6 @@ import { CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
 import TextEditor from "react-simple-wysiwyg";
 import { useResume } from "../../../../context/ResumeContext.jsx";
-import { AIChatSession } from "../../../../server/AIModel.js";
 import { BASE_URL } from "../../../../axiosConfig.js";
 
 export default function SummaryForm({ enableNext }) {
