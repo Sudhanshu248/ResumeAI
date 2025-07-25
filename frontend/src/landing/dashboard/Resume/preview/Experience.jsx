@@ -1,5 +1,5 @@
 export default function Experience({ resumes }) {
-const experienceList = Array.isArray(resumes?.experience) ? resumes.experience : [];
+  const experienceList = Array.isArray(resumes?.experience) ? resumes.experience : [];
   const themeColor = resumes?.themeColor || "#0d6efd";
 
   // if (experienceList.length === 0) return null;
@@ -20,8 +20,9 @@ const experienceList = Array.isArray(resumes?.experience) ? resumes.experience :
               {experience.companyName}, {experience.location}
             </p>
             <p className="text-end m-0">
-              {experience.startDate} - {experience.currentlyWorking ? "Present" : experience.endDate}
+              {experience.startDate?.slice(0, 10)} - {experience.currentlyWorking ? "Present" : experience.endDate?.slice(0, 10)}
             </p>
+
           </div>
 
           {experience.description && (

@@ -14,26 +14,26 @@ export default function SummaryForm({ enableNext }) {
 
   const prompt = `Job Title: ${resumeData?.personalInfo?.jobTitle}, based on my job title, give me a resume summary within 4-5 lines.`;
 
-  // ✅ Sync state on mount (like PRG)
-useEffect(() => {
-  const contextSummary =
-    resumeData?.summary ||
-    resumeData?.personalInfo?.summary ||
-    "";
+  //  Sync state on mount (like PRG)
+  useEffect(() => {
+    const contextSummary =
+      resumeData?.summary ||
+      resumeData?.personalInfo?.summary ||
+      "";
 
-  const summaryStr = String(contextSummary || "");
-  setSummary(summaryStr);
+    const summaryStr = String(contextSummary || "");
+    setSummary(summaryStr);
 
-  if (summaryStr.trim()) {
-    enableNext(true);
-  } else {
-    enableNext(false);
-  }
-}, [resumeData?.personalInfo?.summary]);
+    if (summaryStr.trim()) {
+      enableNext(true);
+    } else {
+      enableNext(false);
+    }
+  }, [resumeData?.personalInfo?.summary]);
 
 
 
-const handleAI = async () => {
+  const handleAI = async () => {
     setLoading(true);
     try {
       const response = await AIChatSession.sendMessage(prompt);
@@ -136,7 +136,7 @@ const handleAI = async () => {
             value={String(summary) || ""}
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Write your professional summary here..."
-className={`form-control p-2 ${wasValidated && !String(summary).trim() ? "is-invalid" : ""}`}
+            className={`form-control p-2 ${wasValidated && !String(summary).trim() ? "is-invalid" : ""}`}
             style={{ borderRadius: "4px", minHeight: "150px", border: "1px solid #ced4da" }}
           />
           {wasValidated && !summary.trim() && (

@@ -26,44 +26,44 @@ export default function EducationForm({ enableNext }) {
   const [wasValidated, setWasValidated] = useState(false);
 
   const [education, setEducation] = useState([{ ...defaultEducation }]);
-// const [hasInitialized, setHasInitialized] = useState(false);
+  // const [hasInitialized, setHasInitialized] = useState(false);
 
-useEffect(() => {
-  if (
-    Array.isArray(resumeData?.education) &&
-    resumeData.education.length > 0 &&
-    JSON.stringify(resumeData.education) !== JSON.stringify(education)
-  ) {
-    setEducation(resumeData.education);
-    // setHasInitialized(true);
-    enableNext(true);
-  }
-}, [resumeData]);
+  useEffect(() => {
+    if (
+      Array.isArray(resumeData?.education) &&
+      resumeData.education.length > 0 &&
+      JSON.stringify(resumeData.education) !== JSON.stringify(education)
+    ) {
+      setEducation(resumeData.education);
+      // setHasInitialized(true);
+      enableNext(true);
+    }
+  }, [resumeData]);
 
-//   // ✅ Sync from resumeData after load (run only once or when resumeData.education changes)
-//   useEffect(() => {
-//     if (Array.isArray(resumeData?.education) && resumeData.education.length > 0) {
-//       setEducation(resumeData.education);
-//     }
-//   }, [resumeData?.education]); // <--- Only depend on resumeData.education
+  //   //  Sync from resumeData after load (run only once or when resumeData.education changes)
+  //   useEffect(() => {
+  //     if (Array.isArray(resumeData?.education) && resumeData.education.length > 0) {
+  //       setEducation(resumeData.education);
+  //     }
+  //   }, [resumeData?.education]); // <--- Only depend on resumeData.education
 
-//   // ✅ Sync local -> context on changes
-//   useEffect(() => {
-//     updateEducation(education);
-//     setResumeData(prev => ({ ...prev, education }));
-//     enableNext(false);
-//   }, [education]);
-// // ...existing code...
+  //   //  Sync local -> context on changes
+  //   useEffect(() => {
+  //     updateEducation(education);
+  //     setResumeData(prev => ({ ...prev, education }));
+  //     enableNext(false);
+  //   }, [education]);
+  // // ...existing code...
 
   const handleChange = (e, index) => {
     const { name, value, type, checked } = e.target;
     const updated = education.map((item, i) =>
       i === index
         ? {
-            ...item,
-            [name]: type === "checkbox" ? checked : value,
-            ...(name === "currentlyStudying" && checked ? { endDate: "" } : {}),
-          }
+          ...item,
+          [name]: type === "checkbox" ? checked : value,
+          ...(name === "currentlyStudying" && checked ? { endDate: "" } : {}),
+        }
         : item
     );
     setEducation(updated);
@@ -95,28 +95,36 @@ useEffect(() => {
     setLoading(true);
 
     try {
-    const isValid = education.every(
-      (item) =>
-        item.institution.trim() !== "" &&
-        item.degree.trim() !== "" &&
-        item.field.trim() !== "" &&
-        item.startDate !== "" &&
-        (item.currentlyStudying || item.endDate !== "") &&
-        item.description.trim() !== ""
-    );
+      const isValid = education.every(
+        (item) =>
+          item.institution.trim() !== "" &&
+          item.degree.trim() !== "" &&
+          item.field.trim() !== "" &&
+          item.startDate !== "" &&
+          (item.currentlyStudying || item.endDate !== "") &&
+          item.description.trim() !== ""
+      );
 
-    if (!isValid) {
-      toast.error("Please fill all required fields");
-      enableNext(false);
-      setLoading(false);
-      return;
-    }
+      if (!isValid) {
+        toast.error("Please fill all required fields");
+        enableNext(false);
+        setLoading(false);
+        return;
+      }
 
-      updateEducation(education);
+      // Trim dates to "YYYY-MM-DD"
+      const trimmedEducation = education.map(item => ({
+        ...item,
+        startDate: item.startDate?.slice(0, 10),
+        endDate: item.currentlyStudying ? null : item.endDate?.slice(0, 10),
+      }));
 
-      await updateResumeSection({ education }); // ✅ Save to backend
+      updateEducation(trimmedEducation);
+
+
+      await updateResumeSection({ education: trimmedEducation  }); //  Save to backend
       toast.success("Education information saved");
-      enableNext(true); // ✅ Enable next only after successful save
+      enableNext(true); //  Enable next only after successful save
     } catch (error) {
       console.error("Error saving education:", error);
       toast.error("Failed to save education to server");
@@ -202,6 +210,9 @@ useEffect(() => {
                   className={`form-control p-1 ${wasValidated && !item.startDate ? "is-invalid" : ""}`}
                   required
                 />
+                {wasValidated && !item.startDate.trim() && (
+                  <div className="invalid-feedback">startDate is required.</div>
+                )}
               </div>
 
               {/* End Date */}
@@ -216,6 +227,9 @@ useEffect(() => {
                   required={!item.currentlyStudying}
                   disabled={item.currentlyStudying}
                 />
+                {wasValidated && !item.endDate.trim() && (
+                  <div className="invalid-feedback">endDate is required.</div>
+                )}
                 <FormControlLabel
                   control={
                     <Checkbox

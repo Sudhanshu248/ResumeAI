@@ -20,7 +20,7 @@ export default function Education({ resumes }) {
               {education.field} — {education.degree}
             </p>
             <p className="text-end m-0">
-              {education.startDate} - {education.currentlyStudying ? "Present" : education.endDate}
+              {education.startDate?.slice(0, 10)} - {education.currentlyStudying ? "Present" : education.endDate?.slice(0, 10)}
             </p>
           </div>
 
