@@ -7,7 +7,7 @@ export default function LogInPage(){
         <>
             <div className="boxs p-4" style={{marginTop: "5vh"}}>
                     <div className="left-img">
-                        <img src="/image/Sign.png"  alt="" />
+                        <img src="/image/Sign.png"  alt="Login Image" />
                     </div>
 
                     <div className="right-box signin ">

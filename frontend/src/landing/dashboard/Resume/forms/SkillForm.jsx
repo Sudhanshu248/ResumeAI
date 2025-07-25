@@ -109,7 +109,6 @@ export default function SkillForm({ enableNext }) {
     try {
       updateSkills(skills);
       const response = await updateResumeSection({ skills });
-      console.log("Skills saved successfully:", response);
       toast.success("Skills saved successfully!");
       enableNext(true);
     } catch (err) {

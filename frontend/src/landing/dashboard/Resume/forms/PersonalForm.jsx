@@ -29,7 +29,6 @@ export default function PersonalForm({ enableNext }) {
 
 
     useEffect(() => {
-        console.log("resumeData.personalInfo on mount:", resumeData?.personalInfo);
     }, [resumeData]);
 
 
@@ -69,7 +68,6 @@ export default function PersonalForm({ enableNext }) {
             updatePersonalInfo(personalInfo);
 
             const response = await updateResumeSection({ personalInfo });
-            console.log(" Server response after update:", response);
             toast.success("Personal details saved");
             enableNext(true);
         } catch (error) {

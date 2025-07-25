@@ -21,8 +21,6 @@ export const updateResume = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
     
-    console.log("Update request body:", updates);
-    
     const updatedResume = await Resume.findOneAndUpdate(
       { _id: id, userId: user._id },
       { $set: updates },

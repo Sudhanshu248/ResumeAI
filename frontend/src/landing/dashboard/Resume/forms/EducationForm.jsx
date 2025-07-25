@@ -55,7 +55,6 @@ export default function EducationForm({ enableNext }) {
     );
     setEducation(updated);
     updateEducation(updated);
-    // console.log(`Education form =  ${prompt}`);
 
   };
   const handleAI = async (index) => {
@@ -103,7 +102,7 @@ export default function EducationForm({ enableNext }) {
         toast.error("AI did not return a response");
       }
     } catch (err) {
-      console.error("❌ AI Error:", err);
+      console.error("AI Error:", err);
       toast.error("Failed to generate summary.");
     } finally {
       setLoading(false);

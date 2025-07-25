@@ -54,7 +54,6 @@ export default function ExperienceForm({ enableNext }) {
             const exp = experience[index];
             // const prompt = `Generate exactly 2 short lines summarizing the academic experience of someone with a ${edu.degree} in ${edu.field} from ${edu.institution}. Focus on practical skills, projects, or learning outcomes. Avoid placeholders like [Specific Area]. Keep the language concise and ready for a resume.`;
             const prompt = `Generate 2 lines impactful job description, based on the job title- ${exp?.jobTitle}, company- ${exp?.companyName}`;
-            console.log(`Prompt for AI: ${prompt}`);
 
             const response = await fetch(`${BASE_URL}/generate-summary`, {
                 method: "POST",
@@ -135,7 +134,6 @@ export default function ExperienceForm({ enableNext }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Save button clicked!");
         setWasValidated(true);
         setLoading(true);
 
@@ -164,11 +162,9 @@ export default function ExperienceForm({ enableNext }) {
             }));
 
             updateExperience(trimmedExperience); // Correct flat array
-            console.log("Experience data to be saved:", trimmedExperience);
 
 
             const response = await updateResumeSection({ experience: trimmedExperience });
-            console.log(" Server response after update:", response);
 
             toast.success("Experience information saved");
             enableNext(true);

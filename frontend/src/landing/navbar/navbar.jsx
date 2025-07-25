@@ -28,7 +28,7 @@ export default function Navbar() {
         const token = localStorage.getItem("token"); // assuming you store JWT in localStorage
 
         if (!token) {
-          console.log("No token found");
+          console.error("No token found");
           return;
         }
 
@@ -38,7 +38,6 @@ export default function Navbar() {
           },
         });
 
-        console.log("Username:", response.data.username);
         setUsername(response.data.username)
       } catch (error) {
         console.error("Error loading user:", error.response?.data?.message || error.message);
@@ -77,7 +76,11 @@ export default function Navbar() {
               <Link className="nav-link" to="/signup">Sign Up</Link>
             </Button>
             :
-            <div>{Username }</div>
+            <div className='user'>
+              <img src="/image/user.png" alt="Default User Image" width="10px"/>
+              <div style={{color: "black"}}>{Username }</div>
+            </div>
+
           }
           <span className="material-symbols-outlined px-3" style={{ cursor: "pointer", color: "black" }} onClick={toggleTheme}>
             dark_mode

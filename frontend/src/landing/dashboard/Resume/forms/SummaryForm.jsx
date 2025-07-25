@@ -14,7 +14,6 @@ export default function SummaryForm({ enableNext }) {
   const [wasValidated, setWasValidated] = useState(false);
 
   const prompt = `Job Title: cloud engineer, based on my job title, Write a professional resume summary in 3-4 lines, plain text only — no formatting, markdown, or bullet points.`;
-  console.log(`Job title = ${resumeData?.personalInfo?.jobTitle}`);
   
   // ✅ Sync state on mount (like PRG)
 useEffect(() => {

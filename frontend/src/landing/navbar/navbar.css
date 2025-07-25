@@ -5,6 +5,19 @@
     padding: 0.5rem;
 }
 
+.user{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-inline: 5px;
+}
+
+.user img{
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+}
+
 .nav-row{
     display: flex;
     justify-content: space-between;

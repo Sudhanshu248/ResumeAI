@@ -68,7 +68,6 @@ const loadResume = async (resumeId) => {
   //  Save current resume to backend
   const saveResume = async (resumeId) => {
     const token = localStorage.getItem("token");
-    console.log("saveResume funciton is running ", resumeData);
     try {
       await axios.put(`${BASE_URL}/update-resume/${resumeId}`, resumeData, {
         headers: {
@@ -100,7 +99,6 @@ const loadResume = async (resumeId) => {
         }
       );
 
-      // console.log("🔍 Raw response object:", response); // <== Add this
 
       setResumeData((prev) => ({ ...prev, ...updatedFields }));
       return response.data; // <== This is where the data should come from
@@ -116,7 +114,6 @@ const loadResume = async (resumeId) => {
   //  Create new resume
   const createResume = async (newResume = {}) => {
     const token = localStorage.getItem("token");
-    console.log("Create Resume  funciton is running ", newResume);
     try {
       const response = await axios.post(`${BASE_URL}/create-resume`, newResume, {
         headers: {
