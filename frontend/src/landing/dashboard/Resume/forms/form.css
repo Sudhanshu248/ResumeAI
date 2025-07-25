@@ -1,0 +1,26 @@
+
+@media screen and (max-width: 700px){
+.experience-addbtn{
+flex-direction: column;
+}
+.education-addbtn{
+flex-direction: column;
+}
+
+.form-experience{
+display: flex;
+flex-wrap: wrap;
+
+}
+.form-education{
+display: flex;
+flex-wrap: wrap;
+
+}
+    
+}
+@media screen and (max-width: 500px){
+.experience-form-container{
+padding: 0px;
+}
+}

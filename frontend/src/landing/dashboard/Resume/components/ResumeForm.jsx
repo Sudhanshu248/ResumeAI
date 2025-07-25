@@ -15,7 +15,7 @@ export default function ResumeForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const step = parseInt(searchParams.get("step")) || 2;
+  const step = parseInt(searchParams.get("step")) || 1;
 
   const [enableNext, setEnableNext] = useState(false);
   const { resumeData, updateThemeColor, loadResume } = useResume();
@@ -73,7 +73,7 @@ export default function ResumeForm() {
             </Button>
           )}
 
-          {step < 6 && enableNext && (
+          {step < 6 && step>0 && enableNext && (
             <Button
               variant="contained"
               color="info"
