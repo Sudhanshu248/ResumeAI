@@ -16,7 +16,7 @@ export default function Personal({ resumes }) {
         <p className="text-center fw-medium">{personal.address}</p>
       )}
 
-      <div className="d-flex justify-content-center gap-4 flex-wrap mb-2">
+      <div className="d-flex justify-content-between gap-4 flex-wrap mb-2" style={{width: "55%", margin: "0 auto"}}>
         {personal.phone && <p className="m-0">{personal.phone}</p>}
         {personal.email && <p className="m-0">{personal.email}</p>}
       </div>

@@ -106,8 +106,8 @@ export default function Signup() {
                         <p>Already have an account? &nbsp;</p>
                     </div>
 
-                    <Button type="button" className='login-button'>
-                        <Link to="/login">
+                    <Button type="button" className='login-button pt-0'>
+                        <Link to="/login" style={{ textDecoration: "none", fontWeight: "bold"}}>
                             Log In
                         </Link>
                     </Button>

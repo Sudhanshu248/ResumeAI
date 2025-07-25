@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
@@ -19,15 +20,19 @@ export default function PersonalForm({ enableNext }) {
 
     //  Sync form state when resumeData is loaded
 useEffect(() => {
-  if (
-    resumeData?.personalInfo &&
-    Object.keys(resumeData.personalInfo).length > 0 &&
-    JSON.stringify(resumeData.personalInfo) !== JSON.stringify(personalInfo)
-  ) {
-    setPersonalInfo(resumeData.personalInfo); // ✅ Correct: set object
+  const info = resumeData?.personalInfo;
+  if (info && Object.keys(info).length > 0) {
+    setPersonalInfo(info);
     enableNext(true);
   }
+}, [resumeData]); // ✅ use the full object instead of .personalInfo
+
+
+useEffect(() => {
+  console.log("resumeData.personalInfo on mount:", resumeData?.personalInfo);
 }, [resumeData]);
+
+
 
 const handleChange = (e) => {
   const { name, value } = e.target;
@@ -71,7 +76,7 @@ const handleChange = (e) => {
 
 
     return (
-        <div
+        <div 
             className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
             style={{
                 height: "fit-content",
@@ -85,7 +90,7 @@ const handleChange = (e) => {
 
             <form className="needs-validation" noValidate onSubmit={handleSubmit}>
 
-                            <div className="row g-3 justify-content-between">
+                            <div className="row g-2 justify-content-between border border-1 border-dark rounded-3 p-3 py-4">
                     <div className="col d-flex flex-column">
                         <label htmlFor="firstName" className="mb-1 fw-medium">First Name</label>
                         <input
@@ -167,11 +172,10 @@ const handleChange = (e) => {
                     </div>
 
                     <div className="col d-flex flex-column">
-                        <label htmlFor="email" className=" fw-medium">Email</label>
+                        <label htmlFor="email" className="mb-1 fw-medium">Email</label>
                         <input
                             type="email"
                             name="email"
-                            id="email"
                             style={{marginBottom: "0px !important"}}
                             className={`p-1 form-control ${wasValidated && !personalInfo.email ? "is-invalid" : ""}`}
                             value={personalInfo.email || ""}
@@ -184,16 +188,19 @@ const handleChange = (e) => {
                     </div>
 
 
-                    <div className="d-flex justify-content-center align-items-center text-end mt-3">
-                        <button
-                            className="btn btn-primary text-white fw-semibold fs-5 mx-auto px-4 py-2"
-                            style={{ width: "7rem" }}
-                            type="submit"
-                        >
-                            {loading ? <CircularProgress size={20} /> : "Save"}
-                        </button>
-                    </div>
                 </div>
+        <div className="d-flex justify-content-center mt-4">
+
+                         <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={loading}
+            sx={{ width: "7rem", fontWeight: 600, fontSize: "1rem" }}
+          >
+            {loading ? <CircularProgress size={20} /> : "Save"}
+          </Button>
+                    </div>
             </form>
         </div>
     );
