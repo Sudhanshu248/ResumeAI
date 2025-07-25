@@ -171,7 +171,7 @@ export default function PersonalForm({ enableNext }) {
                         <input
                             type="email"
                             name="email"
-                            id="email"
+                            id="emails"
                             style={{ marginBottom: "0px !important" }}
                             className={`p-1 form-control ${wasValidated && !personalInfo.email ? "is-invalid" : ""}`}
                             value={personalInfo.email || ""}
