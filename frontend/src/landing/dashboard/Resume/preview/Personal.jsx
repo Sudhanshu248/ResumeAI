@@ -1,9 +1,11 @@
+import '../resume.css'
+
 export default function Personal({ resumes }) {
   const personal = resumes?.personalInfo || {};
   const themeColor = resumes?.themeColor || "#0d6efd";
 
   return (
-    <div className="pe-3 ps-3 pt-3 m-0">
+    <div className="pe-3 ps-3 pt-3 m-0 " style={{textAlign:"center"}}>
       <h2 className="text-center fs-4 fw-bold">
         {personal.firstName} {personal.lastName}
       </h2>
@@ -16,7 +18,7 @@ export default function Personal({ resumes }) {
         <p className="text-center fw-medium">{personal.address}</p>
       )}
 
-      <div className="d-flex justify-content-between gap-4 flex-wrap mb-2" style={{width: "55%", margin: "0 auto"}}>
+      <div className="d-flex justify-content-between align-items-center gap-2  mb-2 preview-personal" style={{width: "100%"}}>
         {personal.phone && <p className="m-0">{personal.phone}</p>}
         {personal.email && <p className="m-0">{personal.email}</p>}
       </div>

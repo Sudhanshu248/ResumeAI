@@ -1,0 +1,11 @@
+
+@media screen and (max-width: 450px) {
+   .viewresume-btn-container{
+    flex-direction: column;
+}
+ 
+   .viewresume-btn{
+    width: 100%;
+}
+ 
+}

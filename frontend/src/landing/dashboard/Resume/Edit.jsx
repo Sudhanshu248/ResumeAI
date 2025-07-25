@@ -19,7 +19,7 @@ export default function EditResume() {
                     <ResumeForm />
                 </div>
 
-                <div className="preview-column col rounded-3 mb-3">
+                <div className="col col-no-grow  preview-column  rounded-3 mb-3">
                     <ResumePreview />
                 </div>
             </div>

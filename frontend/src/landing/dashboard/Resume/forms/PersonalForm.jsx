@@ -19,18 +19,18 @@ export default function PersonalForm({ enableNext }) {
     });
 
     //  Sync form state when resumeData is loaded
-useEffect(() => {
-  const info = resumeData?.personalInfo;
-  if (info && Object.keys(info).length > 0) {
-    setPersonalInfo(info);
-    enableNext(true);
-  }
-}, [resumeData]); // ✅ use the full object instead of .personalInfo
+    useEffect(() => {
+        const info = resumeData?.personalInfo;
+        if (info && Object.keys(info).length > 0) {
+            setPersonalInfo(info);
+            enableNext(true);
+        }
+    }, [resumeData]); // ✅ use the full object instead of .personalInfo
 
 
-useEffect(() => {
-  console.log("resumeData.personalInfo on mount:", resumeData?.personalInfo);
-}, [resumeData]);
+    useEffect(() => {
+        console.log("resumeData.personalInfo on mount:", resumeData?.personalInfo);
+    }, [resumeData]);
 
 
     useEffect(() => {
@@ -85,7 +85,7 @@ useEffect(() => {
 
 
     return (
-        <div 
+        <div
             className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
             style={{
                 height: "fit-content",
@@ -99,7 +99,7 @@ useEffect(() => {
 
             <form className="needs-validation" noValidate onSubmit={handleSubmit}>
 
-                            <div className="row g-2 justify-content-between border border-1 border-dark rounded-3 p-3 py-4">
+                <div className="row g-2 justify-content-between border border-1 border-dark rounded-3 p-1 p-sm-3 py-4">
                     <div className="col d-flex flex-column">
                         <label htmlFor="firstName" className="mb-1 fw-medium">First Name</label>
                         <input
@@ -197,18 +197,18 @@ useEffect(() => {
 
 
                 </div>
-        <div className="d-flex justify-content-center mt-4">
+                <div className="d-flex justify-content-center mt-4">
 
-                         <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            disabled={loading}
-            sx={{ width: "7rem", fontWeight: 600, fontSize: "1rem" }}
-          >
-            {loading ? <CircularProgress size={20} /> : "Save"}
-          </Button>
-                    </div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={loading}
+                        sx={{ width: "7rem", fontWeight: 600, fontSize: "1rem" }}
+                    >
+                        {loading ? <CircularProgress size={20} /> : "Save"}
+                    </Button>
+                </div>
             </form>
         </div>
     );

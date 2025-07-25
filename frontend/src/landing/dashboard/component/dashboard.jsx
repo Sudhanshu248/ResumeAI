@@ -83,7 +83,7 @@ export default function Dashboard() {
 
         <div className="container">
           <div className="row d-flex flex-wrap">
-            <div className="col " onClick={handleClickOpen}>
+            <div className="col card-flex" onClick={handleClickOpen}>
               <AddResume />
             </div>
 
@@ -94,7 +94,7 @@ export default function Dashboard() {
             ) : (
               resumes.map(resume => (
                 <div
-                  className="col card-logo-1"
+                  className="col card-logo-1 card-flex"
                   key={resume._id}
                   onClick={() => navigate(`/resume/${resume._id}/view`)}
                 >

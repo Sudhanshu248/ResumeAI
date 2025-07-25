@@ -12,11 +12,16 @@
     box-shadow: rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1070px) {
     .edit-form {
         display: flex;
         flex-direction: column;
     }
+ 
+}
+
+@media screen and (max-width: 800px) {
+   
    .preview-column{
         margin-top: 1.2rem;
     }
@@ -24,3 +29,11 @@
         width: 100%;
     }
 }
+
+
+@media screen and (max-width: 500px) {
+    .preview-personal {
+     flex-wrap: wrap;
+    }
+}
+
