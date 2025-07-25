@@ -85,13 +85,13 @@ export default function PersonalForm({ enableNext }) {
 
 
     return (
-        <div
-            className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
+        <div 
+            className="forms-cards pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
             style={{
                 height: "fit-content",
                 borderTop: "5px solid #0d6ff2f2",
-                boxShadow:
-                    "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px"
+                    boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
+
             }}
         >
             <h4 className="fw-bold pb-1 m-0 mt-2">Personal Detail</h4>

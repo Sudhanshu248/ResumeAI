@@ -123,12 +123,12 @@ export default function SkillForm({ enableNext }) {
 
   return (
     <div
-      className="pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
+      className="forms-cards pt-2 pb-5 ps-3 pe-3 rounded-4 mt-4"
       style={{
         height: "fit-content",
         borderTop: "5px solid #0d6ff2f2",
-        boxShadow:
-          "rgba(136, 165, 191, 0.48) 4px 4px 10px 0px, rgba(255, 255, 255, 0.8) -3px -3px 10px 0px",
+                    boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
+
       }}
     >
       <h4 className="fw-bold pb-1 m-0 mt-2">Skills</h4>
@@ -141,7 +141,7 @@ export default function SkillForm({ enableNext }) {
           <div key={skill.id} className="mb-4 p-3 border rounded-3">
             <div className="d-flex justify-content-between align-items-center mb-2">
               <h6 className="fw-semibold">Skill {index + 1}</h6>
-              <Button
+              {(skills.length > 1 && <Button
                 variant="outlined"
                 color="error"
                 size="small"
@@ -149,7 +149,7 @@ export default function SkillForm({ enableNext }) {
                 disabled={skills.length === 1}
               >
                 <DeleteIcon />
-              </Button>
+              </Button>)}
             </div>
 
             <div className="row g-3">
@@ -179,7 +179,7 @@ export default function SkillForm({ enableNext }) {
         ))}
 
         <div className="d-flex justify-content-between mt-4">
-          <Button variant="outlined" onClick={handleAddSkill}>
+          <Button variant="contained" onClick={handleAddSkill}>
             Add Skill
           </Button>
         </div>
