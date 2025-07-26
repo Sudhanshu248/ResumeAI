@@ -1,4 +1,3 @@
-//  Updated SkillForm.jsx for PRG
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,7 +24,6 @@ export default function SkillForm({ enableNext }) {
   useEffect(() => {
     if (Array.isArray(resumeData?.skills) && resumeData.skills.length > 0) {
       setSkills(resumeData.skills);
-      // enableNext(true);
     } else {
       enableNext(false);
     }

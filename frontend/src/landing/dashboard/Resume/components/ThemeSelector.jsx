@@ -3,13 +3,14 @@ import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import { LayoutGrid } from 'lucide-react';
 
+// Array of available theme options with names and corresponding colors
 const themes = [
-    { name: 'Blue', color: '#0d6efd' },    { name: 'Green', color: '#198754' },
+    { name: 'Blue', color: '#0d6efd' }, { name: 'Green', color: '#198754' },
     { name: 'Purple', color: '#6f42c1' }, { name: 'Red', color: '#dc3545' },
-    { name: 'Orange', color: '#fd7e14' },  { name: 'Teal', color: '#20c997' },
-    { name: 'Yellow', color: '#ffc107' },  { name: 'Pink', color: '#d63384' },
-    { name: 'Gray', color: '#6c757d' },    { name: 'Black', color: '#000000' },
-    { name: 'Brown', color: '#a52a2a' },  { name: 'Gold', color: '#ffd700' },
+    { name: 'Orange', color: '#fd7e14' }, { name: 'Teal', color: '#20c997' },
+    { name: 'Yellow', color: '#ffc107' }, { name: 'Pink', color: '#d63384' },
+    { name: 'Gray', color: '#6c757d' }, { name: 'Black', color: '#000000' },
+    { name: 'Brown', color: '#a52a2a' }, { name: 'Gold', color: '#ffd700' },
 ];
 
 export default function ThemeSelector({ currentTheme, onThemeChange }) {
@@ -27,14 +28,17 @@ export default function ThemeSelector({ currentTheme, onThemeChange }) {
 
     return (
         <>
-            <Button 
-                variant="outlined" 
-                color="info" 
+            {/* Button to trigger popover with LayoutGrid icon */}
+            <Button
+                variant="outlined"
+                color="info"
                 onClick={handleClick}
                 startIcon={<LayoutGrid />}
             >
                 Theme
             </Button>
+
+            {/* Popover showing theme options */}
             <Popover
                 open={open}
                 anchorEl={anchorEl}
@@ -48,6 +52,7 @@ export default function ThemeSelector({ currentTheme, onThemeChange }) {
                     horizontal: 'left',
                 }}
             >
+                {/* Theme color swatches */}
                 <div className="p-3" style={{ width: '200px' }}>
                     <h6 className="mb-3">Select Theme Color</h6>
                     <div className="d-flex flex-wrap gap-2">

@@ -13,7 +13,7 @@ export default function Navbar() {
   const [theme, setTheme] = useState("light-theme");
   const [Username, setUsername] = useState("")
 
-  // Logic of Dark Mode 
+  // Toggle between light and dark themes
   const toggleTheme = () => {
     if (theme === "dark-theme") {
       setTheme("light-theme");
@@ -22,6 +22,7 @@ export default function Navbar() {
     }
   }
 
+  // Load user data from backend on mount
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -29,6 +30,7 @@ export default function Navbar() {
 
         if (!token) {
           console.error("No token found");
+
           return;
         }
 
@@ -47,11 +49,10 @@ export default function Navbar() {
     loadData();
   }, []);
 
+  // Apply theme to the entire document body
   useEffect(() => {
     document.body.className = theme;
-  }, [theme])
-  // Finish logic
-
+  }, [theme]);
 
   const handleClick = () => {
     navigate('/');
@@ -70,6 +71,7 @@ export default function Navbar() {
           <img src="/image/logo.png" className="logo-image" alt="Company Logo" />
         </div>
 
+        {/* Navigation and theme toggle column */}
         <div className="nav-col-2 m-0">
           {shouldShowSignUp ?
             <Button variant="outlined">
@@ -82,6 +84,9 @@ export default function Navbar() {
             </div>
 
           }
+
+
+          {/* Dark mode toggle icon */}
           <span className="material-symbols-outlined px-3" style={{ cursor: "pointer", color: "black" }} onClick={toggleTheme}>
             dark_mode
           </span>

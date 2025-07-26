@@ -69,28 +69,32 @@ export default function Login() {
 
   return (
     <>
-        <div className="resume-cards box-form  pe-4 ps-4 pt-5 pb-5" style={{ height: "fit-content" }}>
-          <div className='box-form-h3 d-flex justify-content-center mb-3  border-top-0 border-start-0 border-end-0 border-dark'>
-            <h3 style={{ fontFamily: "'Poppins', sans-serif" }}>Log In </h3>
-          </div>
-
-          <p>{error && <div className="alert alert-danger">{error}</div>}</p>
-
-          <div className="input-box h-100 ">
-            <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <div className="login-btn mt-2 mb-3">
-            <Button variant="contained" color="primary" onClick={handleLogin} disabled={loading}>
-              Login
-            </Button>
-          </div>
+      {/* Main container for the Login form */}
+      <div className="resume-cards box-form  pe-4 ps-4 pt-5 pb-5" style={{ height: "fit-content" }}>
+        <div className='box-form-h3 d-flex justify-content-center mb-3  border-top-0 border-start-0 border-end-0 border-dark'>
+          <h3 style={{ fontFamily: "'Poppins', sans-serif" }}>Log In </h3>
         </div>
+
+        {/* Error message display if signup fails */}
+        <p>{error && <div className="alert alert-danger">{error}</div>}</p>
+
+        {/* Input fields for user registration */}
+        <div className="input-box h-100 ">
+          <input type="email" id="email" placeholder="Enter your email" className='mb-5 mt-3'
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input type="password" id="password" placeholder="Enter your password" className='mb-5 mt-3'
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        {/* Login button */}
+        <div className="login-btn mt-2 mb-3">
+          <Button variant="contained" color="primary" onClick={handleLogin} disabled={loading}>
+            Login
+          </Button>
+        </div>
+      </div>
     </>
   )
 }   

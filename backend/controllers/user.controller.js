@@ -1,3 +1,4 @@
+// Import dependencies and user model
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
@@ -12,25 +13,27 @@ const generateToken = (userId) => {
     return token;
 };
 
-// Signin Functionality
+// Signup Functionality
 export const signup = async (req, res) => {
-
     try {
-
         const { name, email, password, username } = req.body;
 
+        // Validate required fields
         if (!name || !email || !password || !username) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        // Check if user exists with a timeout
+        // Check if the user already exists
         const user = await User.findOne({ email }).maxTimeMS(5000);;
 
         if (user) {
             return res.status(400).json({ message: "User already exists" });
         }
 
+        // Hash password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create and save new user
         const newUser = new User({
             name,
             email,
@@ -38,13 +41,10 @@ export const signup = async (req, res) => {
             username
         });
 
-        // Save the user first to get the _id
         await newUser.save({ maxTimeMS: 10000 });
 
-        // Generate token with consistent structure
+        // Generate JWT and assign to user
         const token = generateToken(newUser._id);
-
-        // Update user's token in database
         newUser.token = token;
 
         await newUser.save({ maxTimeMS: 10000 });
@@ -64,6 +64,7 @@ export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // Check if user with email exists
         const user = await User.findOne({ email });
 
         if (!user) {
@@ -72,12 +73,12 @@ export const login = async (req, res) => {
             });
         }
 
+        // Compare entered password with hashed one
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (passwordMatch) {
-            // Generate token with consistent structure
+            // Generate token and update user's token field
             const token = generateToken(user._id);
-            // Update user's token in database
             user.token = token;
             await user.save();
 
@@ -97,11 +98,11 @@ export const login = async (req, res) => {
     }
 };
 
-
-// Get Username Function
+// Get authenticated user's username using JWT
 export const getUsername = async (req, res) => {
     const authHeader = req.headers.authorization;
-  
+
+    // Ensure token is provided in Bearer format
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: "No token provided" });
     }
@@ -111,6 +112,7 @@ export const getUsername = async (req, res) => {
     try {
         const decoded = jwt.verify(token, JWT_SECRETS);
 
+        // Retrieve only username field
         const user = await User.findById(decoded.id).select("username");
 
         if (!user) {
@@ -123,4 +125,3 @@ export const getUsername = async (req, res) => {
         return res.status(401).json({ message: "Invalid or expired token" });
     }
 };
-

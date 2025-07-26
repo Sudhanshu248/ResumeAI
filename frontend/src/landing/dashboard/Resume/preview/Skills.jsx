@@ -4,13 +4,14 @@ export default function Skills({ resumes }) {
 
   return (
     <div className="ps-3 pe-3 pt-4 pb-3">
-      
+      {/* Section title with dynamic theme color */}
       <h5 className="text-start" style={{ color: themeColor }}>
         Skills
       </h5>
 
       <div style={{ border: `0.5px solid ${themeColor}` }}></div>
 
+      {/* Loop through the skills array and render each skill item */}
       <div className="d-flex flex-wrap mt-3">
         {skills.map((skill, index) => (
           <div key={index} className="me-3 mb-3" style={{ minWidth: "200px" }}>

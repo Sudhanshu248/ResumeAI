@@ -31,9 +31,9 @@ export default function Card() {
                             <div className="card-logo fs-3 ">
                                 <i className="fa-solid fa-share-nodes card-logo-1"></i>
                             </div>
-                            <h1 className="fs-4">Share Your Resume
+                            <h1 className="fs-4">Download Your Resume
                             </h1>
-                            <p> After completing your resume, save it securely and generate a shareable link. Easily update your information anytime and share the link with potential employers or download it in a preferred format.</p>
+                            <p>This feature lets users easily download their resume from the platform in formats like PDF or DOCX, ensuring a smooth and user-friendly experience.</p>
                         </div>
                     </div>
 

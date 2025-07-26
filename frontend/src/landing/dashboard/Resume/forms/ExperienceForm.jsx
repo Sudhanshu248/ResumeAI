@@ -11,6 +11,7 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 import { BASE_URL } from "../../../../axiosConfig.js";
 import './form.css';
 
+// Default structure for an education entry
 const createNewExperience = () => ({
     id: uuidv4(),
     jobTitle: "",
@@ -52,7 +53,6 @@ export default function ExperienceForm({ enableNext }) {
             }
 
             const exp = experience[index];
-            // const prompt = `Generate exactly 2 short lines summarizing the academic experience of someone with a ${edu.degree} in ${edu.field} from ${edu.institution}. Focus on practical skills, projects, or learning outcomes. Avoid placeholders like [Specific Area]. Keep the language concise and ready for a resume.`;
             const prompt = `Generate 2 lines impactful job description, based on the job title- ${exp?.jobTitle}, company- ${exp?.companyName}`;
 
             const response = await fetch(`${BASE_URL}/generate-summary`, {
@@ -87,7 +87,7 @@ export default function ExperienceForm({ enableNext }) {
                 toast.error("AI did not return a response");
             }
         } catch (err) {
-            console.error("❌ AI Error:", err);
+            console.error(" AI Error:", err);
             toast.error("Failed to generate summary.");
         } finally {
             setLoading(false);
@@ -181,7 +181,7 @@ export default function ExperienceForm({ enableNext }) {
             style={{
                 height: "fit-content",
                 borderTop: "5px solid #0d6ff2f2",
-                                   boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
+                boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
 
             }}
         >
@@ -289,28 +289,7 @@ export default function ExperienceForm({ enableNext }) {
                                             label="Currently working here"
                                         />
                                     </div>
-{/* 
-                                    <div className=" d-flex flex-column justify-content-center align-items-center" style={{ width: "100%" }}>
-                                        <Button
-                                            variant="outlined"
-                                            color="info"
-                                            onClick={() => handleAI(index)}
-                                            disabled={loading}
-                                            type="button"
-
-                                            sx={{
-                                                borderColor: "rgba(193, 87, 246, 0.95)",
-                                                backgroundColor: "rgba(255, 255, 255, 0.95)",
-                                                color: "rgba(168, 36, 220, 0.95)",
-                                                fontWeight: 400,
-                                                height: "50px",
-                                                width: "fit-content",
-                                            }}
-                                        >
-                                            {loading ? <CircularProgress size={18} /> : "Generate from AI"}
-                                        </Button>
-                                    </div> */}
-                                </div>
+ </div>
 
 
                                     {/* Generative AI Button */}
@@ -319,7 +298,7 @@ export default function ExperienceForm({ enableNext }) {
           <Button
             variant="outlined"
             color="info"
-            onClick={handleAI}
+            onClick={() => handleAI(index)}
             disabled={loading}
             type="button"
             sx={{
@@ -332,6 +311,7 @@ export default function ExperienceForm({ enableNext }) {
             {loading ? <CircularProgress size={18} /> : "Generate From AI"}
           </Button>
         </div>
+
 
 
               {/* Description */}
