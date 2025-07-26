@@ -39,20 +39,21 @@ export default function ResumeForm() {
     setSearchParams({ step: step - 1 });
   };
 
+  // Function to render the correct form based on the current step
   const renderForm = () => {
     switch (step) {
       case 1:
-        return <PersonalForm enableNext={setEnableNext} />;
+        return <PersonalForm enableNext={setEnableNext} />; // Step 1: Personal details
       case 2:
-        return <SummaryForm enableNext={setEnableNext} />;
+        return <SummaryForm enableNext={setEnableNext} />;  // Step 2: Summary
       case 3:
-        return <ExperienceForm enableNext={setEnableNext} />;
+        return <ExperienceForm enableNext={setEnableNext} />; // Step 3: Experience
       case 4:
-        return <EducationForm enableNext={setEnableNext} />;
+        return <EducationForm enableNext={setEnableNext} />;  // Step 4: Education
       case 5:
-        return <SkillForm enableNext={setEnableNext} />;
+        return <SkillForm enableNext={setEnableNext} />;      // Step 5: Skills
       case 6:
-        return <Navigate to={`/resume/${id}/view`} />;
+        return <Navigate to={`/resume/${id}/view`} />;        // Step 6: Navigate to final preview
       default:
         return null;
     }
@@ -60,12 +61,16 @@ export default function ResumeForm() {
 
   return (
     <div className="py-2">
+      {/* Header section with Theme selector and Navigation buttons */}
       <div className="d-flex justify-content-between mb-3">
+
+        {/* Theme color selector component */}
         <ThemeSelector
           currentTheme={resumeData?.themeColor}
           onThemeChange={handleThemeChange}
         />
 
+        {/* Navigation buttons (Back and Next) */}
         <div className="d-flex gap-2">
           {step > 1 && (
             <Button variant="contained" color="info" onClick={handleBack}>
@@ -73,7 +78,8 @@ export default function ResumeForm() {
             </Button>
           )}
 
-          {step < 6 && step>0 && enableNext && (
+          {/* Show 'Next' button only if not on final step and current step is valid */}
+          {step < 6 && step > 0 && enableNext && (
             <Button
               variant="contained"
               color="info"

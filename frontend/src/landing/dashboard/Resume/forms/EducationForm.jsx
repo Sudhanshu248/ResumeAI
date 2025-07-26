@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useResume } from "../../../../context/ResumeContext.jsx";
 import { BASE_URL } from "../../../../axiosConfig.js";
 
+// Default structure for an education entry
 const defaultEducation = {
   id: uuidv4(),
   institution: "",
@@ -28,6 +29,7 @@ export default function EducationForm({ enableNext }) {
 
   const [education, setEducation] = useState([{ ...defaultEducation }]);
 
+  // Load existing education data from resume context (if any)
   useEffect(() => {
     if (
       Array.isArray(resumeData?.education) &&
@@ -55,9 +57,9 @@ export default function EducationForm({ enableNext }) {
     );
     setEducation(updated);
     updateEducation(updated);
-    // console.log(`Education form =  ${prompt}`);
-
   };
+
+
   const handleAI = async (index) => {
     setLoading(true);
     try {
@@ -103,7 +105,7 @@ export default function EducationForm({ enableNext }) {
         toast.error("AI did not return a response");
       }
     } catch (err) {
-      console.error("❌ AI Error:", err);
+      console.error(" AI Error:", err);
       toast.error("Failed to generate summary.");
     } finally {
       setLoading(false);

@@ -18,9 +18,11 @@ export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [newResumeTitle, setNewResumeTitle] = useState('');
   const [loader, setLoader] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
+  // Handler to delete a resume by ID
   const handleDeleteResume = async (resumeId) => {
     try {
       await deleteResume(resumeId);
@@ -29,7 +31,7 @@ export default function Dashboard() {
     }
   };
 
-
+  // Handler to create a new resume
   const onCreateResume = async () => {
     try {
       setLoader(true);
@@ -55,7 +57,7 @@ export default function Dashboard() {
     }
   };
 
-  const [loading, setLoading] = useState(true);
+  // Load resumes on initial render
   useEffect(() => {
     const loadResumes = async () => {
       setLoading(true);
@@ -77,6 +79,7 @@ export default function Dashboard() {
 
   return (
     <>
+      {/* Header Section */}
       <div className="p-5 ms-3 mt-3">
         <h1 className="fs-3 fw-bold">My Resume </h1>
         <p className="fs-5 opacity-75">Start creating your resume for your next job</p>
@@ -87,6 +90,7 @@ export default function Dashboard() {
               <AddResume />
             </div>
 
+            {/* Resume List Rendering */}
             {loading ? (
               <p>Loading resumes...</p>
             ) : resumes.length === 0 ? (
@@ -107,6 +111,7 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Dialog for Creating New Resume */}
         <Dialog
           open={open}
           onClose={handleClose}

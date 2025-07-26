@@ -9,8 +9,6 @@ import NotFound from './landing/notFound/Notfound'
 import GoToTop from './landing/goToTop/GoToTop'
 import ViewResume from './landing/viewResume/view/viewResume'
 import { ResumeProvider } from './context/ResumeContext'
-import ConnectionTest from './components/ConnectionTest'
-import Signup from './landing/Signup/Signup'
 import LogInPage from './landing/login/Loginpage'
 import SignUpPage from './landing/Signup/SignupPage';
 
@@ -20,7 +18,6 @@ function App() {
       <BrowserRouter>
 
         <Navbar />
-        <ConnectionTest />
 
         <Routes>
           <Route path='/' element={<HomePage />} />

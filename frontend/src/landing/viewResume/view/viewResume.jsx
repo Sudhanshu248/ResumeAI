@@ -6,11 +6,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 
-export default function ViewResume() { 
+export default function ViewResume() {
     const { id } = useParams();
     const { resumeData, setResumeData, loadResume } = useResume();
     const navigate = useNavigate();
 
+    // Load resume data when component mounts or when 'id' changes
     useEffect(() => {
         if (id) {
             loadResume(id);
@@ -23,6 +24,7 @@ export default function ViewResume() {
 
     return (
         <>
+            {/* Section excluded from print view */}
             <div id="no-print">
                 <div className="text-center p-3 m-2">
                     <h2 className="text-success p-2 rounded-3">Congratulations! Your resume has been successfully created.</h2>
@@ -49,6 +51,7 @@ export default function ViewResume() {
                 </div>
             </div>
 
+            {/* Render the resume preview (printable area) */}
             <div className="mt-3" style={{ width: '90%', margin: '0 auto 4rem' }}>
                 <ResumePreview />
             </div>

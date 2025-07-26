@@ -11,6 +11,7 @@ import { useResume } from "../../../../context/ResumeContext.jsx";
 import { BASE_URL } from "../../../../axiosConfig.js";
 import './form.css';
 
+// Default structure for an education entry
 const createNewExperience = () => ({
     id: uuidv4(),
     jobTitle: "",
@@ -52,10 +53,8 @@ export default function ExperienceForm({ enableNext }) {
             }
 
             const exp = experience[index];
-            // const prompt = `Generate exactly 2 short lines summarizing the academic experience of someone with a ${edu.degree} in ${edu.field} from ${edu.institution}. Focus on practical skills, projects, or learning outcomes. Avoid placeholders like [Specific Area]. Keep the language concise and ready for a resume.`;
             const prompt = `Generate 2 lines impactful job description, based on the job title- ${exp?.jobTitle}, company- ${exp?.companyName}`;
-            console.log(`Prompt for AI: ${prompt}`);
-
+            
             const response = await fetch(`${BASE_URL}/generate-summary`, {
                 method: "POST",
                 headers: {
@@ -88,7 +87,7 @@ export default function ExperienceForm({ enableNext }) {
                 toast.error("AI did not return a response");
             }
         } catch (err) {
-            console.error("❌ AI Error:", err);
+            console.error(" AI Error:", err);
             toast.error("Failed to generate summary.");
         } finally {
             setLoading(false);
@@ -135,7 +134,6 @@ export default function ExperienceForm({ enableNext }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Save button clicked!");
         setWasValidated(true);
         setLoading(true);
 
@@ -164,11 +162,8 @@ export default function ExperienceForm({ enableNext }) {
             }));
 
             updateExperience(trimmedExperience); // Correct flat array
-            console.log("Experience data to be saved:", trimmedExperience);
-
 
             const response = await updateResumeSection({ experience: trimmedExperience });
-            console.log(" Server response after update:", response);
 
             toast.success("Experience information saved");
             enableNext(true);
@@ -185,7 +180,7 @@ export default function ExperienceForm({ enableNext }) {
             style={{
                 height: "fit-content",
                 borderTop: "5px solid #0d6ff2f2",
-                                   boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
+                boxShadow: "rgba(0, 0, 0, 0.1) 1px 1px 12px 0px, rgba(0, 0, 0, 0.1) 4px 4px 12px 0px,  rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset"
 
             }}
         >
@@ -320,23 +315,23 @@ export default function ExperienceForm({ enableNext }) {
 
                                 {/* Description */}
                                 <div className="d-flex justify-content-between align-items-center px-2 mt-4">
-          <div></div>
-          <Button
-            variant="outlined"
-            color="info"
-            onClick={handleAI}
-            disabled={loading}
-            type="button"
-            sx={{
-              borderColor: "rgba(193, 87, 246, 0.95)",
-              backgroundColor: "rgba(255, 255, 255, 0.95)",
-              color: "rgba(168, 36, 220, 0.95)",
-              fontWeight: 400,
-            }}
-          >
-            {loading ? <CircularProgress size={18} /> : "Generate From AI"}
-          </Button>
-        </div>
+                                    <div></div>
+                                    <Button
+                                        variant="outlined"
+                                        color="info"
+                                        onClick={handleAI}
+                                        disabled={loading}
+                                        type="button"
+                                        sx={{
+                                            borderColor: "rgba(193, 87, 246, 0.95)",
+                                            backgroundColor: "rgba(255, 255, 255, 0.95)",
+                                            color: "rgba(168, 36, 220, 0.95)",
+                                            fontWeight: 400,
+                                        }}
+                                    >
+                                        {loading ? <CircularProgress size={18} /> : "Generate From AI"}
+                                    </Button>
+                                </div>
 
 
 

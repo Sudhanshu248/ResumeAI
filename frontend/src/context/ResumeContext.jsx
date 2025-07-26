@@ -50,25 +50,25 @@ export const ResumeProvider = ({ children }) => {
 
 
   //  Load resume by ID
-const loadResume = async (resumeId) => {
-  const token = localStorage.getItem("token");
-  try {
-    const response = await axios.get(`${BASE_URL}/resume-by-id/${resumeId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const resume = response.data.resume;
-    setResumeData(resume);
-    setCurrentResumeId(resume._id);
-  } catch (error) {
-    console.error("Error loading resume:", error);
-  }
-};
+  const loadResume = async (resumeId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/resume-by-id/${resumeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const resume = response.data.resume;
+      setResumeData(resume);
+      setCurrentResumeId(resume._id);
+    } catch (error) {
+      console.error("Error loading resume:", error);
+    }
+  };
 
 
   //  Save current resume to backend
   const saveResume = async (resumeId) => {
     const token = localStorage.getItem("token");
-    console.log("saveResume funciton is running ", resumeData);
+
     try {
       await axios.put(`${BASE_URL}/update-resume/${resumeId}`, resumeData, {
         headers: {
@@ -99,11 +99,9 @@ const loadResume = async (resumeId) => {
           },
         }
       );
-
-      // console.log("🔍 Raw response object:", response); // <== Add this
-
       setResumeData((prev) => ({ ...prev, ...updatedFields }));
       return response.data; // <== This is where the data should come from
+
     } catch (error) {
       console.error("Error updating resume section:", error);
       throw error;
@@ -116,7 +114,7 @@ const loadResume = async (resumeId) => {
   //  Create new resume
   const createResume = async (newResume = {}) => {
     const token = localStorage.getItem("token");
-    console.log("Create Resume  funciton is running ", newResume);
+
     try {
       const response = await axios.post(`${BASE_URL}/create-resume`, newResume, {
         headers: {
@@ -143,27 +141,30 @@ const loadResume = async (resumeId) => {
     }));
   };
 
-  
+
   //  Update only the summary inside personalInfo
-  const updateSummary = (summary) => {
-    updateLocalResumeData({
-      personalInfo: {
-        ...resumeData?.personalInfo,
-        summary,
-      },
-    });
+  const updateSummary = async (data) => {
+    try {
+      const updated = await updateResumeSection({ summy: data });
+      return updated;
+    } catch (err) {
+      console.error(" Error updating experience:", err);
+      throw err;
+    }
   };
-  
+ 
+
+
   //  Update entire personalInfo block (name, jobTitle, email, etc.)
   const updatePersonalInfo = async (data) => {
-  try {
-    const updated = await  updateResumeSection({ personalInfo: data });
-   return updated;
-  } catch (err) {
-    console.error(" Error updating experience:", err);
-    throw err;
-  }
-};
+    try {
+      const updated = await updateResumeSection({ personalInfo: data });
+      return updated;
+    } catch (err) {
+      console.error(" Error updating experience:", err);
+      throw err;
+    }
+  };
 
   //  Other section updates remain the same
   const updateExperience = async (data) => {
